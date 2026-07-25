@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Painel Administrativo da Central Rádios Brasil">
+  <title>Central Rádios Brasil — Painel Administrativo</title>
+
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="css/dashboard.css">
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar" aria-label="Menu principal">
+      <div class="brand">
+        <div class="brand-mark" aria-hidden="true">CRB</div>
+        <div>
+          <strong>Central Rádios Brasil</strong>
+          <span>Painel Administrativo</span>
+        </div>
+      </div>
+
+      <nav class="main-nav">
+        <a class="nav-link active" href="#/dashboard" data-route="dashboard">
+          <span aria-hidden="true">🏠</span>
+          Dashboard
+        </a>
+
+        <button class="nav-link disabled" type="button" disabled>
+          <span aria-hidden="true">📻</span>
+          Rádios
+          <small>Em breve</small>
+        </button>
+
+        <button class="nav-link disabled" type="button" disabled>
+          <span aria-hidden="true">🎵</span>
+          Categorias
+          <small>Em breve</small>
+        </button>
+
+        <button class="nav-link disabled" type="button" disabled>
+          <span aria-hidden="true">📡</span>
+          Streams
+          <small>Em breve</small>
+        </button>
+
+        <button class="nav-link disabled" type="button" disabled>
+          <span aria-hidden="true">⚙️</span>
+          Configurações
+          <small>Em breve</small>
+        </button>
+      </nav>
+
+      <div class="sidebar-footer">
+        <span id="app-version">v0.1.0</span>
+      </div>
+    </aside>
+
+    <div class="content-area">
+      <header class="topbar">
+        <button id="menu-toggle" class="icon-button" type="button" aria-label="Abrir ou fechar menu">
+          ☰
+        </button>
+
+        <div>
+          <h1 id="page-title">Dashboard</h1>
+          <p>Visão geral do ecossistema Central Rádios Brasil</p>
+        </div>
+
+        <button id="theme-toggle" class="theme-button" type="button" aria-label="Alternar tema">
+          🌙 Tema escuro
+        </button>
+      </header>
+
+      <main id="app-content" class="main-content" tabindex="-1">
+        <section class="welcome-panel">
+          <span class="status-badge">Commit 1 concluído</span>
+          <h2>Estrutura inicial criada</h2>
+          <p>
+            O Painel Administrativo está pronto para receber o Dashboard funcional
+            e a leitura automática dos dados do GitHub nos próximos commits.
+          </p>
+        </section>
+
+        <section class="dashboard-grid" aria-label="Resumo inicial">
+          <article class="dashboard-card">
+            <span class="card-icon" aria-hidden="true">📻</span>
+            <div>
+              <span class="card-label">Rádios</span>
+              <strong class="card-value">—</strong>
+              <small>Será carregado no Commit 2</small>
+            </div>
+          </article>
+
+          <article class="dashboard-card">
+            <span class="card-icon" aria-hidden="true">🗺️</span>
+            <div>
+              <span class="card-label">Estados</span>
+              <strong class="card-value">—</strong>
+              <small>Será carregado no Commit 2</small>
+            </div>
+          </article>
+
+          <article class="dashboard-card">
+            <span class="card-icon" aria-hidden="true">🎵</span>
+            <div>
+              <span class="card-label">Categorias</span>
+              <strong class="card-value">—</strong>
+              <small>Será carregado no Commit 2</small>
+            </div>
+          </article>
+
+          <article class="dashboard-card">
+            <span class="card-icon" aria-hidden="true">📡</span>
+            <div>
+              <span class="card-label">Streams</span>
+              <strong class="card-value">—</strong>
+              <small>Será carregado no Commit 2</small>
+            </div>
+          </article>
+        </section>
+      </main>
+
+      <footer class="footer">
+        <span>Central Rádios Brasil</span>
+        <span>Estrutura inicial do Painel Administrativo</span>
+      </footer>
+    </div>
+  </div>
+
+  <script src="config.js"></script>
+  <script src="js/utils.js"></script>
+  <script src="js/api.js"></script>
+  <script src="js/router.js"></script>
+  <script src="js/dashboard.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

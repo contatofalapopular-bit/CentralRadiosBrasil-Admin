@@ -1,0 +1,261 @@
+/* Central Rádios Brasil — Estilos globais v0.1.0 */
+
+:root {
+  --color-primary: #c91424;
+  --color-primary-dark: #9f0d19;
+  --color-accent: #f2c230;
+  --color-bg: #f4f5f7;
+  --color-surface: #ffffff;
+  --color-text: #202124;
+  --color-muted: #69707a;
+  --color-border: #dfe3e8;
+  --color-sidebar: #141414;
+  --color-sidebar-text: #ffffff;
+  --shadow-card: 0 8px 24px rgba(0, 0, 0, 0.08);
+  --radius-md: 14px;
+  --radius-sm: 10px;
+}
+
+body.dark-theme {
+  --color-bg: #111315;
+  --color-surface: #1b1e21;
+  --color-text: #f5f6f7;
+  --color-muted: #b4bbc3;
+  --color-border: #33383e;
+  --color-sidebar: #090a0b;
+  --shadow-card: 0 8px 24px rgba(0, 0, 0, 0.25);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  min-height: 100%;
+}
+
+body {
+  min-height: 100vh;
+  margin: 0;
+  background: var(--color-bg);
+  color: var(--color-text);
+  font-family: Arial, Helvetica, sans-serif;
+  line-height: 1.5;
+}
+
+button,
+a {
+  font: inherit;
+}
+
+button {
+  cursor: pointer;
+}
+
+.app-shell {
+  min-height: 100vh;
+  display: grid;
+  grid-template-columns: 280px 1fr;
+}
+
+.sidebar {
+  min-height: 100vh;
+  background: var(--color-sidebar);
+  color: var(--color-sidebar-text);
+  display: flex;
+  flex-direction: column;
+  padding: 24px 18px;
+  position: sticky;
+  top: 0;
+}
+
+.brand {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  padding-bottom: 24px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.brand-mark {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background: var(--color-primary);
+  color: #fff;
+  font-weight: 800;
+}
+
+.brand strong,
+.brand span {
+  display: block;
+}
+
+.brand span {
+  margin-top: 2px;
+  font-size: 0.82rem;
+  color: rgba(255, 255, 255, 0.66);
+}
+
+.main-nav {
+  display: grid;
+  gap: 8px;
+  margin-top: 26px;
+}
+
+.nav-link {
+  width: 100%;
+  border: 0;
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: rgba(255, 255, 255, 0.82);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 13px 14px;
+  text-decoration: none;
+  text-align: left;
+}
+
+.nav-link:hover,
+.nav-link.active {
+  background: var(--color-primary);
+  color: #fff;
+}
+
+.nav-link small {
+  margin-left: auto;
+  font-size: 0.68rem;
+}
+
+.nav-link.disabled {
+  cursor: not-allowed;
+  opacity: 0.45;
+}
+
+.sidebar-footer {
+  margin-top: auto;
+  padding-top: 20px;
+  color: rgba(255, 255, 255, 0.55);
+  font-size: 0.82rem;
+}
+
+.content-area {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.topbar {
+  min-height: 90px;
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  padding: 18px 30px;
+  background: var(--color-surface);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.topbar h1,
+.topbar p {
+  margin: 0;
+}
+
+.topbar h1 {
+  font-size: 1.6rem;
+}
+
+.topbar p {
+  margin-top: 3px;
+  color: var(--color-muted);
+}
+
+.icon-button {
+  display: none;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  background: var(--color-surface);
+  color: var(--color-text);
+  padding: 9px 12px;
+}
+
+.theme-button {
+  margin-left: auto;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  background: var(--color-surface);
+  color: var(--color-text);
+  padding: 10px 14px;
+}
+
+.main-content {
+  width: 100%;
+  max-width: 1500px;
+  margin: 0 auto;
+  padding: 30px;
+  flex: 1;
+}
+
+.footer {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 18px 30px;
+  border-top: 1px solid var(--color-border);
+  color: var(--color-muted);
+  font-size: 0.82rem;
+}
+
+@media (max-width: 900px) {
+  .app-shell {
+    grid-template-columns: 1fr;
+  }
+
+  .sidebar {
+    position: fixed;
+    inset: 0 auto 0 0;
+    width: 280px;
+    z-index: 20;
+    transform: translateX(-100%);
+    transition: transform 0.2s ease;
+  }
+
+  body.menu-open .sidebar {
+    transform: translateX(0);
+  }
+
+  .icon-button {
+    display: inline-block;
+  }
+}
+
+@media (max-width: 620px) {
+  .topbar {
+    align-items: flex-start;
+    padding: 16px;
+  }
+
+  .topbar p {
+    display: none;
+  }
+
+  .theme-button {
+    font-size: 0;
+    padding: 9px 11px;
+  }
+
+  .theme-button::first-letter {
+    font-size: 1rem;
+  }
+
+  .main-content {
+    padding: 18px;
+  }
+
+  .footer {
+    flex-direction: column;
+    padding: 16px 18px;
+  }
+}
