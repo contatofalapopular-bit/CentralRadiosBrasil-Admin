@@ -7,6 +7,8 @@
  */
 
 let publicacaoEventosRegistrados = false;
+const PUBLICADOR_URL =
+  "https://broken-bar-45e2.contatofalapopular.workers.dev/publicar";
 
 /**
  * Inicializa a página de Publicação.
@@ -187,13 +189,15 @@ function registrarEventosPublicacao() {
     executarValidacaoPublicacao();
   });
 
-gerarRadiosButton?.addEventListener("click", () => {
-  gerarBancoOficialPublicacao();
-});
+  gerarRadiosButton?.addEventListener("click", () => {
+    gerarBancoOficialPublicacao();
+  });
 
-gerarEsp32Button?.addEventListener("click", () => {
-  gerarBancoEsp32Publicacao();
-});
+  gerarEsp32Button?.addEventListener("click", () => {
+    gerarBancoEsp32Publicacao();
+  });
+
+  criarBotaoPublicarGithub();
 }
 
 /**
@@ -527,5 +531,146 @@ function definirTexto(id, valor) {
 
   if (elemento) {
     elemento.textContent = String(valor);
+  }
+}
+
+function criarBotaoPublicarGithub() {
+  if (document.getElementById("publicacao-publicar-github-button")) {
+    return;
+  }
+
+  const validarButton = document.getElementById(
+    "publicacao-validar-button"
+  );
+
+  const areaBotoes = validarButton?.parentElement;
+
+  if (!areaBotoes) {
+    console.error(
+      "Não foi possível encontrar a área dos botões de publicação."
+    );
+    return;
+  }
+
+  const botao = document.createElement("button");
+
+  botao.id = "publicacao-publicar-github-button";
+  botao.type = "button";
+  botao.className = "primary-button";
+  botao.textContent = "🚀 Publicar no GitHub";
+
+  botao.addEventListener("click", () => {
+    publicarBancosNoGithub();
+  });
+
+  areaBotoes.appendChild(botao);
+}
+
+async function publicarBancosNoGithub() {
+  if (
+    typeof EmissorasAdmin === "undefined" ||
+    !EmissorasAdmin.ultimoRelatorioValidacao?.valido ||
+    !EmissorasAdmin.ultimoBancoOficial ||
+    !EmissorasAdmin.ultimoBancoEsp32
+  ) {
+    alert(
+      "Primeiro clique em “Validar banco” e confirme que a validação foi aprovada."
+    );
+    return;
+  }
+
+  const chave = window.prompt(
+    "Digite a chave de publicação criada na Cloudflare:"
+  );
+
+  if (!chave || !chave.trim()) {
+    return;
+  }
+
+  const botao = document.getElementById(
+    "publicacao-publicar-github-button"
+  );
+
+  const textoOriginal = botao?.textContent;
+
+  if (botao) {
+    botao.disabled = true;
+    botao.textContent = "Publicando...";
+  }
+
+  atualizarBadgePublicacao(
+    "loading",
+    "Publicando no GitHub"
+  );
+
+  definirTexto(
+    "publicacao-resumo",
+    "Enviando radios.json e radios-esp32.json para o repositório oficial."
+  );
+
+  try {
+    const resposta = await fetch(PUBLICADOR_URL, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "X-Publication-Key": chave.trim()
+      },
+      body: JSON.stringify({
+        radios: EmissorasAdmin.ultimoBancoOficial,
+        radiosEsp32: EmissorasAdmin.ultimoBancoEsp32,
+        mensagem: "Publicação oficial dos bancos de rádios"
+      })
+    });
+
+    let resultado;
+
+    try {
+      resultado = await resposta.json();
+    } catch {
+      throw new Error(
+        `O servidor retornou uma resposta inválida. Código ${resposta.status}.`
+      );
+    }
+
+    if (!resposta.ok || !resultado.ok) {
+      throw new Error(
+        resultado.erro || "Não foi possível concluir a publicação."
+      );
+    }
+
+    atualizarBadgePublicacao(
+      "success",
+      "Publicado com sucesso"
+    );
+
+    definirTexto(
+      "publicacao-resumo",
+      "radios.json e radios-esp32.json foram publicados no GitHub."
+    );
+
+    alert(
+      "Publicação concluída com sucesso!\n\nOs dois bancos foram enviados ao GitHub."
+    );
+  } catch (erro) {
+    console.error("Erro ao publicar:", erro);
+
+    atualizarBadgePublicacao(
+      "error",
+      "Falha na publicação"
+    );
+
+    definirTexto(
+      "publicacao-resumo",
+      erro.message || "Não foi possível publicar os bancos."
+    );
+
+    alert(
+      `Falha na publicação:\n\n${erro.message}`
+    );
+  } finally {
+    if (botao) {
+      botao.disabled = false;
+      botao.textContent = textoOriginal;
+    }
   }
 }
