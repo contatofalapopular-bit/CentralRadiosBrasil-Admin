@@ -1,5 +1,13 @@
 # CHANGELOG
 
+## 1.2.0 — Cadastro inteligente de rádios
+
+- Estados brasileiros em lista pronta.
+- Categorias carregadas do banco oficial.
+- País fixado como Brasil.
+- Validação de duplicidade.
+- ID e slug automáticos.
+
 ## 1.1.0 — Cadastro completo de rádios
 
 - Pesquisa e filtros ampliados.

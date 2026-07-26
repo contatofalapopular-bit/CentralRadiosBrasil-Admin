@@ -1,4 +1,18 @@
 const RadiosAdmin = {
+  estadosBrasil: [
+    ["AC", "Acre"], ["AL", "Alagoas"], ["AP", "Amapá"],
+    ["AM", "Amazonas"], ["BA", "Bahia"], ["CE", "Ceará"],
+    ["DF", "Distrito Federal"], ["ES", "Espírito Santo"],
+    ["GO", "Goiás"], ["MA", "Maranhão"], ["MT", "Mato Grosso"],
+    ["MS", "Mato Grosso do Sul"], ["MG", "Minas Gerais"],
+    ["PA", "Pará"], ["PB", "Paraíba"], ["PR", "Paraná"],
+    ["PE", "Pernambuco"], ["PI", "Piauí"], ["RJ", "Rio de Janeiro"],
+    ["RN", "Rio Grande do Norte"], ["RS", "Rio Grande do Sul"],
+    ["RO", "Rondônia"], ["RR", "Roraima"], ["SC", "Santa Catarina"],
+    ["SP", "São Paulo"], ["SE", "Sergipe"], ["TO", "Tocantins"]
+  ],
+
+  categoriasOficiais: [],
   radiosOriginais: [],
   radiosTrabalho: [],
   documentoOriginal: null,
@@ -13,7 +27,66 @@ const RadiosAdmin = {
       this.eventosRegistrados = true;
     }
 
+    await this.carregarCategorias();
+    this.preencherEstadosFormulario();
     await this.carregar();
+  },
+
+  async carregarCategorias() {
+    try {
+      const documento = await API.carregar("categorias.json", true);
+      const lista = Array.isArray(documento)
+        ? documento
+        : (documento.categorias || []);
+
+      this.categoriasOficiais = lista
+        .filter((categoria) => categoria.ativa !== false)
+        .map((categoria) =>
+          typeof categoria === "string"
+            ? categoria
+            : (categoria.nome || categoria.titulo || categoria.slug || "")
+        )
+        .filter(Boolean)
+        .sort((a, b) => a.localeCompare(b, "pt-BR"));
+
+      this.preencherCategoriasFormulario();
+    } catch (erro) {
+      console.warn("Não foi possível carregar categorias.json:", erro);
+      this.categoriasOficiais = [];
+    }
+  },
+
+  preencherEstadosFormulario() {
+    const select = document.getElementById("radio-state");
+    if (!select) return;
+
+    select.innerHTML = '<option value="">Selecione o estado</option>';
+
+    this.estadosBrasil.forEach(([uf, nome]) => {
+      const option = document.createElement("option");
+      option.value = uf;
+      option.textContent = `${uf} — ${nome}`;
+      select.appendChild(option);
+    });
+  },
+
+  preencherCategoriasFormulario() {
+    const select = document.getElementById("radio-category");
+    if (!select) return;
+
+    select.innerHTML = '<option value="">Selecione a categoria</option>';
+
+    this.categoriasOficiais.forEach((categoria) => {
+      const option = document.createElement("option");
+      option.value = categoria;
+      option.textContent = categoria;
+      select.appendChild(option);
+    });
+
+    const optionOutra = document.createElement("option");
+    optionOutra.value = "__outra__";
+    optionOutra.textContent = "Outra categoria";
+    select.appendChild(optionOutra);
   },
 
   registrarEventos() {
@@ -43,6 +116,9 @@ const RadiosAdmin = {
 
     document.getElementById("radio-form")
       .addEventListener("submit", (evento) => this.salvar(evento));
+
+    document.getElementById("radio-category")
+      .addEventListener("change", () => this.atualizarCampoOutraCategoria());
 
     document.getElementById("cancel-radio-form")
       .addEventListener("click", () => this.fecharFormulario());
@@ -284,6 +360,28 @@ const RadiosAdmin = {
     }).join("");
   },
 
+  atualizarCampoOutraCategoria() {
+    const select = document.getElementById("radio-category");
+    const campo = document.getElementById("radio-category-other");
+    const container = document.getElementById("radio-category-other-field");
+
+    const outra = select.value === "__outra__";
+    container.classList.toggle("hidden", !outra);
+    campo.required = outra;
+
+    if (!outra) {
+      campo.value = "";
+    }
+  },
+
+  obterCategoriaSelecionada() {
+    const select = document.getElementById("radio-category");
+    if (select.value === "__outra__") {
+      return document.getElementById("radio-category-other").value.trim();
+    }
+    return select.value.trim();
+  },
+
   abrirFormulario(radio = null) {
     this.pararTeste("form-stream-result");
     this.radioEditandoId = radio?.id ?? null;
@@ -295,6 +393,9 @@ const RadiosAdmin = {
 
     const form = document.getElementById("radio-form");
     form.reset();
+    document.getElementById("radio-country").value = "Brasil";
+    document.getElementById("radio-category-other-field").classList.add("hidden");
+    document.getElementById("radio-category-other").required = false;
 
     if (radio) {
       const localizacao = radio.localizacao || {};
@@ -305,8 +406,24 @@ const RadiosAdmin = {
         localizacao.cidade ?? radio.cidade ?? "";
       document.getElementById("radio-state").value =
         localizacao.uf ?? radio.uf ?? "";
-      document.getElementById("radio-category").value =
+      const categoriaAtual =
         radio.categoriaPrincipal ?? radio.categorias?.[0] ?? "";
+
+      const selectCategoria = document.getElementById("radio-category");
+
+      if (
+        categoriaAtual &&
+        !this.categoriasOficiais.includes(categoriaAtual)
+      ) {
+        selectCategoria.value = "__outra__";
+        document.getElementById("radio-category-other").value =
+          categoriaAtual;
+        document.getElementById("radio-category-other-field")
+          .classList.remove("hidden");
+        document.getElementById("radio-category-other").required = true;
+      } else {
+        selectCategoria.value = categoriaAtual;
+      }
       document.getElementById("radio-extra-categories").value =
         (radio.categorias || [])
           .filter((categoria) => categoria !== radio.categoriaPrincipal)
@@ -353,8 +470,7 @@ const RadiosAdmin = {
     const nome = document.getElementById("radio-name").value.trim();
     const cidade = document.getElementById("radio-city").value.trim();
     const uf = document.getElementById("radio-state").value.trim().toUpperCase();
-    const categoriaPrincipal =
-      document.getElementById("radio-category").value.trim();
+    const categoriaPrincipal = this.obterCategoriaSelecionada();
     const categoriasExtras =
       document.getElementById("radio-extra-categories").value
         .split(",")
@@ -376,11 +492,6 @@ const RadiosAdmin = {
       return;
     }
 
-    if (uf.length !== 2) {
-      alert("O estado deve ser informado com duas letras, por exemplo: GO.");
-      return;
-    }
-
     if (!validarUrlHttp(streamUrl)) {
       alert("A URL do stream deve começar com http:// ou https://.");
       return;
@@ -396,6 +507,31 @@ const RadiosAdmin = {
         alert(`A URL de ${rotulo} não é válida.`);
         return;
       }
+    }
+
+    const duplicada = this.radiosTrabalho.find((radio) => {
+      if (radio.id === this.radioEditandoId) return false;
+
+      const nomeExistente = normalizar(radio.nome);
+      const cidadeExistente = normalizar(
+        radio.localizacao?.cidade ?? radio.cidade ?? ""
+      );
+      const ufExistente = String(
+        radio.localizacao?.uf ?? radio.uf ?? ""
+      ).toUpperCase();
+
+      return (
+        nomeExistente === normalizar(nome) &&
+        cidadeExistente === normalizar(cidade) &&
+        ufExistente === uf
+      );
+    });
+
+    if (duplicada) {
+      alert(
+        `Já existe uma rádio com o nome "${nome}" em ${cidade}/${uf}.`
+      );
+      return;
     }
 
     const radioAnterior = this.radioEditandoId
@@ -417,7 +553,8 @@ const RadiosAdmin = {
       descricao,
       categoriaPrincipal,
       categorias,
-      localizacao: { cidade, uf },
+      pais: "Brasil",
+      localizacao: { cidade, uf, pais: "Brasil" },
       site,
       logo,
       redesSociais: {

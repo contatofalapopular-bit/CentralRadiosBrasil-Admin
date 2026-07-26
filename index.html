@@ -7,13 +7,13 @@
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
   <meta http-equiv="Pragma" content="no-cache">
   <meta http-equiv="Expires" content="0">
-  <title>Central Rádios Brasil — Painel Administrativo v1.1.0</title>
+  <title>Central Rádios Brasil — Painel Administrativo v1.2.0</title>
 
-  <link rel="stylesheet" href="style.css?v=1.1.0">
-  <link rel="stylesheet" href="css/dashboard.css?v=1.1.0">
-  <link rel="stylesheet" href="css/radios.css?v=1.1.0">
+  <link rel="stylesheet" href="style.css?v=1.2.0">
+  <link rel="stylesheet" href="css/dashboard.css?v=1.2.0">
+  <link rel="stylesheet" href="css/radios.css?v=1.2.0">
 </head>
-<body data-app-version="1.1.0" data-build="base-oficial">
+<body data-app-version="1.2.0" data-build="base-oficial">
 <div class="app-shell">
   <aside class="sidebar">
     <div class="brand">
@@ -32,7 +32,7 @@
       <button class="nav-link disabled" disabled>⚙️ Configurações <small>Em breve</small></button>
     </nav>
 
-    <div class="sidebar-footer" id="app-version">v1.1.0</div>
+    <div class="sidebar-footer" id="app-version">v1.2.0</div>
   </aside>
 
   <div class="content-area">
@@ -190,21 +190,34 @@
         </label>
 
         <label>
+          País
+          <input id="radio-country" value="Brasil" readonly>
+        </label>
+
+        <label>
           Cidade *
           <input id="radio-city" required maxlength="100"
             placeholder="Rio Verde">
         </label>
 
         <label>
-          Estado (UF) *
-          <input id="radio-state" required maxlength="2"
-            placeholder="GO">
+          Estado *
+          <select id="radio-state" required>
+            <option value="">Selecione o estado</option>
+          </select>
         </label>
 
         <label>
           Categoria principal *
-          <input id="radio-category" required maxlength="80"
-            placeholder="Jornalismo">
+          <select id="radio-category" required>
+            <option value="">Selecione a categoria</option>
+          </select>
+        </label>
+
+        <label id="radio-category-other-field" class="hidden full-field">
+          Outra categoria *
+          <input id="radio-category-other" maxlength="80"
+            placeholder="Digite a categoria">
         </label>
 
         <label>
@@ -297,11 +310,11 @@
   </section>
 </div>
 
-<script src="config.js?v=1.1.0"></script>
-<script src="js/utils.js?v=1.1.0"></script>
-<script src="js/api.js?v=1.1.0"></script>
-<script src="js/dashboard.js?v=1.1.0"></script>
-<script src="js/radios.js?v=1.1.0"></script>
-<script src="app.js?v=1.1.0"></script>
+<script src="config.js?v=1.2.0"></script>
+<script src="js/utils.js?v=1.2.0"></script>
+<script src="js/api.js?v=1.2.0"></script>
+<script src="js/dashboard.js?v=1.2.0"></script>
+<script src="js/radios.js?v=1.2.0"></script>
+<script src="app.js?v=1.2.0"></script>
 </body>
 </html>
