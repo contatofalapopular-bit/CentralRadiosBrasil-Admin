@@ -187,29 +187,19 @@ function registrarEventosPublicacao() {
     executarValidacaoPublicacao();
   });
 
-  gerarRadiosButton?.addEventListener("click", () => {
-    acionarGeradorExistente(
-      "download-official-json-button",
-      "radios.json"
-    );
-  });
+gerarRadiosButton?.addEventListener("click", () => {
+  gerarBancoOficialPublicacao();
+});
 
-  gerarEsp32Button?.addEventListener("click", () => {
-    acionarGeradorExistente(
-      "download-esp32-json-button",
-      "radios-esp32.json"
-    );
-  });
+gerarEsp32Button?.addEventListener("click", () => {
+  gerarBancoEsp32Publicacao();
+});
 }
 
 /**
  * Reutiliza a validação já implementada no módulo de Emissoras.
  */
 function executarValidacaoPublicacao() {
-  const botaoValidacaoExistente = document.getElementById(
-    "export-emissoras-button"
-  );
-
   atualizarBadgePublicacao(
     "loading",
     "Validando banco"
@@ -221,28 +211,30 @@ function executarValidacaoPublicacao() {
   );
 
   limparProblemasPublicacao();
+  desativarGeradoresPublicacao();
 
-  if (!botaoValidacaoExistente) {
+  if (
+    typeof EmissorasAdmin === "undefined" ||
+    typeof EmissorasAdmin.exportar !== "function"
+  ) {
     atualizarBadgePublicacao(
       "error",
       "Validação indisponível"
     );
 
     adicionarProblemaPublicacao(
-      "O botão de validação do módulo de Emissoras não foi encontrado."
+      "O módulo de validação das emissoras não está disponível."
     );
 
-    desativarGeradoresPublicacao();
     return;
   }
 
-  botaoValidacaoExistente.click();
+  EmissorasAdmin.exportar();
 
   window.setTimeout(() => {
     concluirValidacaoPublicacao();
-  }, 400);
+  }, 300);
 }
-
 /**
  * Lê o resultado produzido pela modal de validação existente.
  */
