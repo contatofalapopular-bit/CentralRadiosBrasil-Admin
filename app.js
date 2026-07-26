@@ -151,21 +151,30 @@ async function renderizarRota() {
       );
     });
 
-  if (rotaFinal === "publicacao") {
-    texto("page-title", "Publicação");
+ if (rotaFinal === "publicacao") {
+  texto("page-title", "Publicação");
 
-    texto(
-      "page-subtitle",
-      "Validação e preparação do banco oficial"
-    );
+  texto(
+    "page-subtitle",
+    "Validação e preparação do banco oficial"
+  );
 
-    if (!publicacaoInicializada) {
-      publicacaoInicializada = true;
-      iniciarPublicacao();
-    } else {
-      atualizarResumoPublicacao();
-    }
-  } else if (rotaFinal === "emissoras") {
+  /*
+   * A Publicação usa o banco e os geradores do módulo
+   * de Emissoras. Por isso, ele precisa estar carregado.
+   */
+  if (!emissorasInicializadas) {
+    emissorasInicializadas = true;
+    await EmissorasAdmin.iniciar();
+  }
+
+  if (!publicacaoInicializada) {
+    publicacaoInicializada = true;
+    iniciarPublicacao();
+  } else {
+    atualizarResumoPublicacao();
+  }
+} else if (rotaFinal === "emissoras") {
     texto("page-title", "Emissoras");
 
     texto(
