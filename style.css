@@ -1,1 +1,43 @@
-*{box-sizing:border-box}body{margin:0;font-family:Arial,sans-serif;background:#f4f5f7;color:#202124}.dark-theme{background:#111315;color:#f5f6f7}.app-shell{min-height:100vh;display:grid;grid-template-columns:280px 1fr}.sidebar{background:#141414;color:#fff;padding:24px 18px;display:flex;flex-direction:column}.brand{display:flex;gap:12px;align-items:center;padding-bottom:24px;border-bottom:1px solid #ffffff22}.brand-mark{width:48px;height:48px;border-radius:50%;display:grid;place-items:center;background:#c91424;font-weight:800}.brand strong,.brand span{display:block}.brand span{font-size:.82rem;color:#ffffffaa}.main-nav{display:grid;gap:8px;margin-top:26px}.nav-link{border:0;border-radius:10px;background:transparent;color:#ffffffd0;display:flex;gap:10px;padding:13px 14px;text-decoration:none}.nav-link.active{background:#c91424}.nav-link small{margin-left:auto}.nav-link.disabled{opacity:.45}.sidebar-footer{margin-top:auto;color:#ffffff88}.content-area{min-width:0}.topbar{display:flex;align-items:center;gap:12px;padding:18px 30px;background:#fff;border-bottom:1px solid #ddd}.dark-theme .topbar,.dark-theme .dashboard-card{background:#1b1e21}.topbar h1,.topbar p{margin:0}.topbar p{color:#69707a}.secondary-button{margin-left:auto}.secondary-button,.theme-button,#retry-button{padding:10px 14px;border-radius:10px;border:1px solid #ddd;background:#fff}.main-content{padding:30px}.hidden{display:none!important}@media(max-width:800px){.app-shell{grid-template-columns:1fr}.sidebar{display:none}.topbar{flex-wrap:wrap;padding:16px}.secondary-button{margin-left:0}.main-content{padding:18px}}
+*{box-sizing:border-box}
+:root{
+  --bg:#f4f5f7;--surface:#fff;--text:#202124;--muted:#69707a;
+  --border:#dfe3e8;--primary:#c91424;--primary-dark:#9f0d19;
+  --sidebar:#141414;--success:#18864b;--danger:#c13232;
+}
+body.dark-theme{
+  --bg:#111315;--surface:#1b1e21;--text:#f5f6f7;
+  --muted:#b4bbc3;--border:#33383e;--sidebar:#090a0b;
+}
+body{margin:0;font-family:Arial,sans-serif;background:var(--bg);color:var(--text)}
+button,input,select{font:inherit}
+button{cursor:pointer}
+.app-shell{min-height:100vh;display:grid;grid-template-columns:280px 1fr}
+.sidebar{background:var(--sidebar);color:#fff;padding:24px 18px;display:flex;flex-direction:column;min-height:100vh;position:sticky;top:0}
+.brand{display:flex;gap:12px;align-items:center;padding-bottom:24px;border-bottom:1px solid #ffffff22}
+.brand-mark{width:48px;height:48px;border-radius:50%;display:grid;place-items:center;background:var(--primary);font-weight:800}
+.brand strong,.brand span{display:block}.brand span{font-size:.82rem;color:#ffffffaa}
+.main-nav{display:grid;gap:8px;margin-top:26px}
+.nav-link{border:0;border-radius:10px;background:transparent;color:#ffffffd0;display:flex;gap:10px;padding:13px 14px;text-decoration:none}
+.nav-link.active,.nav-link:hover{background:var(--primary);color:#fff}
+.nav-link small{margin-left:auto}.nav-link.disabled{opacity:.45}
+.sidebar-footer{margin-top:auto;color:#ffffff88}
+.content-area{min-width:0}
+.topbar{display:flex;align-items:center;gap:12px;padding:18px 30px;background:var(--surface);border-bottom:1px solid var(--border)}
+.topbar h1,.topbar p{margin:0}.topbar p{color:var(--muted)}
+.secondary-button{margin-left:auto}
+.secondary-button,.theme-button,.primary-button,#retry-button{
+  padding:10px 14px;border-radius:10px;border:1px solid var(--border);
+  background:var(--surface);color:var(--text)
+}
+.primary-button{background:var(--primary);color:#fff;border-color:var(--primary);font-weight:700}
+.primary-button:hover{background:var(--primary-dark)}
+.main-content{padding:30px;max-width:1600px;width:100%;margin:0 auto}
+.hidden{display:none!important}
+.status-badge{display:inline-block;padding:6px 10px;border-radius:999px;font-size:.78rem;font-weight:700}
+.status-badge.loading{background:#f2c230;color:#111}
+.status-badge.success{background:#d9f6e5;color:#136637}
+.status-badge.error{background:#ffe0e0;color:#8f2020}
+@media(max-width:800px){
+  .app-shell{grid-template-columns:1fr}.sidebar{position:static;min-height:auto}
+  .topbar{flex-wrap:wrap;padding:16px}.secondary-button{margin-left:0}.main-content{padding:18px}
+}

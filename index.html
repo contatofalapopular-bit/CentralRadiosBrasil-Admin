@@ -3,69 +3,231 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>Dashboard — Central Rádios Brasil</title>
+  <meta name="description" content="Painel Administrativo da Central Rádios Brasil">
+  <title>Central Rádios Brasil — Painel Administrativo</title>
+
   <link rel="stylesheet" href="style.css">
   <link rel="stylesheet" href="css/dashboard.css">
+  <link rel="stylesheet" href="css/radios.css">
 </head>
 <body>
 <div class="app-shell">
   <aside class="sidebar">
-    <div class="brand"><div class="brand-mark">CRB</div><div><strong>Central Rádios Brasil</strong><span>Painel Administrativo</span></div></div>
+    <div class="brand">
+      <div class="brand-mark">CRB</div>
+      <div>
+        <strong>Central Rádios Brasil</strong>
+        <span>Painel Administrativo</span>
+      </div>
+    </div>
+
     <nav class="main-nav">
-      <a class="nav-link active" href="#">🏠 Dashboard</a>
-      <button class="nav-link disabled" disabled>📻 Rádios <small>Em breve</small></button>
+      <a class="nav-link active" data-route="dashboard" href="#/dashboard">🏠 Dashboard</a>
+      <a class="nav-link" data-route="radios" href="#/radios">📻 Rádios</a>
       <button class="nav-link disabled" disabled>🎵 Categorias <small>Em breve</small></button>
       <button class="nav-link disabled" disabled>📡 Streams <small>Em breve</small></button>
       <button class="nav-link disabled" disabled>⚙️ Configurações <small>Em breve</small></button>
     </nav>
-    <div class="sidebar-footer" id="app-version">v0.2.0</div>
+
+    <div class="sidebar-footer" id="app-version">v0.3.0</div>
   </aside>
 
   <div class="content-area">
     <header class="topbar">
-      <div><h1>Dashboard</h1><p>Dados oficiais do ecossistema Central Rádios Brasil</p></div>
+      <div>
+        <h1 id="page-title">Dashboard</h1>
+        <p id="page-subtitle">Dados oficiais do ecossistema Central Rádios Brasil</p>
+      </div>
+
       <button id="refresh-button" class="secondary-button">↻ Atualizar dados</button>
       <button id="theme-toggle" class="theme-button">🌙 Tema escuro</button>
     </header>
 
     <main class="main-content">
-      <section class="welcome-panel">
-        <div>
-          <span id="connection-badge" class="status-badge loading">Conectando ao banco de dados</span>
-          <h2>Visão geral do catálogo</h2>
-          <p>Os números são carregados automaticamente do repositório CentralRadiosBrasil-Dados.</p>
-        </div>
-        <div class="dataset-info">
-          <span>Versão do banco</span>
-          <strong id="dataset-version">—</strong>
-          <small id="last-update">Última atualização: carregando…</small>
-        </div>
+      <section id="dashboard-page">
+        <section class="welcome-panel">
+          <div>
+            <span id="connection-badge" class="status-badge loading">
+              Conectando ao banco de dados
+            </span>
+            <h2>Visão geral do catálogo</h2>
+            <p>
+              Os números são carregados automaticamente do repositório
+              CentralRadiosBrasil-Dados.
+            </p>
+          </div>
+
+          <div class="dataset-info">
+            <span>Versão do banco</span>
+            <strong id="dataset-version">—</strong>
+            <small id="last-update">Última atualização: carregando…</small>
+          </div>
+        </section>
+
+        <section class="dashboard-grid">
+          <article class="dashboard-card"><b>📻</b><div><span>Total de rádios</span><strong id="total-radios">—</strong><small>Emissoras cadastradas</small></div></article>
+          <article class="dashboard-card"><b>🏙️</b><div><span>Cidades</span><strong id="total-cidades">—</strong><small>Cidades com emissoras</small></div></article>
+          <article class="dashboard-card"><b>🗺️</b><div><span>Estados</span><strong id="total-estados">—</strong><small>Estados com emissoras</small></div></article>
+          <article class="dashboard-card"><b>🎵</b><div><span>Categorias</span><strong id="total-categorias">—</strong><small>Categorias em uso</small></div></article>
+          <article class="dashboard-card online"><b>🟢</b><div><span>Online</span><strong id="total-online">—</strong><small>Streams online</small></div></article>
+          <article class="dashboard-card offline"><b>🔴</b><div><span>Offline</span><strong id="total-offline">—</strong><small>Streams offline</small></div></article>
+          <article class="dashboard-card"><b>📡</b><div><span>Streams</span><strong id="total-streams">—</strong><small>Links cadastrados</small></div></article>
+          <article class="dashboard-card"><b>✅</b><div><span>Verificadas</span><strong id="total-verificadas">—</strong><small>Rádios verificadas</small></div></article>
+        </section>
+
+        <section id="error-panel" class="error-panel hidden">
+          <strong>Não foi possível carregar os dados.</strong>
+          <p id="error-message"></p>
+          <button id="retry-button">Tentar novamente</button>
+        </section>
       </section>
 
-      <section class="dashboard-grid">
-        <article class="dashboard-card"><b>📻</b><div><span>Total de rádios</span><strong id="total-radios">—</strong><small>Emissoras cadastradas</small></div></article>
-        <article class="dashboard-card"><b>🏙️</b><div><span>Cidades</span><strong id="total-cidades">—</strong><small>Cidades com emissoras</small></div></article>
-        <article class="dashboard-card"><b>🗺️</b><div><span>Estados</span><strong id="total-estados">—</strong><small>Estados com emissoras</small></div></article>
-        <article class="dashboard-card"><b>🎵</b><div><span>Categorias</span><strong id="total-categorias">—</strong><small>Categorias em uso</small></div></article>
-        <article class="dashboard-card online"><b>🟢</b><div><span>Online</span><strong id="total-online">—</strong><small>Streams online</small></div></article>
-        <article class="dashboard-card offline"><b>🔴</b><div><span>Offline</span><strong id="total-offline">—</strong><small>Streams offline</small></div></article>
-        <article class="dashboard-card"><b>📡</b><div><span>Streams</span><strong id="total-streams">—</strong><small>Links cadastrados</small></div></article>
-        <article class="dashboard-card"><b>✅</b><div><span>Verificadas</span><strong id="total-verificadas">—</strong><small>Rádios verificadas</small></div></article>
-      </section>
+      <section id="radios-page" class="hidden">
+        <div class="radios-toolbar">
+          <div>
+            <span id="radios-status-badge" class="status-badge loading">Carregando rádios</span>
+            <h2>Gerenciamento de rádios</h2>
+            <p>
+              <strong id="radios-visible-count">0</strong> exibidas de
+              <strong id="radios-total-count">0</strong> cadastradas.
+            </p>
+          </div>
 
-      <section id="error-panel" class="error-panel hidden">
-        <strong>Não foi possível carregar os dados.</strong>
-        <p id="error-message"></p>
-        <button id="retry-button">Tentar novamente</button>
+          <div class="toolbar-actions">
+            <button id="export-radios-button" class="secondary-button">⬇ Exportar radios.json</button>
+            <button id="new-radio-button" class="primary-button">＋ Nova rádio</button>
+          </div>
+        </div>
+
+        <div id="draft-banner" class="draft-banner hidden">
+          <div>
+            <strong>Existem alterações salvas somente neste navegador.</strong>
+            <span>Exporte o arquivo radios.json para publicá-las no repositório de dados.</span>
+          </div>
+          <button id="discard-draft-button" class="text-button">Descartar rascunho</button>
+        </div>
+
+        <section class="filters-panel">
+          <label>
+            Buscar
+            <input id="radio-search" type="search" placeholder="Nome, cidade, estado ou categoria">
+          </label>
+
+          <label>
+            Estado
+            <select id="radio-uf-filter">
+              <option value="">Todos os estados</option>
+            </select>
+          </label>
+
+          <label>
+            Status
+            <select id="radio-status-filter">
+              <option value="">Todos os status</option>
+              <option value="online">Online</option>
+              <option value="offline">Offline</option>
+              <option value="nao_testado">Não testado</option>
+            </select>
+          </label>
+        </section>
+
+        <section class="table-card">
+          <div class="table-scroll">
+            <table class="radios-table">
+              <thead>
+                <tr>
+                  <th>Rádio</th>
+                  <th>Cidade</th>
+                  <th>UF</th>
+                  <th>Categoria</th>
+                  <th>Status</th>
+                  <th>Verificada</th>
+                  <th>Ações</th>
+                </tr>
+              </thead>
+              <tbody id="radios-table-body">
+                <tr><td colspan="7" class="empty-state">Carregando…</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
       </section>
     </main>
   </div>
+</div>
+
+<div id="radio-modal-backdrop" class="modal-backdrop hidden">
+  <section class="modal-card" role="dialog" aria-modal="true" aria-labelledby="radio-modal-title">
+    <div class="modal-header">
+      <div>
+        <span>Catálogo de emissoras</span>
+        <h2 id="radio-modal-title">Cadastrar nova rádio</h2>
+      </div>
+      <button id="cancel-radio-form" class="close-button" type="button" aria-label="Fechar">×</button>
+    </div>
+
+    <form id="radio-form">
+      <div class="form-grid">
+        <label class="full-field">
+          Nome da rádio *
+          <input id="radio-name" required maxlength="120">
+        </label>
+
+        <label>
+          Cidade *
+          <input id="radio-city" required maxlength="100">
+        </label>
+
+        <label>
+          Estado (UF) *
+          <input id="radio-state" required maxlength="2" placeholder="GO">
+        </label>
+
+        <label>
+          Categoria principal *
+          <input id="radio-category" required maxlength="80" placeholder="Jornalismo">
+        </label>
+
+        <label>
+          Site oficial
+          <input id="radio-site" type="url" placeholder="https://">
+        </label>
+
+        <label class="full-field">
+          URL do stream principal *
+          <input id="radio-stream" type="url" required placeholder="https://">
+        </label>
+
+        <label class="full-field">
+          URL do logotipo
+          <input id="radio-logo" type="url" placeholder="https://">
+        </label>
+
+        <label class="checkbox-field full-field">
+          <input id="radio-verified" type="checkbox">
+          Rádio verificada
+        </label>
+      </div>
+
+      <p class="form-note">
+        Os dados serão salvos como rascunho neste navegador. Para atualizar o
+        GitHub, use “Exportar radios.json”.
+      </p>
+
+      <div class="modal-actions">
+        <button id="cancel-radio-form-bottom" type="button" class="secondary-button"
+          onclick="RadiosAdmin.fecharFormulario()">Cancelar</button>
+        <button type="submit" class="primary-button">Salvar rascunho</button>
+      </div>
+    </form>
+  </section>
 </div>
 
 <script src="config.js"></script>
 <script src="js/utils.js"></script>
 <script src="js/api.js"></script>
 <script src="js/dashboard.js"></script>
+<script src="js/radios.js"></script>
 <script src="app.js"></script>
 </body>
 </html>
