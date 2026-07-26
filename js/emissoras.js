@@ -1525,39 +1525,65 @@ const EmissorasAdmin = {
           emissora.ativa !== false &&
           emissora.publica !== false
       )
-      .map((emissora) => {
-        const streams = Array.isArray(emissora.streams)
-          ? emissora.streams
-          : [];
+     .map((emissora) => {
+  const streams = Array.isArray(emissora.streams)
+    ? emissora.streams
+    : [];
 
-        const principal =
-          streams.find(
-            (stream) => stream.principal === true
-          ) ||
-          streams[0] ||
-          null;
+  const principal =
+    streams.find(
+      (stream) => stream.principal === true
+    ) ||
+    streams[0] ||
+    null;
 
-        return {
-          id: emissora.id,
-          nome: emissora.nome,
-          uf: emissora.localizacao?.uf || "",
-          cidade:
-            emissora.localizacao?.cidade || "",
-          categoria:
-            emissora.categoriaPrincipal || "",
-          logo: emissora.logo || "",
-          url: principal?.url || "",
-          codec:
-            String(
-              principal?.codec || "nao_informado"
-            ).toLowerCase(),
-          bitrate:
-            principal?.bitrate
-              ? Number(principal.bitrate)
-              : null
-        };
-      })
-      .filter((radio) => radio.url)
+  const enderecoStream = String(
+    principal?.url || ""
+  ).trim();
+
+  if (!enderecoStream) {
+    return null;
+  }
+
+  try {
+    const urlStream = new URL(enderecoStream);
+    const usaSsl = urlStream.protocol === "https:";
+
+    const porta =
+      Number(urlStream.port) ||
+      (usaSsl ? 443 : 80);
+
+    const caminho =
+      `${urlStream.pathname || "/"}${urlStream.search || ""}`;
+
+    return {
+      id: emissora.id || "",
+      nome: emissora.nome || "",
+      cidade: emissora.localizacao?.cidade || "",
+      estado: emissora.localizacao?.uf || "",
+      categoria: emissora.categoriaPrincipal || "",
+      host: urlStream.hostname,
+      porta,
+      caminho,
+      ssl: usaSsl,
+      ativa: emissora.ativa !== false
+    };
+  } catch (erro) {
+    console.warn(
+      `Stream inválido na emissora ${emissora.nome || emissora.id}:`,
+      enderecoStream
+    );
+
+    return null;
+  }
+})
+.filter(
+  (radio) =>
+    radio &&
+    radio.nome &&
+    radio.host &&
+    radio.porta > 0
+)
       .sort((a, b) =>
         a.nome.localeCompare(b.nome, "pt-BR")
       );
