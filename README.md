@@ -1,10 +1,25 @@
-# Commit 12.3 - Logotipos de Emissoras
+# Central Rádios Brasil — Painel Administrativo
 
-Objetivos desta etapa:
-- Upload de logotipo principal
-- Pré-visualização da imagem
-- Remoção/substituição do logotipo
-- Preparação para exportação no radios.json
-- Base para integração com ESP32, PWA e site
+## Versão 2.2.0 — Commit 13.1
 
-Este pacote é um marco de planejamento da etapa 12.3.
+Primeira etapa do Banco Oficial das Emissoras.
+
+### Funcionalidades
+
+- banco estruturado em memória e rascunho local;
+- cadastro e edição;
+- exclusão;
+- clonagem;
+- importação de radios.json ou emissoras.json;
+- exportação de radios.json;
+- busca ampliada;
+- filtros;
+- ordenação;
+- ativar e desativar;
+- estatísticas de total, FM, AM, Web, ativas e verificadas.
+
+### Próximas etapas
+
+- 13.2: vínculo definitivo entre emissoras e múltiplos streams;
+- 13.3: estrutura final do radios.json;
+- 13.4: validação e publicação do banco oficial.

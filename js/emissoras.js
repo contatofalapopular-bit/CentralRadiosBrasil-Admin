@@ -39,6 +39,12 @@ const EmissorasAdmin = {
     document.getElementById("export-emissoras-button")
       .addEventListener("click", () => this.exportar());
 
+    document.getElementById("import-emissoras-input")
+      .addEventListener("change", (evento) => this.importar(evento));
+
+    document.getElementById("emissora-sort")
+      .addEventListener("change", () => this.renderizar());
+
     document.getElementById("discard-emissoras-draft-button")
       .addEventListener("click", () => this.descartarRascunho());
 
@@ -285,7 +291,7 @@ const EmissorasAdmin = {
     const tipo = document.getElementById("emissora-type-filter").value;
     const status = document.getElementById("emissora-status-filter").value;
 
-    return this.emissoras.filter((emissora) => {
+    const lista = this.emissoras.filter((emissora) => {
       const localizacao = emissora.localizacao || {};
 
       const correspondeBusca =
@@ -298,7 +304,9 @@ const EmissorasAdmin = {
           localizacao.cidade,
           localizacao.uf,
           emissora.categoriaPrincipal,
-          emissora.frequencia
+          emissora.frequencia,
+          emissora.slug,
+          emissora.id
         ].join(" ")).includes(busca);
 
       const correspondeStatus =
@@ -313,6 +321,37 @@ const EmissorasAdmin = {
         correspondeStatus
       );
     });
+
+    const ordem = document.getElementById("emissora-sort").value;
+
+    return lista.sort((a, b) => {
+      const localA = a.localizacao || {};
+      const localB = b.localizacao || {};
+
+      if (ordem === "nome-desc") {
+        return b.nome.localeCompare(a.nome, "pt-BR");
+      }
+
+      if (ordem === "cidade") {
+        return String(localA.cidade || "").localeCompare(
+          String(localB.cidade || ""),
+          "pt-BR"
+        );
+      }
+
+      if (ordem === "estado") {
+        return String(localA.uf || "").localeCompare(
+          String(localB.uf || ""),
+          "pt-BR"
+        ) || a.nome.localeCompare(b.nome, "pt-BR");
+      }
+
+      if (ordem === "atualizacao") {
+        return new Date(b.atualizadoEm || 0) - new Date(a.atualizadoEm || 0);
+      }
+
+      return a.nome.localeCompare(b.nome, "pt-BR");
+    });
   },
 
   renderizar() {
@@ -321,6 +360,11 @@ const EmissorasAdmin = {
 
     texto("emissoras-visible-count", lista.length);
     texto("emissoras-total-count", this.emissoras.length);
+    texto("emissoras-fm-count", this.emissoras.filter((e) => e.tipo === "FM").length);
+    texto("emissoras-am-count", this.emissoras.filter((e) => e.tipo === "AM").length);
+    texto("emissoras-web-count", this.emissoras.filter((e) => e.tipo === "Web").length);
+    texto("emissoras-active-count", this.emissoras.filter((e) => e.ativa !== false).length);
+    texto("emissoras-verified-count", this.emissoras.filter((e) => e.verificada === true).length);
 
     if (!lista.length) {
       tbody.innerHTML = `
@@ -359,8 +403,16 @@ const EmissorasAdmin = {
               Editar
             </button>
             <button class="table-button"
+              onclick="EmissorasAdmin.clonar('${escaparHtml(emissora.id)}')">
+              Clonar
+            </button>
+            <button class="table-button"
               onclick="EmissorasAdmin.alternar('${escaparHtml(emissora.id)}')">
               ${emissora.ativa !== false ? "Desativar" : "Ativar"}
+            </button>
+            <button class="table-button danger"
+              onclick="EmissorasAdmin.excluir('${escaparHtml(emissora.id)}')">
+              Excluir
             </button>
           </td>
         </tr>
@@ -582,6 +634,81 @@ const EmissorasAdmin = {
     this.salvarLocal();
     this.preencherFiltros();
     this.fecharFormulario();
+  },
+
+  clonar(id) {
+    const original = this.emissoras.find((item) => item.id === id);
+    if (!original) return;
+
+    const copia = structuredClone(original);
+    const agora = Date.now();
+
+    copia.id = `${gerarSlug(original.nome)}-copia-${agora}`;
+    copia.slug = `${gerarSlug(original.nome)}-copia-${agora}`;
+    copia.nome = `${original.nome} - Cópia`;
+    copia.verificada = false;
+    copia.criadoEm = new Date().toISOString();
+    copia.atualizadoEm = new Date().toISOString();
+
+    this.emissoras.push(copia);
+    this.salvarLocal();
+    this.preencherFiltros();
+
+    alert("Emissora clonada. Edite a cópia antes de publicar.");
+  },
+
+  excluir(id) {
+    const emissora = this.emissoras.find((item) => item.id === id);
+    if (!emissora) return;
+
+    const confirmou = confirm(
+      `Excluir "${emissora.nome}" do rascunho local?\n\n` +
+      "O arquivo publicado no GitHub não será alterado até você exportar e substituir radios.json."
+    );
+
+    if (!confirmou) return;
+
+    this.emissoras = this.emissoras.filter((item) => item.id !== id);
+    this.salvarLocal();
+    this.preencherFiltros();
+  },
+
+  async importar(evento) {
+    const arquivo = evento.target.files?.[0];
+    evento.target.value = "";
+
+    if (!arquivo) return;
+
+    try {
+      const documento = await lerArquivoJson(arquivo);
+      const lista = Array.isArray(documento)
+        ? documento
+        : (documento.radios || documento.emissoras || []);
+
+      if (!Array.isArray(lista)) {
+        throw new Error("O arquivo não contém uma lista válida de emissoras.");
+      }
+
+      const normalizadas = lista.map((item) =>
+        this.normalizarEmissoraExistente(item)
+      );
+
+      const confirmou = confirm(
+        `Importar ${normalizadas.length} emissora(s)?\n\n` +
+        "O rascunho local atual será substituído."
+      );
+
+      if (!confirmou) return;
+
+      this.documentoOriginal = documento;
+      this.emissoras = normalizadas;
+      this.salvarLocal();
+      this.preencherFiltros();
+
+      alert("Banco de emissoras importado para o rascunho local.");
+    } catch (erro) {
+      alert(erro.message);
+    }
   },
 
   alternar(id) {

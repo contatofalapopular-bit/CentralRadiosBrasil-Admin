@@ -7,15 +7,15 @@
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
   <meta http-equiv="Pragma" content="no-cache">
   <meta http-equiv="Expires" content="0">
-  <title>Central Rádios Brasil — Painel Administrativo v2.0.0</title>
+  <title>Central Rádios Brasil — Painel Administrativo v2.2.0</title>
 
-  <link rel="stylesheet" href="style.css?v=2.0.0">
-  <link rel="stylesheet" href="css/dashboard.css?v=2.0.0">
-  <link rel="stylesheet" href="css/radios.css?v=2.0.0">
-  <link rel="stylesheet" href="css/streams.css?v=2.0.0">
-  <link rel="stylesheet" href="css/emissoras.css?v=2.0.0">
+  <link rel="stylesheet" href="style.css?v=2.2.0">
+  <link rel="stylesheet" href="css/dashboard.css?v=2.2.0">
+  <link rel="stylesheet" href="css/radios.css?v=2.2.0">
+  <link rel="stylesheet" href="css/streams.css?v=2.2.0">
+  <link rel="stylesheet" href="css/emissoras.css?v=2.2.0">
 </head>
-<body data-app-version="2.0.0" data-build="base-oficial">
+<body data-app-version="2.2.0" data-build="base-oficial">
 <div class="app-shell">
   <aside class="sidebar">
     <div class="brand">
@@ -37,7 +37,7 @@
       <button class="nav-link disabled" disabled>⚙️ Configurações <small>Em breve</small></button>
     </nav>
 
-    <div class="sidebar-footer" id="app-version">v2.0.0</div>
+    <div class="sidebar-footer" id="app-version">v2.2.0</div>
   </aside>
 
   <div class="content-area">
@@ -467,6 +467,11 @@
           </div>
 
           <div class="toolbar-actions">
+            <label class="file-button">
+              ⬆ Importar banco
+              <input id="import-emissoras-input" type="file"
+                accept=".json,application/json">
+            </label>
             <button id="export-emissoras-button" class="secondary-button">
               ⬇ Exportar radios.json
             </button>
@@ -487,6 +492,34 @@
             Descartar rascunho
           </button>
         </div>
+
+
+        <section class="emissoras-stats">
+          <article>
+            <span>Total</span>
+            <strong id="emissoras-total-count">0</strong>
+          </article>
+          <article>
+            <span>FM</span>
+            <strong id="emissoras-fm-count">0</strong>
+          </article>
+          <article>
+            <span>AM</span>
+            <strong id="emissoras-am-count">0</strong>
+          </article>
+          <article>
+            <span>Web</span>
+            <strong id="emissoras-web-count">0</strong>
+          </article>
+          <article>
+            <span>Ativas</span>
+            <strong id="emissoras-active-count">0</strong>
+          </article>
+          <article>
+            <span>Verificadas</span>
+            <strong id="emissoras-verified-count">0</strong>
+          </article>
+        </section>
 
         <section class="filters-panel emissoras-filters">
           <label>
@@ -518,6 +551,17 @@
               <option value="">Todos os status</option>
               <option value="ativa">Ativas</option>
               <option value="inativa">Inativas</option>
+            </select>
+          </label>
+
+          <label>
+            Ordenar
+            <select id="emissora-sort">
+              <option value="nome">Nome A–Z</option>
+              <option value="nome-desc">Nome Z–A</option>
+              <option value="cidade">Cidade</option>
+              <option value="estado">Estado</option>
+              <option value="atualizacao">Última atualização</option>
             </select>
           </label>
         </section>
@@ -1008,16 +1052,16 @@
   </section>
 </div>
 
-<script src="config.js?v=2.0.0"></script>
-<script src="js/utils.js?v=2.0.0"></script>
-<script src="js/api.js?v=2.0.0"></script>
-<script src="js/dashboard.js?v=2.0.0"></script>
-<script src="js/radios.js?v=2.0.0"></script>
-<script src="js/estados.js?v=2.0.0"></script>
-<script src="js/categorias.js?v=2.0.0"></script>
-<script src="js/cidades.js?v=2.0.0"></script>
-<script src="js/streams.js?v=2.0.0"></script>
-<script src="js/emissoras.js?v=2.0.0"></script>
-<script src="app.js?v=2.0.0"></script>
+<script src="config.js?v=2.2.0"></script>
+<script src="js/utils.js?v=2.2.0"></script>
+<script src="js/api.js?v=2.2.0"></script>
+<script src="js/dashboard.js?v=2.2.0"></script>
+<script src="js/radios.js?v=2.2.0"></script>
+<script src="js/estados.js?v=2.2.0"></script>
+<script src="js/categorias.js?v=2.2.0"></script>
+<script src="js/cidades.js?v=2.2.0"></script>
+<script src="js/streams.js?v=2.2.0"></script>
+<script src="js/emissoras.js?v=2.2.0"></script>
+<script src="app.js?v=2.2.0"></script>
 </body>
 </html>

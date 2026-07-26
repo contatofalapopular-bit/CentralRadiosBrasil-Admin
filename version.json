@@ -1,7 +1,7 @@
 {
   "app": "Central Rádios Brasil — Painel Administrativo",
-  "version": "2.0.0",
-  "release": "Cadastro completo de emissoras",
+  "version": "2.2.0",
+  "release": "Banco Oficial das Emissoras — Etapa 13.1",
   "build": "2026-07-25",
   "modules": {
     "dashboard": true,
@@ -57,7 +57,12 @@
     "emissoras-location",
     "emissoras-contacts",
     "emissoras-social",
-    "emissoras-json-export"
+    "emissoras-json-export",
+    "emissoras-import",
+    "emissoras-delete",
+    "emissoras-clone",
+    "emissoras-sort",
+    "emissoras-stats"
   ],
   "fixes": [
     "load-estados-script",

@@ -1,5 +1,5 @@
 .emissoras-filters {
-  grid-template-columns: 2fr 1fr 1fr 1fr;
+  grid-template-columns: 2fr 1fr 1fr 1fr 1fr;
 }
 
 .emissoras-table {
@@ -64,5 +64,48 @@
 
   .emissora-modal-card .full-field {
     grid-column: auto;
+  }
+}
+
+
+.emissoras-stats {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: 12px;
+  margin: 20px 0;
+}
+
+.emissoras-stats article {
+  padding: 16px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: var(--surface);
+}
+
+.emissoras-stats span,
+.emissoras-stats strong {
+  display: block;
+}
+
+.emissoras-stats span {
+  color: var(--muted);
+  font-size: 0.8rem;
+  text-transform: uppercase;
+}
+
+.emissoras-stats strong {
+  margin-top: 5px;
+  font-size: 1.65rem;
+}
+
+@media (max-width: 1100px) {
+  .emissoras-stats {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (max-width: 650px) {
+  .emissoras-stats {
+    grid-template-columns: repeat(2, 1fr);
   }
 }
