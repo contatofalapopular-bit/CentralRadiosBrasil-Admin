@@ -2,137 +2,70 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Painel Administrativo da Central Rádios Brasil">
-  <title>Central Rádios Brasil — Painel Administrativo</title>
-
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Dashboard — Central Rádios Brasil</title>
   <link rel="stylesheet" href="style.css">
   <link rel="stylesheet" href="css/dashboard.css">
 </head>
 <body>
-  <div class="app-shell">
-    <aside class="sidebar" aria-label="Menu principal">
-      <div class="brand">
-        <div class="brand-mark" aria-hidden="true">CRB</div>
+<div class="app-shell">
+  <aside class="sidebar">
+    <div class="brand"><div class="brand-mark">CRB</div><div><strong>Central Rádios Brasil</strong><span>Painel Administrativo</span></div></div>
+    <nav class="main-nav">
+      <a class="nav-link active" href="#">🏠 Dashboard</a>
+      <button class="nav-link disabled" disabled>📻 Rádios <small>Em breve</small></button>
+      <button class="nav-link disabled" disabled>🎵 Categorias <small>Em breve</small></button>
+      <button class="nav-link disabled" disabled>📡 Streams <small>Em breve</small></button>
+      <button class="nav-link disabled" disabled>⚙️ Configurações <small>Em breve</small></button>
+    </nav>
+    <div class="sidebar-footer" id="app-version">v0.2.0</div>
+  </aside>
+
+  <div class="content-area">
+    <header class="topbar">
+      <div><h1>Dashboard</h1><p>Dados oficiais do ecossistema Central Rádios Brasil</p></div>
+      <button id="refresh-button" class="secondary-button">↻ Atualizar dados</button>
+      <button id="theme-toggle" class="theme-button">🌙 Tema escuro</button>
+    </header>
+
+    <main class="main-content">
+      <section class="welcome-panel">
         <div>
-          <strong>Central Rádios Brasil</strong>
-          <span>Painel Administrativo</span>
+          <span id="connection-badge" class="status-badge loading">Conectando ao banco de dados</span>
+          <h2>Visão geral do catálogo</h2>
+          <p>Os números são carregados automaticamente do repositório CentralRadiosBrasil-Dados.</p>
         </div>
-      </div>
-
-      <nav class="main-nav">
-        <a class="nav-link active" href="#/dashboard" data-route="dashboard">
-          <span aria-hidden="true">🏠</span>
-          Dashboard
-        </a>
-
-        <button class="nav-link disabled" type="button" disabled>
-          <span aria-hidden="true">📻</span>
-          Rádios
-          <small>Em breve</small>
-        </button>
-
-        <button class="nav-link disabled" type="button" disabled>
-          <span aria-hidden="true">🎵</span>
-          Categorias
-          <small>Em breve</small>
-        </button>
-
-        <button class="nav-link disabled" type="button" disabled>
-          <span aria-hidden="true">📡</span>
-          Streams
-          <small>Em breve</small>
-        </button>
-
-        <button class="nav-link disabled" type="button" disabled>
-          <span aria-hidden="true">⚙️</span>
-          Configurações
-          <small>Em breve</small>
-        </button>
-      </nav>
-
-      <div class="sidebar-footer">
-        <span id="app-version">v0.1.0</span>
-      </div>
-    </aside>
-
-    <div class="content-area">
-      <header class="topbar">
-        <button id="menu-toggle" class="icon-button" type="button" aria-label="Abrir ou fechar menu">
-          ☰
-        </button>
-
-        <div>
-          <h1 id="page-title">Dashboard</h1>
-          <p>Visão geral do ecossistema Central Rádios Brasil</p>
+        <div class="dataset-info">
+          <span>Versão do banco</span>
+          <strong id="dataset-version">—</strong>
+          <small id="last-update">Última atualização: carregando…</small>
         </div>
+      </section>
 
-        <button id="theme-toggle" class="theme-button" type="button" aria-label="Alternar tema">
-          🌙 Tema escuro
-        </button>
-      </header>
+      <section class="dashboard-grid">
+        <article class="dashboard-card"><b>📻</b><div><span>Total de rádios</span><strong id="total-radios">—</strong><small>Emissoras cadastradas</small></div></article>
+        <article class="dashboard-card"><b>🏙️</b><div><span>Cidades</span><strong id="total-cidades">—</strong><small>Cidades com emissoras</small></div></article>
+        <article class="dashboard-card"><b>🗺️</b><div><span>Estados</span><strong id="total-estados">—</strong><small>Estados com emissoras</small></div></article>
+        <article class="dashboard-card"><b>🎵</b><div><span>Categorias</span><strong id="total-categorias">—</strong><small>Categorias em uso</small></div></article>
+        <article class="dashboard-card online"><b>🟢</b><div><span>Online</span><strong id="total-online">—</strong><small>Streams online</small></div></article>
+        <article class="dashboard-card offline"><b>🔴</b><div><span>Offline</span><strong id="total-offline">—</strong><small>Streams offline</small></div></article>
+        <article class="dashboard-card"><b>📡</b><div><span>Streams</span><strong id="total-streams">—</strong><small>Links cadastrados</small></div></article>
+        <article class="dashboard-card"><b>✅</b><div><span>Verificadas</span><strong id="total-verificadas">—</strong><small>Rádios verificadas</small></div></article>
+      </section>
 
-      <main id="app-content" class="main-content" tabindex="-1">
-        <section class="welcome-panel">
-          <span class="status-badge">Commit 1 concluído</span>
-          <h2>Estrutura inicial criada</h2>
-          <p>
-            O Painel Administrativo está pronto para receber o Dashboard funcional
-            e a leitura automática dos dados do GitHub nos próximos commits.
-          </p>
-        </section>
-
-        <section class="dashboard-grid" aria-label="Resumo inicial">
-          <article class="dashboard-card">
-            <span class="card-icon" aria-hidden="true">📻</span>
-            <div>
-              <span class="card-label">Rádios</span>
-              <strong class="card-value">—</strong>
-              <small>Será carregado no Commit 2</small>
-            </div>
-          </article>
-
-          <article class="dashboard-card">
-            <span class="card-icon" aria-hidden="true">🗺️</span>
-            <div>
-              <span class="card-label">Estados</span>
-              <strong class="card-value">—</strong>
-              <small>Será carregado no Commit 2</small>
-            </div>
-          </article>
-
-          <article class="dashboard-card">
-            <span class="card-icon" aria-hidden="true">🎵</span>
-            <div>
-              <span class="card-label">Categorias</span>
-              <strong class="card-value">—</strong>
-              <small>Será carregado no Commit 2</small>
-            </div>
-          </article>
-
-          <article class="dashboard-card">
-            <span class="card-icon" aria-hidden="true">📡</span>
-            <div>
-              <span class="card-label">Streams</span>
-              <strong class="card-value">—</strong>
-              <small>Será carregado no Commit 2</small>
-            </div>
-          </article>
-        </section>
-      </main>
-
-      <footer class="footer">
-        <span>Central Rádios Brasil</span>
-        <span>Estrutura inicial do Painel Administrativo</span>
-      </footer>
-    </div>
+      <section id="error-panel" class="error-panel hidden">
+        <strong>Não foi possível carregar os dados.</strong>
+        <p id="error-message"></p>
+        <button id="retry-button">Tentar novamente</button>
+      </section>
+    </main>
   </div>
+</div>
 
-  <script src="config.js"></script>
-  <script src="js/utils.js"></script>
-  <script src="js/api.js"></script>
-  <script src="js/router.js"></script>
-  <script src="js/dashboard.js"></script>
-  <script src="app.js"></script>
+<script src="config.js"></script>
+<script src="js/utils.js"></script>
+<script src="js/api.js"></script>
+<script src="js/dashboard.js"></script>
+<script src="app.js"></script>
 </body>
 </html>

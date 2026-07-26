@@ -1,54 +1,20 @@
-/**
- * Ponto de entrada do Painel Administrativo.
- */
-
 document.addEventListener("DOMContentLoaded", () => {
-  inicializarAplicacao();
-});
+  texto("app-version", `v${CONFIG.VERSION}`);
 
-function inicializarAplicacao() {
-  const versionElement = document.getElementById("app-version");
-  const menuToggle = document.getElementById("menu-toggle");
-  const themeToggle = document.getElementById("theme-toggle");
-
-  if (versionElement) {
-    versionElement.textContent = `v${CONFIG.VERSION}`;
-  }
-
-  menuToggle?.addEventListener("click", () => {
-    document.body.classList.toggle("menu-open");
+  document.getElementById("refresh-button").addEventListener("click", () => carregarDashboard(true));
+  document.getElementById("retry-button").addEventListener("click", () => carregarDashboard(true));
+  document.getElementById("theme-toggle").addEventListener("click", () => {
+    const escuro = document.body.classList.toggle("dark-theme");
+    localStorage.setItem("crb-theme", escuro ? "dark" : "light");
+    atualizarTema();
   });
 
-  themeToggle?.addEventListener("click", alternarTema);
+  if (localStorage.getItem("crb-theme") === "dark") document.body.classList.add("dark-theme");
+  atualizarTema();
+  carregarDashboard();
+});
 
-  aplicarTemaSalvo();
-  inicializarRouter();
-
-  console.info(`${CONFIG.APP_NAME} ${CONFIG.VERSION} iniciado.`);
-}
-
-function alternarTema() {
-  const escuroAtivo = document.body.classList.toggle("dark-theme");
-  localStorage.setItem("crb-theme", escuroAtivo ? "dark" : "light");
-  atualizarTextoTema(escuroAtivo);
-}
-
-function aplicarTemaSalvo() {
-  const temaSalvo = localStorage.getItem("crb-theme");
-  const escuroAtivo = temaSalvo === "dark";
-
-  document.body.classList.toggle("dark-theme", escuroAtivo);
-  atualizarTextoTema(escuroAtivo);
-}
-
-function atualizarTextoTema(escuroAtivo) {
-  const themeToggle = document.getElementById("theme-toggle");
-
-  if (!themeToggle) {
-    return;
-  }
-
-  themeToggle.textContent = escuroAtivo
-    ? "☀️ Tema claro"
-    : "🌙 Tema escuro";
+function atualizarTema() {
+  document.getElementById("theme-toggle").textContent =
+    document.body.classList.contains("dark-theme") ? "☀️ Tema claro" : "🌙 Tema escuro";
 }

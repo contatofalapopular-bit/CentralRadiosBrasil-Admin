@@ -1,27 +1,20 @@
-/**
- * Camada de acesso aos dados.
- * As funções reais serão implementadas no Commit 2.
- */
-
-const API = Object.freeze({
-  baseRawUrl() {
-    return [
-      "https://raw.githubusercontent.com",
-      CONFIG.GITHUB_OWNER,
-      CONFIG.DADOS_REPO,
-      CONFIG.DADOS_BRANCH
-    ].join("/");
+const API = {
+  baseUrl() {
+    return `https://raw.githubusercontent.com/${CONFIG.GITHUB_OWNER}/${CONFIG.DADOS_REPO}/${CONFIG.DADOS_BRANCH}`;
   },
-
-  async carregarRadios() {
-    throw new Error("carregarRadios() será implementada no Commit 2.");
-  },
-
-  async carregarCategorias() {
-    throw new Error("carregarCategorias() será implementada no Commit 2.");
-  },
-
-  async carregarEstados() {
-    throw new Error("carregarEstados() será implementada no Commit 2.");
+  async carregar(nome, semCache = false) {
+    const controller = new AbortController();
+    const timer = setTimeout(() => controller.abort(), CONFIG.REQUEST_TIMEOUT_MS);
+    try {
+      const sufixo = semCache ? `?t=${Date.now()}` : "";
+      const resposta = await fetch(`${this.baseUrl()}/${nome}${sufixo}`, {
+        cache: semCache ? "no-store" : "default",
+        signal: controller.signal
+      });
+      if (!resposta.ok) throw new Error(`${nome}: erro ${resposta.status}`);
+      return await resposta.json();
+    } finally {
+      clearTimeout(timer);
+    }
   }
-});
+};
