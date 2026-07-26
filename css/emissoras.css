@@ -1,0 +1,25 @@
+.emissoras-filters {
+  grid-template-columns: 2fr 1fr 1fr 1fr;
+}
+
+.emissoras-table {
+  min-width: 1100px;
+}
+
+.emissoras-table td > small {
+  display: block;
+  margin-top: 4px;
+  color: var(--muted);
+}
+
+@media (max-width: 900px) {
+  .emissoras-filters {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (max-width: 650px) {
+  .emissoras-filters {
+    grid-template-columns: 1fr;
+  }
+}

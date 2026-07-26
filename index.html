@@ -7,14 +7,15 @@
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
   <meta http-equiv="Pragma" content="no-cache">
   <meta http-equiv="Expires" content="0">
-  <title>Central Rádios Brasil — Painel Administrativo v1.6.1</title>
+  <title>Central Rádios Brasil — Painel Administrativo v1.7.0</title>
 
-  <link rel="stylesheet" href="style.css?v=1.6.1">
-  <link rel="stylesheet" href="css/dashboard.css?v=1.6.1">
-  <link rel="stylesheet" href="css/radios.css?v=1.6.1">
-  <link rel="stylesheet" href="css/streams.css?v=1.6.1">
+  <link rel="stylesheet" href="style.css?v=1.7.0">
+  <link rel="stylesheet" href="css/dashboard.css?v=1.7.0">
+  <link rel="stylesheet" href="css/radios.css?v=1.7.0">
+  <link rel="stylesheet" href="css/streams.css?v=1.7.0">
+  <link rel="stylesheet" href="css/emissoras.css?v=1.7.0">
 </head>
-<body data-app-version="1.6.1" data-build="base-oficial">
+<body data-app-version="1.7.0" data-build="base-oficial">
 <div class="app-shell">
   <aside class="sidebar">
     <div class="brand">
@@ -27,6 +28,7 @@
 
     <nav class="main-nav">
       <a class="nav-link active" data-route="dashboard" href="#/dashboard">🏠 Dashboard</a>
+      <a class="nav-link" data-route="emissoras" href="#/emissoras">🏢 Emissoras</a>
       <a class="nav-link" data-route="radios" href="#/radios">📻 Rádios</a>
       <a class="nav-link" data-route="estados" href="#/estados">🗺️ Estados</a>
       <a class="nav-link" data-route="cidades" href="#/cidades">🏙️ Cidades</a>
@@ -35,7 +37,7 @@
       <button class="nav-link disabled" disabled>⚙️ Configurações <small>Em breve</small></button>
     </nav>
 
-    <div class="sidebar-footer" id="app-version">v1.6.1</div>
+    <div class="sidebar-footer" id="app-version">v1.7.0</div>
   </aside>
 
   <div class="content-area">
@@ -452,6 +454,95 @@
         </section>
       </section>
 
+
+      <section id="emissoras-page" class="hidden">
+        <div class="radios-toolbar">
+          <div>
+            <span class="status-badge success">Estrutura inicial ativa</span>
+            <h2>Cadastro Nacional de Emissoras</h2>
+            <p>
+              <strong id="emissoras-visible-count">0</strong> exibidas de
+              <strong id="emissoras-total-count">0</strong>.
+            </p>
+          </div>
+
+          <div class="toolbar-actions">
+            <button id="new-emissora-button" class="primary-button">
+              ＋ Nova emissora
+            </button>
+          </div>
+        </div>
+
+        <div class="draft-banner">
+          <div>
+            <strong>Etapa 12.1 — Estrutura do módulo</strong>
+            <span>
+              O formulário completo, logotipo e múltiplos streams serão
+              adicionados nas próximas etapas.
+            </span>
+          </div>
+        </div>
+
+        <section class="filters-panel emissoras-filters">
+          <label>
+            Buscar
+            <input id="emissora-search" type="search"
+              placeholder="Nome, cidade, estado, categoria ou frequência">
+          </label>
+
+          <label>
+            Estado
+            <select id="emissora-uf-filter">
+              <option value="">Todos os estados</option>
+            </select>
+          </label>
+
+          <label>
+            Tipo
+            <select id="emissora-type-filter">
+              <option value="">Todos os tipos</option>
+              <option value="FM">FM</option>
+              <option value="AM">AM</option>
+              <option value="Web">Web</option>
+            </select>
+          </label>
+
+          <label>
+            Status
+            <select id="emissora-status-filter">
+              <option value="">Todos os status</option>
+              <option value="ativa">Ativas</option>
+              <option value="inativa">Inativas</option>
+            </select>
+          </label>
+        </section>
+
+        <section class="table-card">
+          <div class="table-scroll">
+            <table class="radios-table emissoras-table">
+              <thead>
+                <tr>
+                  <th>Emissora</th>
+                  <th>Tipo</th>
+                  <th>Frequência</th>
+                  <th>Cidade</th>
+                  <th>UF</th>
+                  <th>Categoria</th>
+                  <th>Streams</th>
+                  <th>Status</th>
+                  <th>Ações</th>
+                </tr>
+              </thead>
+              <tbody id="emissoras-table-body">
+                <tr>
+                  <td colspan="9" class="empty-state">Carregando…</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+      </section>
+
     </main>
   </div>
 </div>
@@ -715,15 +806,76 @@
 </div>
 
 
-<script src="config.js?v=1.6.1"></script>
-<script src="js/utils.js?v=1.6.1"></script>
-<script src="js/api.js?v=1.6.1"></script>
-<script src="js/dashboard.js?v=1.6.1"></script>
-<script src="js/radios.js?v=1.6.1"></script>
-<script src="js/estados.js?v=1.6.1"></script>
-<script src="js/categorias.js?v=1.6.1"></script>
-<script src="js/cidades.js?v=1.6.1"></script>
-<script src="js/streams.js?v=1.6.1"></script>
-<script src="app.js?v=1.6.1"></script>
+
+<div id="emissora-modal-backdrop" class="modal-backdrop hidden">
+  <section class="modal-card" role="dialog" aria-modal="true"
+    aria-labelledby="emissora-modal-title">
+
+    <div class="modal-header">
+      <div>
+        <span>Cadastro Nacional</span>
+        <h2 id="emissora-modal-title">Nova emissora</h2>
+      </div>
+
+      <button id="cancel-emissora-form" class="close-button"
+        type="button" aria-label="Fechar">×</button>
+    </div>
+
+    <form id="emissora-form">
+      <div class="form-grid">
+        <label class="full-field">
+          Nome da emissora *
+          <input id="emissora-name" required maxlength="120">
+        </label>
+
+        <label>
+          Tipo
+          <select id="emissora-type">
+            <option value="FM">FM</option>
+            <option value="AM">AM</option>
+            <option value="Web">Web</option>
+          </select>
+        </label>
+
+        <label>
+          Frequência
+          <input id="emissora-frequency" maxlength="20"
+            placeholder="Ex.: 98.7 MHz">
+        </label>
+
+        <label class="full-field checkbox-field">
+          <input id="emissora-active" type="checkbox" checked>
+          Emissora ativa
+        </label>
+      </div>
+
+      <p class="form-note">
+        Esta é a estrutura inicial. Os demais campos serão habilitados no
+        Commit 12.2.
+      </p>
+
+      <div class="modal-actions">
+        <button type="button" class="secondary-button"
+          onclick="EmissorasAdmin.fecharFormulario()">Cancelar</button>
+        <button type="button" class="primary-button" disabled>
+          Salvar — disponível no Commit 12.2
+        </button>
+      </div>
+    </form>
+  </section>
+</div>
+
+
+<script src="config.js?v=1.7.0"></script>
+<script src="js/utils.js?v=1.7.0"></script>
+<script src="js/api.js?v=1.7.0"></script>
+<script src="js/dashboard.js?v=1.7.0"></script>
+<script src="js/radios.js?v=1.7.0"></script>
+<script src="js/estados.js?v=1.7.0"></script>
+<script src="js/categorias.js?v=1.7.0"></script>
+<script src="js/cidades.js?v=1.7.0"></script>
+<script src="js/streams.js?v=1.7.0"></script>
+<script src="js/emissoras.js?v=1.7.0"></script>
+<script src="app.js?v=1.7.0"></script>
 </body>
 </html>

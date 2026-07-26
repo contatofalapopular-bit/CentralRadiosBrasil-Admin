@@ -1,7 +1,7 @@
 {
   "app": "Central Rádios Brasil — Painel Administrativo",
-  "version": "1.6.1",
-  "release": "Módulo de Streams funcional",
+  "version": "1.7.0",
+  "release": "Estrutura do Cadastro Nacional de Emissoras",
   "build": "2026-07-25",
   "modules": {
     "dashboard": true,
@@ -10,7 +10,8 @@
     "streams": true,
     "settings": false,
     "states": true,
-    "cities": true
+    "cities": true,
+    "emissoras": true
   },
   "features": [
     "radio-search",
@@ -45,7 +46,11 @@
     "streams-edit",
     "streams-test",
     "streams-status",
-    "streams-json-export"
+    "streams-json-export",
+    "emissoras-page",
+    "emissoras-search",
+    "emissoras-filters",
+    "emissoras-form-base"
   ],
   "fixes": [
     "load-estados-script",

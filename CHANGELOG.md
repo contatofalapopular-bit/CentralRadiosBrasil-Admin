@@ -1,5 +1,12 @@
 # CHANGELOG
 
+## 1.7.0 — Commit 12.1
+
+- Nova área Emissoras.
+- Tabela, busca e filtros.
+- Formulário-base.
+- Preparação para o Cadastro Nacional de Emissoras.
+
 ## 1.6.1 — Correção e implementação do módulo Streams
 
 - Menu Streams ativado.

@@ -3,6 +3,7 @@ let estadosInicializados = false;
 let categoriasInicializadas = false;
 let cidadesInicializadas = false;
 let streamsInicializados = false;
+let emissorasInicializadas = false;
 
 document.addEventListener("DOMContentLoaded", () => {
   texto("app-version", `v${CONFIG.VERSION}`);
@@ -63,8 +64,9 @@ async function renderizarRota() {
   const categorias = document.getElementById("categorias-page");
   const cidades = document.getElementById("cidades-page");
   const streams = document.getElementById("streams-page");
+  const emissoras = document.getElementById("emissoras-page");
 
-  const rotaValida = ["dashboard", "radios", "estados", "categorias", "cidades", "streams"].includes(rota);
+  const rotaValida = ["dashboard", "radios", "estados", "categorias", "cidades", "streams", "emissoras"].includes(rota);
   const rotaFinal = rotaValida ? rota : "dashboard";
 
   if (!rotaValida) {
@@ -78,12 +80,23 @@ async function renderizarRota() {
   categorias.classList.toggle("hidden", rotaFinal !== "categorias");
   cidades.classList.toggle("hidden", rotaFinal !== "cidades");
   streams.classList.toggle("hidden", rotaFinal !== "streams");
+  emissoras.classList.toggle("hidden", rotaFinal !== "emissoras");
 
   document.querySelectorAll(".nav-link[data-route]").forEach((link) => {
     link.classList.toggle("active", link.dataset.route === rotaFinal);
   });
 
-  if (rotaFinal === "streams") {
+  if (rotaFinal === "emissoras") {
+    texto("page-title", "Emissoras");
+    texto("page-subtitle", "Cadastro Nacional de Emissoras");
+
+    if (!emissorasInicializadas) {
+      emissorasInicializadas = true;
+      await EmissorasAdmin.iniciar();
+    } else {
+      EmissorasAdmin.renderizar();
+    }
+  } else if (rotaFinal === "streams") {
     texto("page-title", "Streams");
     texto("page-subtitle", "Cadastro e verificação dos links de transmissão");
 

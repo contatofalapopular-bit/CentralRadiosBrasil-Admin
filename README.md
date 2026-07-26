@@ -1,24 +1,21 @@
 # Central Rádios Brasil — Painel Administrativo
 
-## Versão 1.6.1 — Commit 11.1
+## Versão 1.7.0 — Commit 12.1
 
-Correção e implementação real do módulo de Streams.
+Estrutura do Cadastro Nacional de Emissoras.
 
-### Funcionalidades
+### Funcionalidades desta etapa
 
-- menu Streams ativo;
-- leitura dos streams existentes em `radios.json`;
+- menu Emissoras;
+- listagem inicial a partir de radios.json;
 - busca e filtros;
-- cadastro, edição e exclusão local;
-- teste de reprodução no navegador;
-- status online, offline e não testado;
-- tempo de resposta;
-- última verificação;
-- protocolo HTTP/HTTPS;
-- codec e bitrate;
-- exportação de `streams.json`.
+- botão Nova emissora;
+- formulário-base;
+- estrutura pronta para formulário completo, logotipo e múltiplos streams.
 
-### Observação
+### Próximas etapas
 
-O teste é realizado pelo navegador. Alguns servidores podem bloquear a
-reprodução mesmo com o stream funcionando.
+- 12.2: formulário completo e salvamento;
+- 12.3: logotipo;
+- 12.4: múltiplos streams;
+- 12.5: exportação final compatível com o ecossistema.
