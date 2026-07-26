@@ -1,20 +1,30 @@
 # Central Rádios Brasil — Painel Administrativo
 
-## Versão 0.3.1 — Commit 4 de consolidação
+## Base Oficial v1.0.0
 
-Este commit consolida a base existente sem reiniciar o projeto.
+Esta é a base estável oficial do Painel Administrativo.
 
-### Correções
+### Funcionalidades preservadas
 
-- mantém o Dashboard funcional;
-- ativa a opção **Rádios** no menu;
-- preserva a leitura do repositório `CentralRadiosBrasil-Dados`;
-- impede o registro repetido de eventos ao trocar de página;
-- adiciona versão aos arquivos CSS e JavaScript para evitar cache antigo;
-- exibe corretamente a versão `0.3.1`;
-- mantém cadastro, edição, exclusão local e exportação de `radios.json`.
+- Dashboard conectado ao repositório `CentralRadiosBrasil-Dados`;
+- leitura de `radios.json`, `categorias.json` e `versao.json`;
+- indicadores de rádios, cidades, estados, categorias e streams;
+- menu Rádios ativo;
+- listagem, busca e filtros;
+- cadastro e edição em rascunho local;
+- exclusão em rascunho local;
+- exportação do arquivo `radios.json`;
+- tema claro e escuro.
 
-### Segurança
+### Consolidação técnica
 
-As alterações nas rádios continuam sendo guardadas como rascunho local.
-Nenhum token ou senha do GitHub fica exposto no navegador.
+- versão `1.0.0` escrita diretamente no HTML;
+- versão também controlada pelo `config.js`;
+- parâmetros de versão em todos os arquivos CSS e JavaScript;
+- arquivo público `version.json`;
+- arquivo `.nojekyll`;
+- nenhuma senha ou token do GitHub exposto no navegador.
+
+### Próximos módulos
+
+Os próximos commits serão incrementais e preservarão esta base.

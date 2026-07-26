@@ -1,0 +1,13 @@
+{
+  "app": "Central Rádios Brasil — Painel Administrativo",
+  "version": "1.0.0",
+  "release": "Base Oficial",
+  "build": "2026-07-25",
+  "modules": {
+    "dashboard": true,
+    "radios": true,
+    "categories": false,
+    "streams": false,
+    "settings": false
+  }
+}

@@ -2,6 +2,8 @@ let radiosInicializadas = false;
 
 document.addEventListener("DOMContentLoaded", () => {
   texto("app-version", `v${CONFIG.VERSION}`);
+  document.body.dataset.appVersion = CONFIG.VERSION;
+  console.info(`${CONFIG.APP_NAME} — Base Oficial v${CONFIG.VERSION}`);
 
   document.getElementById("refresh-button").addEventListener("click", () => {
     if (rotaAtual() === "dashboard") {
