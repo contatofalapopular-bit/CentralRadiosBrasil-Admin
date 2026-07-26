@@ -1,28 +1,10 @@
-# Central Rádios Brasil — Painel Administrativo
+# Commit 12.3 - Logotipos de Emissoras
 
-## Versão 2.0.0 — Commit 12.2
+Objetivos desta etapa:
+- Upload de logotipo principal
+- Pré-visualização da imagem
+- Remoção/substituição do logotipo
+- Preparação para exportação no radios.json
+- Base para integração com ESP32, PWA e site
 
-Formulário completo e salvamento do Cadastro Nacional de Emissoras.
-
-### Funcionalidades
-
-- cadastro completo;
-- edição;
-- ativar e desativar;
-- dados principais;
-- tipo e frequência;
-- estado e cidade;
-- CEP, endereço, latitude e longitude;
-- telefone, WhatsApp e e-mail;
-- site e redes sociais;
-- descrição e observações;
-- ativa, verificada e pública;
-- validação de duplicidade;
-- rascunho local;
-- exportação de radios.json.
-
-### Próximas etapas
-
-- 12.3: logotipo;
-- 12.4: múltiplos streams;
-- 12.5: exportação final e integração total.
+Este pacote é um marco de planejamento da etapa 12.3.

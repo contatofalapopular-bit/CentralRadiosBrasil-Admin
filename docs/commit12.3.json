@@ -1,0 +1,10 @@
+{
+  "commit":"12.3",
+  "version":"2.1.0",
+  "features":[
+    "logo_upload",
+    "logo_preview",
+    "logo_replace",
+    "logo_export"
+  ]
+}
