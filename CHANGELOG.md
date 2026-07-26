@@ -1,5 +1,12 @@
 # CHANGELOG
 
+## 1.3.0 — Cadastro de Estados
+
+- Lista dos 26 estados e Distrito Federal.
+- Busca e filtro por região.
+- Edição e ativação local.
+- Exportação de estados.json.
+
 ## 1.2.0 — Cadastro inteligente de rádios
 
 - Estados brasileiros em lista pronta.

@@ -1,20 +1,18 @@
 # Central Rádios Brasil — Painel Administrativo
 
-## Versão 1.2.0 — Commit 7
+## Versão 1.3.0 — Commit 8
 
-Cadastro inteligente de rádios.
+Cadastro de Estados.
 
-### Novidades
+### Funcionalidades
 
-- seleção pronta dos 26 estados e Distrito Federal;
-- país fixado como Brasil;
-- categorias carregadas automaticamente de `categorias.json`;
-- opção para informar uma categoria diferente;
-- geração automática de ID e slug;
-- bloqueio de rádio duplicada pelo conjunto nome + cidade + estado;
-- manutenção dos recursos de busca, filtros, teste de stream, importação e exportação.
+- 26 estados e Distrito Federal;
+- sigla, nome e região;
+- busca por sigla, nome ou região;
+- filtro por região;
+- ativar e desativar estado;
+- editar nome e região no rascunho local;
+- restaurar lista oficial;
+- exportar `estados.json`.
 
-### Segurança
-
-As alterações permanecem em rascunho local até a exportação de `radios.json`.
-Nenhuma senha ou token do GitHub é exposto.
+Esta estrutura será usada futuramente pelos módulos de cidades e rádios.

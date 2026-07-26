@@ -174,3 +174,36 @@
   color: var(--muted);
   cursor: not-allowed;
 }
+
+
+.states-filters {
+  grid-template-columns: 2fr 1fr;
+}
+
+.states-table {
+  min-width: 700px;
+}
+
+.state-status {
+  display: inline-block;
+  padding: 5px 9px;
+  border-radius: 999px;
+  font-size: 0.78rem;
+  font-weight: 700;
+}
+
+.state-status.active {
+  background: #d9f6e5;
+  color: #136637;
+}
+
+.state-status.inactive {
+  background: #eceff2;
+  color: #555;
+}
+
+@media (max-width: 650px) {
+  .states-filters {
+    grid-template-columns: 1fr;
+  }
+}

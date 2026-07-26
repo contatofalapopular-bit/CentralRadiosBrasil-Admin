@@ -7,13 +7,13 @@
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
   <meta http-equiv="Pragma" content="no-cache">
   <meta http-equiv="Expires" content="0">
-  <title>Central Rádios Brasil — Painel Administrativo v1.2.0</title>
+  <title>Central Rádios Brasil — Painel Administrativo v1.3.0</title>
 
-  <link rel="stylesheet" href="style.css?v=1.2.0">
-  <link rel="stylesheet" href="css/dashboard.css?v=1.2.0">
-  <link rel="stylesheet" href="css/radios.css?v=1.2.0">
+  <link rel="stylesheet" href="style.css?v=1.3.0">
+  <link rel="stylesheet" href="css/dashboard.css?v=1.3.0">
+  <link rel="stylesheet" href="css/radios.css?v=1.3.0">
 </head>
-<body data-app-version="1.2.0" data-build="base-oficial">
+<body data-app-version="1.3.0" data-build="base-oficial">
 <div class="app-shell">
   <aside class="sidebar">
     <div class="brand">
@@ -27,12 +27,13 @@
     <nav class="main-nav">
       <a class="nav-link active" data-route="dashboard" href="#/dashboard">🏠 Dashboard</a>
       <a class="nav-link" data-route="radios" href="#/radios">📻 Rádios</a>
+      <a class="nav-link" data-route="estados" href="#/estados">🗺️ Estados</a>
       <button class="nav-link disabled" disabled>🎵 Categorias <small>Em breve</small></button>
       <button class="nav-link disabled" disabled>📡 Streams <small>Em breve</small></button>
       <button class="nav-link disabled" disabled>⚙️ Configurações <small>Em breve</small></button>
     </nav>
 
-    <div class="sidebar-footer" id="app-version">v1.2.0</div>
+    <div class="sidebar-footer" id="app-version">v1.3.0</div>
   </aside>
 
   <div class="content-area">
@@ -167,6 +168,67 @@
           </div>
         </section>
       </section>
+
+      <section id="estados-page" class="hidden">
+        <div class="radios-toolbar">
+          <div>
+            <span class="status-badge success">Lista oficial carregada</span>
+            <h2>Cadastro de estados</h2>
+            <p>
+              <strong id="estados-visible-count">27</strong> exibidos de
+              <strong id="estados-total-count">27</strong>.
+              Ativos: <strong id="estados-active-count">27</strong>.
+            </p>
+          </div>
+
+          <div class="toolbar-actions">
+            <button id="reset-estados-button" class="secondary-button">
+              ↺ Restaurar lista oficial
+            </button>
+            <button id="export-estados-button" class="primary-button">
+              ⬇ Exportar estados.json
+            </button>
+          </div>
+        </div>
+
+        <section class="filters-panel states-filters">
+          <label>
+            Buscar
+            <input id="estado-search" type="search"
+              placeholder="Sigla, estado ou região">
+          </label>
+
+          <label>
+            Região
+            <select id="estado-region-filter">
+              <option value="">Todas as regiões</option>
+              <option value="Norte">Norte</option>
+              <option value="Nordeste">Nordeste</option>
+              <option value="Centro-Oeste">Centro-Oeste</option>
+              <option value="Sudeste">Sudeste</option>
+              <option value="Sul">Sul</option>
+            </select>
+          </label>
+        </section>
+
+        <section class="table-card">
+          <div class="table-scroll">
+            <table class="radios-table states-table">
+              <thead>
+                <tr>
+                  <th>UF</th>
+                  <th>Estado</th>
+                  <th>Região</th>
+                  <th>Status</th>
+                  <th>Ações</th>
+                </tr>
+              </thead>
+              <tbody id="estados-table-body"></tbody>
+            </table>
+          </div>
+        </section>
+      </section>
+
     </main>
   </div>
 </div>
@@ -310,11 +372,11 @@
   </section>
 </div>
 
-<script src="config.js?v=1.2.0"></script>
-<script src="js/utils.js?v=1.2.0"></script>
-<script src="js/api.js?v=1.2.0"></script>
-<script src="js/dashboard.js?v=1.2.0"></script>
-<script src="js/radios.js?v=1.2.0"></script>
-<script src="app.js?v=1.2.0"></script>
+<script src="config.js?v=1.3.0"></script>
+<script src="js/utils.js?v=1.3.0"></script>
+<script src="js/api.js?v=1.3.0"></script>
+<script src="js/dashboard.js?v=1.3.0"></script>
+<script src="js/radios.js?v=1.3.0"></script>
+<script src="app.js?v=1.3.0"></script>
 </body>
 </html>

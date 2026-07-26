@@ -1,4 +1,5 @@
 let radiosInicializadas = false;
+let estadosInicializados = false;
 
 document.addEventListener("DOMContentLoaded", () => {
   texto("app-version", `v${CONFIG.VERSION}`);
@@ -47,8 +48,9 @@ async function renderizarRota() {
   const rota = rotaAtual();
   const dashboard = document.getElementById("dashboard-page");
   const radios = document.getElementById("radios-page");
+  const estados = document.getElementById("estados-page");
 
-  const rotaValida = rota === "dashboard" || rota === "radios";
+  const rotaValida = ["dashboard", "radios", "estados"].includes(rota);
   const rotaFinal = rotaValida ? rota : "dashboard";
 
   if (!rotaValida) {
@@ -58,12 +60,23 @@ async function renderizarRota() {
 
   dashboard.classList.toggle("hidden", rotaFinal !== "dashboard");
   radios.classList.toggle("hidden", rotaFinal !== "radios");
+  estados.classList.toggle("hidden", rotaFinal !== "estados");
 
   document.querySelectorAll(".nav-link[data-route]").forEach((link) => {
     link.classList.toggle("active", link.dataset.route === rotaFinal);
   });
 
-  if (rotaFinal === "radios") {
+  if (rotaFinal === "estados") {
+    texto("page-title", "Estados");
+    texto("page-subtitle", "Cadastro e organização dos estados brasileiros");
+
+    if (!estadosInicializados) {
+      estadosInicializados = true;
+      EstadosAdmin.iniciar();
+    } else {
+      EstadosAdmin.renderizar();
+    }
+  } else if (rotaFinal === "radios") {
     texto("page-title", "Rádios");
     texto("page-subtitle", "Gerenciamento do catálogo de emissoras");
 

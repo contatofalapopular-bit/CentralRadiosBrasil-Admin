@@ -1,14 +1,15 @@
 {
   "app": "Central Rádios Brasil — Painel Administrativo",
-  "version": "1.2.0",
-  "release": "Cadastro inteligente de rádios",
+  "version": "1.3.0",
+  "release": "Cadastro de Estados",
   "build": "2026-07-25",
   "modules": {
     "dashboard": true,
     "radios": true,
     "categories": false,
     "streams": false,
-    "settings": false
+    "settings": false,
+    "states": true
   },
   "features": [
     "radio-search",
@@ -22,6 +23,10 @@
     "brazil-states-select",
     "categories-from-json",
     "duplicate-radio-validation",
-    "automatic-id-slug"
+    "automatic-id-slug",
+    "states-list",
+    "states-region-filter",
+    "states-local-edit",
+    "states-json-export"
   ]
 }
