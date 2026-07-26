@@ -1,1 +1,19 @@
-/* Commit 11 placeholder */
+.stream-filters {
+  grid-template-columns: 2fr 1fr 1fr;
+}
+
+.streams-table {
+  min-width: 1350px;
+}
+
+.streams-table td > small {
+  display: block;
+  margin-top: 4px;
+  color: var(--muted);
+}
+
+@media (max-width: 800px) {
+  .stream-filters {
+    grid-template-columns: 1fr;
+  }
+}

@@ -7,13 +7,14 @@
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
   <meta http-equiv="Pragma" content="no-cache">
   <meta http-equiv="Expires" content="0">
-  <title>Central Rádios Brasil — Painel Administrativo v1.5.0</title>
+  <title>Central Rádios Brasil — Painel Administrativo v1.6.1</title>
 
-  <link rel="stylesheet" href="style.css?v=1.5.0">
-  <link rel="stylesheet" href="css/dashboard.css?v=1.5.0">
-  <link rel="stylesheet" href="css/radios.css?v=1.5.0">
+  <link rel="stylesheet" href="style.css?v=1.6.1">
+  <link rel="stylesheet" href="css/dashboard.css?v=1.6.1">
+  <link rel="stylesheet" href="css/radios.css?v=1.6.1">
+  <link rel="stylesheet" href="css/streams.css?v=1.6.1">
 </head>
-<body data-app-version="1.5.0" data-build="base-oficial">
+<body data-app-version="1.6.1" data-build="base-oficial">
 <div class="app-shell">
   <aside class="sidebar">
     <div class="brand">
@@ -30,11 +31,11 @@
       <a class="nav-link" data-route="estados" href="#/estados">🗺️ Estados</a>
       <a class="nav-link" data-route="cidades" href="#/cidades">🏙️ Cidades</a>
       <a class="nav-link" data-route="categorias" href="#/categorias">🎵 Categorias</a>
-      <button class="nav-link disabled" disabled>📡 Streams <small>Em breve</small></button>
+      <a class="nav-link" data-route="streams" href="#/streams">📡 Streams</a>
       <button class="nav-link disabled" disabled>⚙️ Configurações <small>Em breve</small></button>
     </nav>
 
-    <div class="sidebar-footer" id="app-version">v1.5.0</div>
+    <div class="sidebar-footer" id="app-version">v1.6.1</div>
   </aside>
 
   <div class="content-area">
@@ -369,6 +370,88 @@
         </section>
       </section>
 
+
+      <section id="streams-page" class="hidden">
+        <div class="radios-toolbar">
+          <div>
+            <span id="streams-status-badge" class="status-badge loading">
+              Aguardando carregamento
+            </span>
+            <h2>Cadastro de streams</h2>
+            <p>
+              <strong id="streams-visible-count">0</strong> exibidos de
+              <strong id="streams-total-count">0</strong>.
+              Online: <strong id="streams-online-count">0</strong>.
+              Offline: <strong id="streams-offline-count">0</strong>.
+            </p>
+          </div>
+
+          <div class="toolbar-actions">
+            <button id="reset-streams-button" class="secondary-button">
+              ↺ Recarregar de radios.json
+            </button>
+            <button id="export-streams-button" class="secondary-button">
+              ⬇ Exportar streams.json
+            </button>
+            <button id="new-stream-button" class="primary-button">
+              ＋ Novo stream
+            </button>
+          </div>
+        </div>
+
+        <section class="filters-panel stream-filters">
+          <label>
+            Buscar
+            <input id="stream-search" type="search"
+              placeholder="Rádio, nome do stream, URL ou codec">
+          </label>
+
+          <label>
+            Status
+            <select id="stream-status-filter">
+              <option value="">Todos os status</option>
+              <option value="online">Online</option>
+              <option value="offline">Offline</option>
+              <option value="nao_testado">Não testado</option>
+            </select>
+          </label>
+
+          <label>
+            Protocolo
+            <select id="stream-protocol-filter">
+              <option value="">Todos</option>
+              <option value="HTTPS">HTTPS</option>
+              <option value="HTTP">HTTP</option>
+            </select>
+          </label>
+        </section>
+
+        <section class="table-card">
+          <div class="table-scroll">
+            <table class="radios-table streams-table">
+              <thead>
+                <tr>
+                  <th>Rádio / Stream</th>
+                  <th>URL</th>
+                  <th>Protocolo</th>
+                  <th>Codec</th>
+                  <th>Bitrate</th>
+                  <th>Status</th>
+                  <th>Resposta</th>
+                  <th>Última verificação</th>
+                  <th>Ações</th>
+                </tr>
+              </thead>
+              <tbody id="streams-table-body">
+                <tr>
+                  <td colspan="9" class="empty-state">Carregando…</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+      </section>
+
     </main>
   </div>
 </div>
@@ -557,14 +640,90 @@
 </div>
 
 
-<script src="config.js?v=1.5.0"></script>
-<script src="js/utils.js?v=1.5.0"></script>
-<script src="js/api.js?v=1.5.0"></script>
-<script src="js/dashboard.js?v=1.5.0"></script>
-<script src="js/radios.js?v=1.5.0"></script>
-<script src="js/estados.js?v=1.5.0"></script>
-<script src="js/categorias.js?v=1.5.0"></script>
-<script src="js/cidades.js?v=1.5.0"></script>
-<script src="app.js?v=1.5.0"></script>
+
+<div id="stream-modal-backdrop" class="modal-backdrop hidden">
+  <section class="modal-card" role="dialog" aria-modal="true"
+    aria-labelledby="stream-modal-title">
+
+    <div class="modal-header">
+      <div>
+        <span>Links de transmissão</span>
+        <h2 id="stream-modal-title">Novo stream</h2>
+      </div>
+
+      <button id="cancel-stream-form" class="close-button"
+        type="button" aria-label="Fechar">×</button>
+    </div>
+
+    <form id="stream-form">
+      <div class="form-grid">
+        <label class="full-field">
+          Nome da rádio *
+          <input id="stream-radio-name" required maxlength="120">
+        </label>
+
+        <label>
+          Nome do stream *
+          <input id="stream-name" required maxlength="80"
+            placeholder="Principal">
+        </label>
+
+        <label>
+          Codec
+          <input id="stream-codec" maxlength="30"
+            placeholder="MP3, AAC, OGG">
+        </label>
+
+        <label class="full-field">
+          URL do stream *
+          <input id="stream-url" type="url" required
+            placeholder="https://">
+        </label>
+
+        <label>
+          Bitrate (kbps)
+          <input id="stream-bitrate" type="number" min="1" max="1000">
+        </label>
+
+        <label class="checkbox-field">
+          <input id="stream-principal" type="checkbox" checked>
+          Stream principal
+        </label>
+
+        <div class="full-field stream-test-box">
+          <div class="stream-test-actions">
+            <button id="test-stream-form-button" type="button"
+              class="secondary-button">▶ Testar</button>
+            <button id="stop-stream-form-button" type="button"
+              class="secondary-button">■ Parar</button>
+          </div>
+
+          <p id="stream-form-result"
+            class="stream-test-result neutral">
+            Nenhum teste realizado.
+          </p>
+        </div>
+      </div>
+
+      <div class="modal-actions">
+        <button type="button" class="secondary-button"
+          onclick="StreamsAdmin.fecharFormulario()">Cancelar</button>
+        <button type="submit" class="primary-button">Salvar stream</button>
+      </div>
+    </form>
+  </section>
+</div>
+
+
+<script src="config.js?v=1.6.1"></script>
+<script src="js/utils.js?v=1.6.1"></script>
+<script src="js/api.js?v=1.6.1"></script>
+<script src="js/dashboard.js?v=1.6.1"></script>
+<script src="js/radios.js?v=1.6.1"></script>
+<script src="js/estados.js?v=1.6.1"></script>
+<script src="js/categorias.js?v=1.6.1"></script>
+<script src="js/cidades.js?v=1.6.1"></script>
+<script src="js/streams.js?v=1.6.1"></script>
+<script src="app.js?v=1.6.1"></script>
 </body>
 </html>

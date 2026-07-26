@@ -2,6 +2,7 @@ let radiosInicializadas = false;
 let estadosInicializados = false;
 let categoriasInicializadas = false;
 let cidadesInicializadas = false;
+let streamsInicializados = false;
 
 document.addEventListener("DOMContentLoaded", () => {
   texto("app-version", `v${CONFIG.VERSION}`);
@@ -19,6 +20,8 @@ document.addEventListener("DOMContentLoaded", () => {
       CategoriasAdmin.renderizar();
     } else if (rotaAtual() === "cidades") {
       CidadesAdmin.carregar(true);
+    } else if (rotaAtual() === "streams") {
+      StreamsAdmin.renderizar();
     }
   });
 
@@ -59,8 +62,9 @@ async function renderizarRota() {
   const estados = document.getElementById("estados-page");
   const categorias = document.getElementById("categorias-page");
   const cidades = document.getElementById("cidades-page");
+  const streams = document.getElementById("streams-page");
 
-  const rotaValida = ["dashboard", "radios", "estados", "categorias", "cidades"].includes(rota);
+  const rotaValida = ["dashboard", "radios", "estados", "categorias", "cidades", "streams"].includes(rota);
   const rotaFinal = rotaValida ? rota : "dashboard";
 
   if (!rotaValida) {
@@ -73,12 +77,23 @@ async function renderizarRota() {
   estados.classList.toggle("hidden", rotaFinal !== "estados");
   categorias.classList.toggle("hidden", rotaFinal !== "categorias");
   cidades.classList.toggle("hidden", rotaFinal !== "cidades");
+  streams.classList.toggle("hidden", rotaFinal !== "streams");
 
   document.querySelectorAll(".nav-link[data-route]").forEach((link) => {
     link.classList.toggle("active", link.dataset.route === rotaFinal);
   });
 
-  if (rotaFinal === "cidades") {
+  if (rotaFinal === "streams") {
+    texto("page-title", "Streams");
+    texto("page-subtitle", "Cadastro e verificação dos links de transmissão");
+
+    if (!streamsInicializados) {
+      streamsInicializados = true;
+      await StreamsAdmin.iniciar();
+    } else {
+      StreamsAdmin.renderizar();
+    }
+  } else if (rotaFinal === "cidades") {
     texto("page-title", "Cidades");
     texto("page-subtitle", "Base nacional de municípios brasileiros");
 
