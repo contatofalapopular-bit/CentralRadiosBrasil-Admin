@@ -4,6 +4,7 @@ let categoriasInicializadas = false;
 let cidadesInicializadas = false;
 let streamsInicializados = false;
 let emissorasInicializadas = false;
+let publicacaoInicializada = false;
 
 document.addEventListener("DOMContentLoaded", () => {
   texto("app-version", `v${CONFIG.VERSION}`);
@@ -23,6 +24,10 @@ document.addEventListener("DOMContentLoaded", () => {
       CidadesAdmin.carregar(true);
     } else if (rotaAtual() === "streams") {
       StreamsAdmin.renderizar();
+    } else if (rotaAtual() === "emissoras") {
+      EmissorasAdmin.renderizar();
+    } else if (rotaAtual() === "publicacao") {
+      atualizarResumoPublicacao();
     }
   });
 
@@ -32,7 +37,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
   document.getElementById("theme-toggle").addEventListener("click", () => {
     const escuro = document.body.classList.toggle("dark-theme");
-    localStorage.setItem("crb-theme", escuro ? "dark" : "light");
+
+    localStorage.setItem(
+      "crb-theme",
+      escuro ? "dark" : "light"
+    );
+
     atualizarTema();
   });
 
@@ -41,7 +51,12 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   atualizarTema();
-  window.addEventListener("hashchange", renderizarRota);
+
+  window.addEventListener(
+    "hashchange",
+    renderizarRota
+  );
+
   renderizarRota();
 });
 
@@ -58,6 +73,7 @@ function rotaAtual() {
 
 async function renderizarRota() {
   const rota = rotaAtual();
+
   const dashboard = document.getElementById("dashboard-page");
   const radios = document.getElementById("radios-page");
   const estados = document.getElementById("estados-page");
@@ -65,8 +81,20 @@ async function renderizarRota() {
   const cidades = document.getElementById("cidades-page");
   const streams = document.getElementById("streams-page");
   const emissoras = document.getElementById("emissoras-page");
+  const publicacao = document.getElementById("publicacao-page");
 
-  const rotaValida = ["dashboard", "radios", "estados", "categorias", "cidades", "streams", "emissoras"].includes(rota);
+  const rotasValidas = [
+    "dashboard",
+    "radios",
+    "estados",
+    "categorias",
+    "cidades",
+    "streams",
+    "emissoras",
+    "publicacao"
+  ];
+
+  const rotaValida = rotasValidas.includes(rota);
   const rotaFinal = rotaValida ? rota : "dashboard";
 
   if (!rotaValida) {
@@ -74,21 +102,76 @@ async function renderizarRota() {
     return;
   }
 
-  dashboard.classList.toggle("hidden", rotaFinal !== "dashboard");
-  radios.classList.toggle("hidden", rotaFinal !== "radios");
-  estados.classList.toggle("hidden", rotaFinal !== "estados");
-  categorias.classList.toggle("hidden", rotaFinal !== "categorias");
-  cidades.classList.toggle("hidden", rotaFinal !== "cidades");
-  streams.classList.toggle("hidden", rotaFinal !== "streams");
-  emissoras.classList.toggle("hidden", rotaFinal !== "emissoras");
+  dashboard.classList.toggle(
+    "hidden",
+    rotaFinal !== "dashboard"
+  );
 
-  document.querySelectorAll(".nav-link[data-route]").forEach((link) => {
-    link.classList.toggle("active", link.dataset.route === rotaFinal);
-  });
+  radios.classList.toggle(
+    "hidden",
+    rotaFinal !== "radios"
+  );
 
-  if (rotaFinal === "emissoras") {
+  estados.classList.toggle(
+    "hidden",
+    rotaFinal !== "estados"
+  );
+
+  categorias.classList.toggle(
+    "hidden",
+    rotaFinal !== "categorias"
+  );
+
+  cidades.classList.toggle(
+    "hidden",
+    rotaFinal !== "cidades"
+  );
+
+  streams.classList.toggle(
+    "hidden",
+    rotaFinal !== "streams"
+  );
+
+  emissoras.classList.toggle(
+    "hidden",
+    rotaFinal !== "emissoras"
+  );
+
+  publicacao.classList.toggle(
+    "hidden",
+    rotaFinal !== "publicacao"
+  );
+
+  document
+    .querySelectorAll(".nav-link[data-route]")
+    .forEach((link) => {
+      link.classList.toggle(
+        "active",
+        link.dataset.route === rotaFinal
+      );
+    });
+
+  if (rotaFinal === "publicacao") {
+    texto("page-title", "Publicação");
+
+    texto(
+      "page-subtitle",
+      "Validação e preparação do banco oficial"
+    );
+
+    if (!publicacaoInicializada) {
+      publicacaoInicializada = true;
+      iniciarPublicacao();
+    } else {
+      atualizarResumoPublicacao();
+    }
+  } else if (rotaFinal === "emissoras") {
     texto("page-title", "Emissoras");
-    texto("page-subtitle", "Cadastro Nacional de Emissoras");
+
+    texto(
+      "page-subtitle",
+      "Cadastro Nacional de Emissoras"
+    );
 
     if (!emissorasInicializadas) {
       emissorasInicializadas = true;
@@ -98,7 +181,11 @@ async function renderizarRota() {
     }
   } else if (rotaFinal === "streams") {
     texto("page-title", "Streams");
-    texto("page-subtitle", "Cadastro e verificação dos links de transmissão");
+
+    texto(
+      "page-subtitle",
+      "Cadastro e verificação dos links de transmissão"
+    );
 
     if (!streamsInicializados) {
       streamsInicializados = true;
@@ -108,7 +195,11 @@ async function renderizarRota() {
     }
   } else if (rotaFinal === "cidades") {
     texto("page-title", "Cidades");
-    texto("page-subtitle", "Base nacional de municípios brasileiros");
+
+    texto(
+      "page-subtitle",
+      "Base nacional de municípios brasileiros"
+    );
 
     if (!cidadesInicializadas) {
       cidadesInicializadas = true;
@@ -118,7 +209,11 @@ async function renderizarRota() {
     }
   } else if (rotaFinal === "categorias") {
     texto("page-title", "Categorias");
-    texto("page-subtitle", "Cadastro e organização das categorias de rádio");
+
+    texto(
+      "page-subtitle",
+      "Cadastro e organização das categorias de rádio"
+    );
 
     if (!categoriasInicializadas) {
       categoriasInicializadas = true;
@@ -128,7 +223,11 @@ async function renderizarRota() {
     }
   } else if (rotaFinal === "estados") {
     texto("page-title", "Estados");
-    texto("page-subtitle", "Cadastro e organização dos estados brasileiros");
+
+    texto(
+      "page-subtitle",
+      "Cadastro e organização dos estados brasileiros"
+    );
 
     if (!estadosInicializados) {
       estadosInicializados = true;
@@ -138,7 +237,11 @@ async function renderizarRota() {
     }
   } else if (rotaFinal === "radios") {
     texto("page-title", "Rádios");
-    texto("page-subtitle", "Gerenciamento do catálogo de emissoras");
+
+    texto(
+      "page-subtitle",
+      "Gerenciamento do catálogo de emissoras"
+    );
 
     if (!radiosInicializadas) {
       radiosInicializadas = true;
@@ -148,7 +251,12 @@ async function renderizarRota() {
     }
   } else {
     texto("page-title", "Dashboard");
-    texto("page-subtitle", "Dados oficiais do ecossistema Central Rádios Brasil");
+
+    texto(
+      "page-subtitle",
+      "Dados oficiais do ecossistema Central Rádios Brasil"
+    );
+
     carregarDashboard();
   }
 }
