@@ -1,25 +1,20 @@
 # Central Rádios Brasil — Painel Administrativo
 
-## Versão 0.3.0 — Commit 3
+## Versão 0.3.1 — Commit 4 de consolidação
 
-Nova tela de gerenciamento de rádios:
+Este commit consolida a base existente sem reiniciar o projeto.
 
-- listagem do catálogo;
-- busca por nome, cidade, estado ou categoria;
-- filtros por estado e status;
-- cadastro de nova rádio;
-- edição;
-- exclusão;
-- rascunho salvo no navegador;
-- exportação do arquivo `radios.json`.
+### Correções
 
-## Segurança
+- mantém o Dashboard funcional;
+- ativa a opção **Rádios** no menu;
+- preserva a leitura do repositório `CentralRadiosBrasil-Dados`;
+- impede o registro repetido de eventos ao trocar de página;
+- adiciona versão aos arquivos CSS e JavaScript para evitar cache antigo;
+- exibe corretamente a versão `0.3.1`;
+- mantém cadastro, edição, exclusão local e exportação de `radios.json`.
 
-O GitHub Pages é uma hospedagem estática. Por isso, esta versão não coloca
-tokens ou senhas no navegador.
+### Segurança
 
-As alterações são salvas localmente e exportadas para um novo `radios.json`,
-que deve substituir o arquivo no repositório `CentralRadiosBrasil-Dados`.
-
-A publicação automática será implementada futuramente por uma camada segura
-com autenticação.
+As alterações nas rádios continuam sendo guardadas como rascunho local.
+Nenhum token ou senha do GitHub fica exposto no navegador.

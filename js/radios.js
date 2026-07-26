@@ -4,8 +4,13 @@ const RadiosAdmin = {
   documentoOriginal: null,
   radioEditandoId: null,
 
+  eventosRegistrados: false,
+
   async iniciar() {
-    this.registrarEventos();
+    if (!this.eventosRegistrados) {
+      this.registrarEventos();
+      this.eventosRegistrados = true;
+    }
     await this.carregar();
   },
 
