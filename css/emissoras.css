@@ -23,3 +23,46 @@
     grid-template-columns: 1fr;
   }
 }
+
+
+.emissora-modal-card {
+  width: min(900px, 100%);
+}
+
+.form-section {
+  margin: 0 0 22px;
+  padding: 18px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+}
+
+.form-section legend {
+  padding: 0 8px;
+  font-weight: 800;
+  color: var(--text);
+}
+
+.emissora-modal-card .form-grid {
+  grid-template-columns: 1fr 1fr;
+}
+
+.emissora-modal-card textarea,
+.emissora-modal-card select {
+  width: 100%;
+  padding: 11px 12px;
+  border: 1px solid var(--border);
+  border-radius: 9px;
+  background: var(--surface);
+  color: var(--text);
+  font: inherit;
+}
+
+@media (max-width: 700px) {
+  .emissora-modal-card .form-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .emissora-modal-card .full-field {
+    grid-column: auto;
+  }
+}

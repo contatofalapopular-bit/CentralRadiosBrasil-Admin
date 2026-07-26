@@ -1,5 +1,12 @@
 # CHANGELOG
 
+## 2.0.0 — Commit 12.2
+
+- Formulário completo de emissoras.
+- Salvamento e edição local.
+- Integração com estados, cidades e categorias.
+- Exportação de radios.json.
+
 ## 1.7.0 — Commit 12.1
 
 - Nova área Emissoras.

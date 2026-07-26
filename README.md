@@ -1,21 +1,28 @@
 # Central Rádios Brasil — Painel Administrativo
 
-## Versão 1.7.0 — Commit 12.1
+## Versão 2.0.0 — Commit 12.2
 
-Estrutura do Cadastro Nacional de Emissoras.
+Formulário completo e salvamento do Cadastro Nacional de Emissoras.
 
-### Funcionalidades desta etapa
+### Funcionalidades
 
-- menu Emissoras;
-- listagem inicial a partir de radios.json;
-- busca e filtros;
-- botão Nova emissora;
-- formulário-base;
-- estrutura pronta para formulário completo, logotipo e múltiplos streams.
+- cadastro completo;
+- edição;
+- ativar e desativar;
+- dados principais;
+- tipo e frequência;
+- estado e cidade;
+- CEP, endereço, latitude e longitude;
+- telefone, WhatsApp e e-mail;
+- site e redes sociais;
+- descrição e observações;
+- ativa, verificada e pública;
+- validação de duplicidade;
+- rascunho local;
+- exportação de radios.json.
 
 ### Próximas etapas
 
-- 12.2: formulário completo e salvamento;
 - 12.3: logotipo;
 - 12.4: múltiplos streams;
-- 12.5: exportação final compatível com o ecossistema.
+- 12.5: exportação final e integração total.
