@@ -314,32 +314,63 @@ function importarProblemasDaValidacao() {
 /**
  * Aciona os botões de download já existentes na modal.
  */
-function acionarGeradorExistente(idBotao, nomeArquivo) {
-  const botaoOriginal = document.getElementById(idBotao);
-
-  if (!botaoOriginal) {
+function gerarBancoOficialPublicacao() {
+  if (
+    typeof EmissorasAdmin === "undefined" ||
+    typeof EmissorasAdmin.baixarBancoOficial !== "function"
+  ) {
     atualizarBadgePublicacao(
       "error",
       "Gerador indisponível"
     );
 
     adicionarProblemaPublicacao(
-      `O gerador de ${nomeArquivo} não foi encontrado.`
+      "O gerador de radios.json não está disponível."
     );
 
     return;
   }
 
-  botaoOriginal.click();
+  EmissorasAdmin.baixarBancoOficial();
 
   atualizarBadgePublicacao(
     "success",
-    "Arquivo preparado"
+    "radios.json gerado"
   );
 
   definirTexto(
     "publicacao-resumo",
-    `${nomeArquivo} foi preparado para download.`
+    "O arquivo radios.json foi preparado para download."
+  );
+}
+
+function gerarBancoEsp32Publicacao() {
+  if (
+    typeof EmissorasAdmin === "undefined" ||
+    typeof EmissorasAdmin.baixarBancoEsp32 !== "function"
+  ) {
+    atualizarBadgePublicacao(
+      "error",
+      "Gerador indisponível"
+    );
+
+    adicionarProblemaPublicacao(
+      "O gerador de radios-esp32.json não está disponível."
+    );
+
+    return;
+  }
+
+  EmissorasAdmin.baixarBancoEsp32();
+
+  atualizarBadgePublicacao(
+    "success",
+    "radios-esp32.json gerado"
+  );
+
+  definirTexto(
+    "publicacao-resumo",
+    "O arquivo radios-esp32.json foi preparado para download."
   );
 }
 
