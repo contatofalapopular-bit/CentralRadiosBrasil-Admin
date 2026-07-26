@@ -11,6 +11,8 @@ document.addEventListener("DOMContentLoaded", () => {
       carregarDashboard(true);
     } else if (rotaAtual() === "radios") {
       RadiosAdmin.carregar();
+    } else if (rotaAtual() === "estados") {
+      EstadosAdmin.renderizar();
     }
   });
 

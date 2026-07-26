@@ -1,18 +1,17 @@
 # Central Rádios Brasil — Painel Administrativo
 
-## Versão 1.3.0 — Commit 8
+## Versão 1.3.1 — Commit 8.1
 
-Cadastro de Estados.
+Correção da tela de Estados.
 
-### Funcionalidades
+### Correção realizada
 
-- 26 estados e Distrito Federal;
-- sigla, nome e região;
-- busca por sigla, nome ou região;
-- filtro por região;
-- ativar e desativar estado;
-- editar nome e região no rascunho local;
-- restaurar lista oficial;
-- exportar `estados.json`.
+- inclusão correta do arquivo `js/estados.js` no `index.html`;
+- tabela com os 26 estados e o Distrito Federal passa a ser renderizada;
+- botão Atualizar dados também redesenha a tela de Estados;
+- todas as funcionalidades anteriores foram preservadas.
 
-Esta estrutura será usada futuramente pelos módulos de cidades e rádios.
+### Causa do problema
+
+O arquivo `js/estados.js` existia no projeto, mas não estava sendo carregado
+pela página principal.

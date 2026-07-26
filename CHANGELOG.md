@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## 1.3.1 — Correção da tabela de Estados
+
+- Carregamento de `js/estados.js` corrigido.
+- Tabela dos estados passa a ser renderizada.
+- Atualização manual da tela de Estados corrigida.
+
 ## 1.3.0 — Cadastro de Estados
 
 - Lista dos 26 estados e Distrito Federal.
