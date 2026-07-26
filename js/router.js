@@ -16,6 +16,11 @@ function processarRota() {
       carregarDashboard();
       break;
 
+    case "publicacao":
+      definirTituloPagina("Publicação Oficial");
+      carregarPublicacao();
+      break;
+
     default:
       window.location.hash = `#/${CONFIG.DEFAULT_ROUTE}`;
   }
