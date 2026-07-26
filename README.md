@@ -1,17 +1,20 @@
 # Central Rádios Brasil — Painel Administrativo
 
-## Versão 1.3.1 — Commit 8.1
+## Versão 1.4.0 — Commit 9
 
-Correção da tela de Estados.
+Cadastro de Categorias.
 
-### Correção realizada
+### Funcionalidades
 
-- inclusão correta do arquivo `js/estados.js` no `index.html`;
-- tabela com os 26 estados e o Distrito Federal passa a ser renderizada;
-- botão Atualizar dados também redesenha a tela de Estados;
-- todas as funcionalidades anteriores foram preservadas.
+- lista inicial de categorias de rádio;
+- busca por nome, descrição ou identificador;
+- filtro por status;
+- criar nova categoria;
+- editar categoria;
+- ativar ou desativar;
+- excluir do rascunho local;
+- restaurar lista inicial;
+- exportar `categorias.json`.
 
-### Causa do problema
-
-O arquivo `js/estados.js` existia no projeto, mas não estava sendo carregado
-pela página principal.
+O módulo de rádios continua funcionando e poderá usar o arquivo exportado
+como fonte oficial das categorias.

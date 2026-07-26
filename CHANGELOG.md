@@ -1,5 +1,13 @@
 # CHANGELOG
 
+## 1.4.0 — Cadastro de Categorias
+
+- Menu Categorias ativado.
+- Lista inicial de categorias.
+- Criação, edição, ativação e exclusão local.
+- Busca e filtro por status.
+- Exportação de categorias.json.
+
 ## 1.3.1 — Correção da tabela de Estados
 
 - Carregamento de `js/estados.js` corrigido.

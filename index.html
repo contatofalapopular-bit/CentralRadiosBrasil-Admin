@@ -7,13 +7,13 @@
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
   <meta http-equiv="Pragma" content="no-cache">
   <meta http-equiv="Expires" content="0">
-  <title>Central Rádios Brasil — Painel Administrativo v1.3.1</title>
+  <title>Central Rádios Brasil — Painel Administrativo v1.4.0</title>
 
-  <link rel="stylesheet" href="style.css?v=1.3.1">
-  <link rel="stylesheet" href="css/dashboard.css?v=1.3.1">
-  <link rel="stylesheet" href="css/radios.css?v=1.3.1">
+  <link rel="stylesheet" href="style.css?v=1.4.0">
+  <link rel="stylesheet" href="css/dashboard.css?v=1.4.0">
+  <link rel="stylesheet" href="css/radios.css?v=1.4.0">
 </head>
-<body data-app-version="1.3.1" data-build="base-oficial">
+<body data-app-version="1.4.0" data-build="base-oficial">
 <div class="app-shell">
   <aside class="sidebar">
     <div class="brand">
@@ -28,12 +28,12 @@
       <a class="nav-link active" data-route="dashboard" href="#/dashboard">🏠 Dashboard</a>
       <a class="nav-link" data-route="radios" href="#/radios">📻 Rádios</a>
       <a class="nav-link" data-route="estados" href="#/estados">🗺️ Estados</a>
-      <button class="nav-link disabled" disabled>🎵 Categorias <small>Em breve</small></button>
+      <a class="nav-link" data-route="categorias" href="#/categorias">🎵 Categorias</a>
       <button class="nav-link disabled" disabled>📡 Streams <small>Em breve</small></button>
       <button class="nav-link disabled" disabled>⚙️ Configurações <small>Em breve</small></button>
     </nav>
 
-    <div class="sidebar-footer" id="app-version">v1.3.1</div>
+    <div class="sidebar-footer" id="app-version">v1.4.0</div>
   </aside>
 
   <div class="content-area">
@@ -229,6 +229,67 @@
         </section>
       </section>
 
+
+      <section id="categorias-page" class="hidden">
+        <div class="radios-toolbar">
+          <div>
+            <span class="status-badge success">Categorias disponíveis</span>
+            <h2>Cadastro de categorias</h2>
+            <p>
+              <strong id="categorias-visible-count">0</strong> exibidas de
+              <strong id="categorias-total-count">0</strong>.
+              Ativas: <strong id="categorias-active-count">0</strong>.
+            </p>
+          </div>
+
+          <div class="toolbar-actions">
+            <button id="reset-categorias-button" class="secondary-button">
+              ↺ Restaurar lista inicial
+            </button>
+            <button id="export-categorias-button" class="secondary-button">
+              ⬇ Exportar categorias.json
+            </button>
+            <button id="new-category-button" class="primary-button">
+              ＋ Nova categoria
+            </button>
+          </div>
+        </div>
+
+        <section class="filters-panel states-filters">
+          <label>
+            Buscar
+            <input id="categoria-search" type="search"
+              placeholder="Nome, descrição ou identificador">
+          </label>
+
+          <label>
+            Status
+            <select id="categoria-status-filter">
+              <option value="">Todos os status</option>
+              <option value="ativa">Ativas</option>
+              <option value="inativa">Inativas</option>
+            </select>
+          </label>
+        </section>
+
+        <section class="table-card">
+          <div class="table-scroll">
+            <table class="radios-table categories-table">
+              <thead>
+                <tr>
+                  <th>Categoria</th>
+                  <th>ID</th>
+                  <th>Descrição</th>
+                  <th>Status</th>
+                  <th>Ações</th>
+                </tr>
+              </thead>
+              <tbody id="categorias-table-body"></tbody>
+            </table>
+          </div>
+        </section>
+      </section>
+
     </main>
   </div>
 </div>
@@ -372,12 +433,58 @@
   </section>
 </div>
 
-<script src="config.js?v=1.3.1"></script>
-<script src="js/utils.js?v=1.3.1"></script>
-<script src="js/api.js?v=1.3.1"></script>
-<script src="js/dashboard.js?v=1.3.1"></script>
-<script src="js/radios.js?v=1.3.1"></script>
-<script src="js/estados.js?v=1.3.1"></script>
-<script src="app.js?v=1.3.1"></script>
+
+<div id="categoria-modal-backdrop" class="modal-backdrop hidden">
+  <section class="modal-card category-modal" role="dialog" aria-modal="true"
+    aria-labelledby="categoria-modal-title">
+
+    <div class="modal-header">
+      <div>
+        <span>Organização do catálogo</span>
+        <h2 id="categoria-modal-title">Nova categoria</h2>
+      </div>
+
+      <button id="cancel-categoria-form" class="close-button"
+        type="button" aria-label="Fechar">×</button>
+    </div>
+
+    <form id="categoria-form">
+      <div class="form-grid">
+        <label class="full-field">
+          Nome da categoria *
+          <input id="categoria-name" required maxlength="80"
+            placeholder="Ex.: Jazz">
+        </label>
+
+        <label class="full-field">
+          Descrição
+          <textarea id="categoria-description" rows="4" maxlength="300"
+            placeholder="Descrição curta da categoria"></textarea>
+        </label>
+
+        <label class="checkbox-field full-field">
+          <input id="categoria-active" type="checkbox" checked>
+          Categoria ativa
+        </label>
+      </div>
+
+      <div class="modal-actions">
+        <button type="button" class="secondary-button"
+          onclick="CategoriasAdmin.fecharFormulario()">Cancelar</button>
+        <button type="submit" class="primary-button">Salvar categoria</button>
+      </div>
+    </form>
+  </section>
+</div>
+
+
+<script src="config.js?v=1.4.0"></script>
+<script src="js/utils.js?v=1.4.0"></script>
+<script src="js/api.js?v=1.4.0"></script>
+<script src="js/dashboard.js?v=1.4.0"></script>
+<script src="js/radios.js?v=1.4.0"></script>
+<script src="js/estados.js?v=1.4.0"></script>
+<script src="js/categorias.js?v=1.4.0"></script>
+<script src="app.js?v=1.4.0"></script>
 </body>
 </html>

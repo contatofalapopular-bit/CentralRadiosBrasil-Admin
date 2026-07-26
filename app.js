@@ -1,5 +1,6 @@
 let radiosInicializadas = false;
 let estadosInicializados = false;
+let categoriasInicializadas = false;
 
 document.addEventListener("DOMContentLoaded", () => {
   texto("app-version", `v${CONFIG.VERSION}`);
@@ -13,6 +14,8 @@ document.addEventListener("DOMContentLoaded", () => {
       RadiosAdmin.carregar();
     } else if (rotaAtual() === "estados") {
       EstadosAdmin.renderizar();
+    } else if (rotaAtual() === "categorias") {
+      CategoriasAdmin.renderizar();
     }
   });
 
@@ -51,8 +54,9 @@ async function renderizarRota() {
   const dashboard = document.getElementById("dashboard-page");
   const radios = document.getElementById("radios-page");
   const estados = document.getElementById("estados-page");
+  const categorias = document.getElementById("categorias-page");
 
-  const rotaValida = ["dashboard", "radios", "estados"].includes(rota);
+  const rotaValida = ["dashboard", "radios", "estados", "categorias"].includes(rota);
   const rotaFinal = rotaValida ? rota : "dashboard";
 
   if (!rotaValida) {
@@ -63,12 +67,23 @@ async function renderizarRota() {
   dashboard.classList.toggle("hidden", rotaFinal !== "dashboard");
   radios.classList.toggle("hidden", rotaFinal !== "radios");
   estados.classList.toggle("hidden", rotaFinal !== "estados");
+  categorias.classList.toggle("hidden", rotaFinal !== "categorias");
 
   document.querySelectorAll(".nav-link[data-route]").forEach((link) => {
     link.classList.toggle("active", link.dataset.route === rotaFinal);
   });
 
-  if (rotaFinal === "estados") {
+  if (rotaFinal === "categorias") {
+    texto("page-title", "Categorias");
+    texto("page-subtitle", "Cadastro e organização das categorias de rádio");
+
+    if (!categoriasInicializadas) {
+      categoriasInicializadas = true;
+      CategoriasAdmin.iniciar();
+    } else {
+      CategoriasAdmin.renderizar();
+    }
+  } else if (rotaFinal === "estados") {
     texto("page-title", "Estados");
     texto("page-subtitle", "Cadastro e organização dos estados brasileiros");
 
