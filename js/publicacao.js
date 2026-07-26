@@ -231,9 +231,28 @@ function executarValidacaoPublicacao() {
 
   EmissorasAdmin.exportar();
 
-  window.setTimeout(() => {
-    concluirValidacaoPublicacao();
-  }, 300);
+  const resultado = EmissorasAdmin.ultimoRelatorioValidacao;
+
+if (!resultado) {
+  atualizarBadgePublicacao(
+    "error",
+    "Falha na validação"
+  );
+
+  definirTexto(
+    "publicacao-resumo",
+    "O módulo de Emissoras não retornou o relatório da validação."
+  );
+
+  adicionarProblemaPublicacao(
+    "Não foi possível obter o resultado da validação oficial."
+  );
+
+  desativarGeradoresPublicacao();
+  return;
+}
+
+concluirValidacaoPublicacao();
 }
 /**
  * Lê o resultado produzido pela modal de validação existente.
