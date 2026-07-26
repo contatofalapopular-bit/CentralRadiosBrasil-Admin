@@ -7,15 +7,15 @@
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
   <meta http-equiv="Pragma" content="no-cache">
   <meta http-equiv="Expires" content="0">
-  <title>Central Rádios Brasil — Painel Administrativo v2.2.0</title>
+  <title>Central Rádios Brasil — Painel Administrativo v2.3.0</title>
 
-  <link rel="stylesheet" href="style.css?v=2.2.0">
-  <link rel="stylesheet" href="css/dashboard.css?v=2.2.0">
-  <link rel="stylesheet" href="css/radios.css?v=2.2.0">
-  <link rel="stylesheet" href="css/streams.css?v=2.2.0">
-  <link rel="stylesheet" href="css/emissoras.css?v=2.2.0">
+  <link rel="stylesheet" href="style.css?v=2.3.0">
+  <link rel="stylesheet" href="css/dashboard.css?v=2.3.0">
+  <link rel="stylesheet" href="css/radios.css?v=2.3.0">
+  <link rel="stylesheet" href="css/streams.css?v=2.3.0">
+  <link rel="stylesheet" href="css/emissoras.css?v=2.3.0">
 </head>
-<body data-app-version="2.2.0" data-build="base-oficial">
+<body data-app-version="2.3.0" data-build="base-oficial">
 <div class="app-shell">
   <aside class="sidebar">
     <div class="brand">
@@ -37,7 +37,7 @@
       <button class="nav-link disabled" disabled>⚙️ Configurações <small>Em breve</small></button>
     </nav>
 
-    <div class="sidebar-footer" id="app-version">v2.2.0</div>
+    <div class="sidebar-footer" id="app-version">v2.3.0</div>
   </aside>
 
   <div class="content-area">
@@ -1011,6 +1011,50 @@
       </fieldset>
 
       <fieldset class="form-section">
+        <legend>Streams da emissora</legend>
+
+        <div class="linked-streams-header">
+          <div>
+            <strong>
+              <span id="emissora-streams-count">0</span> stream(s)
+            </strong>
+            <small>
+              Defina um stream principal e quantos streams de reserva forem
+              necessários.
+            </small>
+          </div>
+
+          <button id="add-emissora-stream-button" type="button"
+            class="primary-button">
+            ＋ Adicionar stream
+          </button>
+        </div>
+
+        <div class="table-scroll linked-streams-table-wrapper">
+          <table class="radios-table linked-streams-table">
+            <thead>
+              <tr>
+                <th>Nome</th>
+                <th>URL</th>
+                <th>Codec</th>
+                <th>Bitrate</th>
+                <th>Status</th>
+                <th>Principal</th>
+                <th>Ações</th>
+              </tr>
+            </thead>
+            <tbody id="emissora-streams-table-body">
+              <tr>
+                <td colspan="7" class="empty-state">
+                  Nenhum stream adicionado a esta emissora.
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </fieldset>
+
+      <fieldset class="form-section">
         <legend>Administração</legend>
 
         <div class="form-grid">
@@ -1052,16 +1096,77 @@
   </section>
 </div>
 
-<script src="config.js?v=2.2.0"></script>
-<script src="js/utils.js?v=2.2.0"></script>
-<script src="js/api.js?v=2.2.0"></script>
-<script src="js/dashboard.js?v=2.2.0"></script>
-<script src="js/radios.js?v=2.2.0"></script>
-<script src="js/estados.js?v=2.2.0"></script>
-<script src="js/categorias.js?v=2.2.0"></script>
-<script src="js/cidades.js?v=2.2.0"></script>
-<script src="js/streams.js?v=2.2.0"></script>
-<script src="js/emissoras.js?v=2.2.0"></script>
-<script src="app.js?v=2.2.0"></script>
+
+<div id="emissora-stream-modal-backdrop" class="modal-backdrop hidden">
+  <section class="modal-card linked-stream-modal" role="dialog"
+    aria-modal="true" aria-labelledby="emissora-stream-modal-title">
+
+    <div class="modal-header">
+      <div>
+        <span>Streams da emissora</span>
+        <h2 id="emissora-stream-modal-title">Adicionar stream</h2>
+      </div>
+
+      <button id="cancel-emissora-stream-form" class="close-button"
+        type="button" aria-label="Fechar">×</button>
+    </div>
+
+    <form id="emissora-stream-form">
+      <div class="form-grid">
+        <label class="full-field">
+          Nome do stream *
+          <input id="emissora-stream-name" required maxlength="80"
+            placeholder="Principal, Backup, AAC...">
+        </label>
+
+        <label class="full-field">
+          URL do stream *
+          <input id="emissora-stream-url" type="url" required
+            placeholder="https://">
+        </label>
+
+        <label>
+          Codec
+          <input id="emissora-stream-codec" maxlength="30"
+            placeholder="MP3, AAC, OGG">
+        </label>
+
+        <label>
+          Bitrate (kbps)
+          <input id="emissora-stream-bitrate" type="number"
+            min="1" max="1000">
+        </label>
+
+        <label class="checkbox-field full-field">
+          <input id="emissora-stream-principal" type="checkbox">
+          Stream principal
+        </label>
+      </div>
+
+      <div class="modal-actions">
+        <button type="button" class="secondary-button"
+          onclick="EmissorasAdmin.fecharStreamFormulario()">
+          Cancelar
+        </button>
+        <button type="submit" class="primary-button">
+          Salvar stream
+        </button>
+      </div>
+    </form>
+  </section>
+</div>
+
+
+<script src="config.js?v=2.3.0"></script>
+<script src="js/utils.js?v=2.3.0"></script>
+<script src="js/api.js?v=2.3.0"></script>
+<script src="js/dashboard.js?v=2.3.0"></script>
+<script src="js/radios.js?v=2.3.0"></script>
+<script src="js/estados.js?v=2.3.0"></script>
+<script src="js/categorias.js?v=2.3.0"></script>
+<script src="js/cidades.js?v=2.3.0"></script>
+<script src="js/streams.js?v=2.3.0"></script>
+<script src="js/emissoras.js?v=2.3.0"></script>
+<script src="app.js?v=2.3.0"></script>
 </body>
 </html>

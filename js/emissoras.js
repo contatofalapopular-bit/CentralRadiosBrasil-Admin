@@ -4,6 +4,8 @@ const EmissorasAdmin = {
   editandoId: null,
   eventosRegistrados: false,
   cidadesCache: [],
+  streamsTemporarios: [],
+  streamEditandoId: null,
 
   async iniciar() {
     if (!this.eventosRegistrados) {
@@ -56,6 +58,18 @@ const EmissorasAdmin = {
 
     document.getElementById("emissora-state")
       .addEventListener("change", () => this.atualizarCidadesFormulario());
+
+    document.getElementById("add-emissora-stream-button")
+      .addEventListener("click", () => this.abrirStreamFormulario());
+
+    document.getElementById("emissora-stream-form")
+      .addEventListener("submit", (evento) => this.salvarStreamTemporario(evento));
+
+    document.getElementById("cancel-emissora-stream-form")
+      .addEventListener("click", () => this.fecharStreamFormulario());
+
+    document.getElementById("emissora-stream-principal")
+      .addEventListener("change", () => this.garantirPrincipalUnico());
 
     document.getElementById("emissora-modal-backdrop")
       .addEventListener("click", (evento) => {
@@ -429,6 +443,9 @@ const EmissorasAdmin = {
     );
 
     document.getElementById("emissora-form").reset();
+    this.streamsTemporarios = structuredClone(emissora?.streams || []);
+    this.streamEditandoId = null;
+    this.renderizarStreamsTemporarios();
     document.getElementById("emissora-country").value = "Brasil";
     document.getElementById("emissora-active").checked = true;
     document.getElementById("emissora-public").checked = true;
@@ -497,8 +514,224 @@ const EmissorasAdmin = {
     document.getElementById("emissora-name").focus();
   },
 
+  renderizarStreamsTemporarios() {
+    const tbody = document.getElementById("emissora-streams-table-body");
+    const contador = document.getElementById("emissora-streams-count");
+
+    contador.textContent = this.streamsTemporarios.length;
+
+    if (!this.streamsTemporarios.length) {
+      tbody.innerHTML = `
+        <tr>
+          <td colspan="7" class="empty-state">
+            Nenhum stream adicionado a esta emissora.
+          </td>
+        </tr>
+      `;
+      return;
+    }
+
+    tbody.innerHTML = this.streamsTemporarios.map((stream, indice) => {
+      const status =
+        stream.monitoramento?.status ||
+        stream.status ||
+        "nao_testado";
+
+      return `
+        <tr>
+          <td>
+            <strong>${escaparHtml(stream.nome || `Stream ${indice + 1}`)}</strong>
+            ${stream.principal === true
+              ? '<small class="primary-stream-label">Principal</small>'
+              : ''}
+          </td>
+          <td class="stream-url-cell">
+            <small title="${escaparHtml(stream.url || "")}">
+              ${escaparHtml(stream.url || "—")}
+            </small>
+          </td>
+          <td>${escaparHtml(stream.codec || "Não informado")}</td>
+          <td>${stream.bitrate ? `${escaparHtml(stream.bitrate)} kbps` : "—"}</td>
+          <td>
+            <span class="stream-status ${escaparHtml(status)}">
+              ${StreamsAdmin?.rotuloStatus
+                ? StreamsAdmin.rotuloStatus(status)
+                : status}
+            </span>
+          </td>
+          <td>${stream.principal === true ? "✅ Sim" : "— Não"}</td>
+          <td class="actions-cell">
+            <button type="button" class="table-button"
+              onclick="EmissorasAdmin.editarStreamTemporario('${escaparHtml(stream.id)}')">
+              Editar
+            </button>
+            <button type="button" class="table-button danger"
+              onclick="EmissorasAdmin.removerStreamTemporario('${escaparHtml(stream.id)}')">
+              Remover
+            </button>
+          </td>
+        </tr>
+      `;
+    }).join("");
+  },
+
+  abrirStreamFormulario(stream = null) {
+    this.streamEditandoId = stream?.id || null;
+
+    texto(
+      "emissora-stream-modal-title",
+      stream ? "Editar stream" : "Adicionar stream"
+    );
+
+    document.getElementById("emissora-stream-form").reset();
+    document.getElementById("emissora-stream-principal").checked =
+      stream?.principal === true || this.streamsTemporarios.length === 0;
+
+    if (stream) {
+      document.getElementById("emissora-stream-name").value =
+        stream.nome || "";
+      document.getElementById("emissora-stream-url").value =
+        stream.url || "";
+      document.getElementById("emissora-stream-codec").value =
+        stream.codec || "";
+      document.getElementById("emissora-stream-bitrate").value =
+        stream.bitrate || "";
+    }
+
+    document.getElementById("emissora-stream-modal-backdrop")
+      .classList.remove("hidden");
+
+    document.getElementById("emissora-stream-name").focus();
+  },
+
+  fecharStreamFormulario() {
+    this.streamEditandoId = null;
+    document.getElementById("emissora-stream-modal-backdrop")
+      .classList.add("hidden");
+  },
+
+  editarStreamTemporario(id) {
+    const stream = this.streamsTemporarios.find((item) => item.id === id);
+    if (stream) this.abrirStreamFormulario(stream);
+  },
+
+  salvarStreamTemporario(evento) {
+    evento.preventDefault();
+
+    const nome =
+      document.getElementById("emissora-stream-name").value.trim();
+    const url =
+      document.getElementById("emissora-stream-url").value.trim();
+    const codec =
+      document.getElementById("emissora-stream-codec").value.trim();
+    const bitrateValor =
+      document.getElementById("emissora-stream-bitrate").value.trim();
+    const principal =
+      document.getElementById("emissora-stream-principal").checked;
+
+    if (!nome || !url) {
+      alert("Informe o nome e a URL do stream.");
+      return;
+    }
+
+    if (!validarUrlHttp(url)) {
+      alert("A URL deve começar com http:// ou https://.");
+      return;
+    }
+
+    const duplicado = this.streamsTemporarios.find((stream) => {
+      if (stream.id === this.streamEditandoId) return false;
+      return normalizar(stream.url) === normalizar(url);
+    });
+
+    if (duplicado) {
+      alert("Este endereço de stream já foi adicionado.");
+      return;
+    }
+
+    if (principal) {
+      this.streamsTemporarios.forEach((stream) => {
+        stream.principal = false;
+      });
+    }
+
+    const anterior = this.streamEditandoId
+      ? this.streamsTemporarios.find(
+          (stream) => stream.id === this.streamEditandoId
+        )
+      : null;
+
+    const atualizado = {
+      ...(anterior || {}),
+      id: anterior?.id || `stream-${Date.now()}`,
+      nome,
+      url,
+      codec: codec || "Não informado",
+      bitrate: bitrateValor ? Number(bitrateValor) : null,
+      principal,
+      monitoramento: {
+        ...(anterior?.monitoramento || {}),
+        status:
+          anterior?.monitoramento?.status ||
+          anterior?.status ||
+          "nao_testado",
+        ultimaVerificacao:
+          anterior?.monitoramento?.ultimaVerificacao || null,
+        tempoRespostaMs:
+          anterior?.monitoramento?.tempoRespostaMs || null
+      }
+    };
+
+    if (anterior) {
+      const indice = this.streamsTemporarios.findIndex(
+        (stream) => stream.id === anterior.id
+      );
+      this.streamsTemporarios[indice] = atualizado;
+    } else {
+      this.streamsTemporarios.push(atualizado);
+    }
+
+    this.garantirPrincipalExistente();
+    this.renderizarStreamsTemporarios();
+    this.fecharStreamFormulario();
+  },
+
+  removerStreamTemporario(id) {
+    const stream = this.streamsTemporarios.find((item) => item.id === id);
+    if (!stream) return;
+
+    const confirmou = confirm(
+      `Remover o stream "${stream.nome}" desta emissora?`
+    );
+
+    if (!confirmou) return;
+
+    this.streamsTemporarios =
+      this.streamsTemporarios.filter((item) => item.id !== id);
+
+    this.garantirPrincipalExistente();
+    this.renderizarStreamsTemporarios();
+  },
+
+  garantirPrincipalUnico() {
+    if (!document.getElementById("emissora-stream-principal").checked) {
+      return;
+    }
+  },
+
+  garantirPrincipalExistente() {
+    if (
+      this.streamsTemporarios.length &&
+      !this.streamsTemporarios.some((stream) => stream.principal === true)
+    ) {
+      this.streamsTemporarios[0].principal = true;
+    }
+  },
+
   fecharFormulario() {
     this.editandoId = null;
+    this.streamsTemporarios = [];
+    this.streamEditandoId = null;
     document.getElementById("emissora-modal-backdrop")
       .classList.add("hidden");
   },
@@ -617,7 +850,7 @@ const EmissorasAdmin = {
       ativa: document.getElementById("emissora-active").checked,
       verificada: document.getElementById("emissora-verified").checked,
       publica: document.getElementById("emissora-public").checked,
-      streams: anterior?.streams || [],
+      streams: structuredClone(this.streamsTemporarios),
       criadoEm: anterior?.criadoEm || new Date().toISOString(),
       atualizadoEm: new Date().toISOString()
     };

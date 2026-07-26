@@ -1,7 +1,7 @@
 {
   "app": "Central Rádios Brasil — Painel Administrativo",
-  "version": "2.2.0",
-  "release": "Banco Oficial das Emissoras — Etapa 13.1",
+  "version": "2.3.0",
+  "release": "Emissoras e Múltiplos Streams — Etapa 13.2",
   "build": "2026-07-25",
   "modules": {
     "dashboard": true,
@@ -62,7 +62,12 @@
     "emissoras-delete",
     "emissoras-clone",
     "emissoras-sort",
-    "emissoras-stats"
+    "emissoras-stats",
+    "emissora-multiple-streams",
+    "emissora-primary-stream",
+    "emissora-backup-streams",
+    "emissora-stream-edit",
+    "emissora-stream-remove"
   ],
   "fixes": [
     "load-estados-script",

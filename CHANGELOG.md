@@ -1,5 +1,12 @@
 # CHANGELOG
 
+## 2.3.0 — Commit 13.2
+
+- Múltiplos streams vinculados às emissoras.
+- Stream principal e reservas.
+- Edição e remoção dentro do cadastro.
+- Exportação integrada no radios.json.
+
 ## 2.2.0 — Commit 13.1
 
 - Banco oficial de emissoras iniciado.
