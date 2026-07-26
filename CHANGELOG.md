@@ -1,5 +1,12 @@
 # CHANGELOG
 
+## 2.3.1 — Commit 12.2.1 Corretivo
+
+- Estados carregados corretamente no formulário de Emissoras.
+- Cidades filtradas automaticamente pelo estado.
+- Estado e cidade preservados na edição.
+- Cache e consulta ao IBGE reforçados.
+
 ## 2.3.0 — Commit 13.2
 
 - Múltiplos streams vinculados às emissoras.

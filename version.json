@@ -1,7 +1,7 @@
 {
   "app": "Central Rádios Brasil — Painel Administrativo",
-  "version": "2.3.0",
-  "release": "Emissoras e Múltiplos Streams — Etapa 13.2",
+  "version": "2.3.1",
+  "release": "Correção de Estados e Cidades nas Emissoras",
   "build": "2026-07-25",
   "modules": {
     "dashboard": true,
@@ -72,6 +72,10 @@
   "fixes": [
     "load-estados-script",
     "render-states-table",
-    "refresh-states-page"
+    "refresh-states-page",
+    "emissora-states-select",
+    "emissora-cities-by-state",
+    "emissora-edit-location",
+    "cities-cache-fallback"
   ]
 }

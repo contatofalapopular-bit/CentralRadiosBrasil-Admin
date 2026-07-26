@@ -1,4 +1,34 @@
 const EmissorasAdmin = {
+  estadosBrasil: [
+    { uf: "AC", nome: "Acre" },
+    { uf: "AL", nome: "Alagoas" },
+    { uf: "AP", nome: "Amapá" },
+    { uf: "AM", nome: "Amazonas" },
+    { uf: "BA", nome: "Bahia" },
+    { uf: "CE", nome: "Ceará" },
+    { uf: "DF", nome: "Distrito Federal" },
+    { uf: "ES", nome: "Espírito Santo" },
+    { uf: "GO", nome: "Goiás" },
+    { uf: "MA", nome: "Maranhão" },
+    { uf: "MT", nome: "Mato Grosso" },
+    { uf: "MS", nome: "Mato Grosso do Sul" },
+    { uf: "MG", nome: "Minas Gerais" },
+    { uf: "PA", nome: "Pará" },
+    { uf: "PB", nome: "Paraíba" },
+    { uf: "PR", nome: "Paraná" },
+    { uf: "PE", nome: "Pernambuco" },
+    { uf: "PI", nome: "Piauí" },
+    { uf: "RJ", nome: "Rio de Janeiro" },
+    { uf: "RN", nome: "Rio Grande do Norte" },
+    { uf: "RS", nome: "Rio Grande do Sul" },
+    { uf: "RO", nome: "Rondônia" },
+    { uf: "RR", nome: "Roraima" },
+    { uf: "SC", nome: "Santa Catarina" },
+    { uf: "SP", nome: "São Paulo" },
+    { uf: "SE", nome: "Sergipe" },
+    { uf: "TO", nome: "Tocantins" }
+  ],
+
   emissoras: [],
   documentoOriginal: null,
   editandoId: null,
@@ -167,16 +197,23 @@ const EmissorasAdmin = {
 
   async carregarEstadosFormulario() {
     const select = document.getElementById("emissora-state");
-    const estados = window.EstadosAdmin?.estadosPadrao || [];
+    const valorAtual = select.value;
 
     select.innerHTML = '<option value="">Selecione o estado</option>';
 
-    estados.forEach((estado) => {
+    this.estadosBrasil.forEach((estado) => {
       const option = document.createElement("option");
       option.value = estado.uf;
       option.textContent = `${estado.uf} — ${estado.nome}`;
       select.appendChild(option);
     });
+
+    if (
+      valorAtual &&
+      this.estadosBrasil.some((estado) => estado.uf === valorAtual)
+    ) {
+      select.value = valorAtual;
+    }
   },
 
   async carregarCategoriasFormulario() {
@@ -214,57 +251,105 @@ const EmissorasAdmin = {
   },
 
   async carregarCidadesCache() {
+    this.cidadesCache = [];
+
     const cache = localStorage.getItem(CONFIG.CIDADES_STORAGE_KEY);
 
     if (cache) {
       try {
-        this.cidadesCache = JSON.parse(cache).cidades || [];
-        return;
-      } catch {}
+        const documento = JSON.parse(cache);
+        const lista = Array.isArray(documento)
+          ? documento
+          : (documento.cidades || []);
+
+        if (lista.length) {
+          this.cidadesCache = lista
+            .map((cidade) => ({
+              id: cidade.id,
+              nome: cidade.nome,
+              uf: String(cidade.uf || "").toUpperCase()
+            }))
+            .filter((cidade) => cidade.nome && cidade.uf);
+
+          return;
+        }
+      } catch (erro) {
+        console.warn("Cache de cidades inválido:", erro);
+      }
     }
 
     try {
-      const resposta = await fetch(CONFIG.IBGE_MUNICIPIOS_URL);
-      if (!resposta.ok) return;
+      const resposta = await fetch(CONFIG.IBGE_MUNICIPIOS_URL, {
+        cache: "no-store"
+      });
+
+      if (!resposta.ok) {
+        throw new Error(`IBGE respondeu com erro ${resposta.status}`);
+      }
 
       const dados = await resposta.json();
 
-      this.cidadesCache = dados.map((municipio) => {
-        const uf =
-          municipio.microrregiao?.mesorregiao?.UF ||
-          municipio["regiao-imediata"]?.["regiao-intermediaria"]?.UF ||
-          {};
+      this.cidadesCache = dados
+        .map((municipio) => {
+          const uf =
+            municipio.microrregiao?.mesorregiao?.UF ||
+            municipio["regiao-imediata"]?.["regiao-intermediaria"]?.UF ||
+            {};
 
-        return {
-          id: municipio.id,
-          nome: municipio.nome,
-          uf: uf.sigla || ""
-        };
-      });
-    } catch {
+          return {
+            id: municipio.id,
+            nome: municipio.nome,
+            uf: String(uf.sigla || "").toUpperCase()
+          };
+        })
+        .filter((cidade) => cidade.nome && cidade.uf);
+
+      const documentoCache = {
+        schemaVersion: "1.0.0",
+        source: "IBGE - API de Localidades",
+        generatedAt: new Date().toISOString(),
+        total: this.cidadesCache.length,
+        cidades: this.cidadesCache
+      };
+
+      localStorage.setItem(
+        CONFIG.CIDADES_STORAGE_KEY,
+        JSON.stringify(documentoCache)
+      );
+    } catch (erro) {
+      console.error("Não foi possível carregar as cidades:", erro);
       this.cidadesCache = [];
     }
   },
 
   atualizarCidadesFormulario(cidadeSelecionada = "") {
-    const uf = document.getElementById("emissora-state").value;
+    const uf = String(
+      document.getElementById("emissora-state").value || ""
+    ).toUpperCase();
+
     const select = document.getElementById("emissora-city");
-
     select.innerHTML = '<option value="">Selecione a cidade</option>';
+    select.disabled = !uf;
 
-    this.cidadesCache
-      .filter((cidade) => cidade.uf === uf)
-      .sort((a, b) => a.nome.localeCompare(b.nome, "pt-BR"))
-      .forEach((cidade) => {
-        const option = document.createElement("option");
-        option.value = cidade.nome;
-        option.textContent = cidade.nome;
-        select.appendChild(option);
-      });
+    if (!uf) {
+      return;
+    }
+
+    const cidadesDoEstado = this.cidadesCache
+      .filter((cidade) => String(cidade.uf).toUpperCase() === uf)
+      .sort((a, b) => a.nome.localeCompare(b.nome, "pt-BR"));
+
+    cidadesDoEstado.forEach((cidade) => {
+      const option = document.createElement("option");
+      option.value = cidade.nome;
+      option.textContent = cidade.nome;
+      select.appendChild(option);
+    });
 
     if (cidadeSelecionada) {
-      const existe = [...select.options]
-        .some((option) => option.value === cidadeSelecionada);
+      const existe = [...select.options].some(
+        (option) => option.value === cidadeSelecionada
+      );
 
       if (!existe) {
         const option = document.createElement("option");
@@ -469,8 +554,19 @@ const EmissorasAdmin = {
       document.getElementById("emissora-description").value =
         emissora.descricao || "";
 
-      document.getElementById("emissora-state").value =
-        localizacao.uf || "";
+      const ufSalva = String(localizacao.uf || "").toUpperCase();
+
+      if (
+        ufSalva &&
+        !this.estadosBrasil.some((estado) => estado.uf === ufSalva)
+      ) {
+        const option = document.createElement("option");
+        option.value = ufSalva;
+        option.textContent = ufSalva;
+        document.getElementById("emissora-state").appendChild(option);
+      }
+
+      document.getElementById("emissora-state").value = ufSalva;
       this.atualizarCidadesFormulario(localizacao.cidade || "");
       document.getElementById("emissora-cep").value =
         localizacao.cep || "";
@@ -505,6 +601,7 @@ const EmissorasAdmin = {
       document.getElementById("emissora-public").checked =
         emissora.publica !== false;
     } else {
+      document.getElementById("emissora-state").value = "";
       this.atualizarCidadesFormulario();
     }
 
