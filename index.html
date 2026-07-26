@@ -7,13 +7,13 @@
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
   <meta http-equiv="Pragma" content="no-cache">
   <meta http-equiv="Expires" content="0">
-  <title>Central Rádios Brasil — Painel Administrativo v1.4.0</title>
+  <title>Central Rádios Brasil — Painel Administrativo v1.5.0</title>
 
-  <link rel="stylesheet" href="style.css?v=1.4.0">
-  <link rel="stylesheet" href="css/dashboard.css?v=1.4.0">
-  <link rel="stylesheet" href="css/radios.css?v=1.4.0">
+  <link rel="stylesheet" href="style.css?v=1.5.0">
+  <link rel="stylesheet" href="css/dashboard.css?v=1.5.0">
+  <link rel="stylesheet" href="css/radios.css?v=1.5.0">
 </head>
-<body data-app-version="1.4.0" data-build="base-oficial">
+<body data-app-version="1.5.0" data-build="base-oficial">
 <div class="app-shell">
   <aside class="sidebar">
     <div class="brand">
@@ -28,12 +28,13 @@
       <a class="nav-link active" data-route="dashboard" href="#/dashboard">🏠 Dashboard</a>
       <a class="nav-link" data-route="radios" href="#/radios">📻 Rádios</a>
       <a class="nav-link" data-route="estados" href="#/estados">🗺️ Estados</a>
+      <a class="nav-link" data-route="cidades" href="#/cidades">🏙️ Cidades</a>
       <a class="nav-link" data-route="categorias" href="#/categorias">🎵 Categorias</a>
       <button class="nav-link disabled" disabled>📡 Streams <small>Em breve</small></button>
       <button class="nav-link disabled" disabled>⚙️ Configurações <small>Em breve</small></button>
     </nav>
 
-    <div class="sidebar-footer" id="app-version">v1.4.0</div>
+    <div class="sidebar-footer" id="app-version">v1.5.0</div>
   </aside>
 
   <div class="content-area">
@@ -290,6 +291,84 @@
         </section>
       </section>
 
+
+      <section id="cidades-page" class="hidden">
+        <div class="radios-toolbar">
+          <div>
+            <span id="cidades-status-badge" class="status-badge loading">
+              Aguardando consulta ao IBGE
+            </span>
+            <h2>Cadastro nacional de cidades</h2>
+            <p>
+              <strong id="cidades-visible-count">0</strong> encontradas de
+              <strong id="cidades-total-count">0</strong>.
+            </p>
+            <small id="cidades-source-note">
+              Fonte oficial: IBGE — API de Localidades.
+            </small>
+          </div>
+
+          <div class="toolbar-actions">
+            <button id="reload-cidades-button" class="secondary-button">
+              ↻ Atualizar pelo IBGE
+            </button>
+            <button id="export-cidades-button" class="primary-button">
+              ⬇ Exportar cidades.json
+            </button>
+          </div>
+        </div>
+
+        <section class="filters-panel cities-filters">
+          <label>
+            Buscar município
+            <input id="cidade-search" type="search"
+              placeholder="Nome, código IBGE, estado ou região">
+          </label>
+
+          <label>
+            Estado
+            <select id="cidade-uf-filter">
+              <option value="">Todos os estados</option>
+            </select>
+          </label>
+
+          <label>
+            Região
+            <select id="cidade-region-filter">
+              <option value="">Todas as regiões</option>
+            </select>
+          </label>
+        </section>
+
+        <p id="cidades-table-note" class="table-note">
+          Aguardando carregamento.
+        </p>
+
+        <section class="table-card">
+          <div class="table-scroll">
+            <table class="radios-table cities-table">
+              <thead>
+                <tr>
+                  <th>Município</th>
+                  <th>UF</th>
+                  <th>Estado</th>
+                  <th>Região</th>
+                  <th>Código IBGE</th>
+                  <th>Origem</th>
+                </tr>
+              </thead>
+              <tbody id="cidades-table-body">
+                <tr>
+                  <td colspan="6" class="empty-state">
+                    Carregando municípios…
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+      </section>
+
     </main>
   </div>
 </div>
@@ -478,13 +557,14 @@
 </div>
 
 
-<script src="config.js?v=1.4.0"></script>
-<script src="js/utils.js?v=1.4.0"></script>
-<script src="js/api.js?v=1.4.0"></script>
-<script src="js/dashboard.js?v=1.4.0"></script>
-<script src="js/radios.js?v=1.4.0"></script>
-<script src="js/estados.js?v=1.4.0"></script>
-<script src="js/categorias.js?v=1.4.0"></script>
-<script src="app.js?v=1.4.0"></script>
+<script src="config.js?v=1.5.0"></script>
+<script src="js/utils.js?v=1.5.0"></script>
+<script src="js/api.js?v=1.5.0"></script>
+<script src="js/dashboard.js?v=1.5.0"></script>
+<script src="js/radios.js?v=1.5.0"></script>
+<script src="js/estados.js?v=1.5.0"></script>
+<script src="js/categorias.js?v=1.5.0"></script>
+<script src="js/cidades.js?v=1.5.0"></script>
+<script src="app.js?v=1.5.0"></script>
 </body>
 </html>

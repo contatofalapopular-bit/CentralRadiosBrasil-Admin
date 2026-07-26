@@ -1,6 +1,7 @@
 let radiosInicializadas = false;
 let estadosInicializados = false;
 let categoriasInicializadas = false;
+let cidadesInicializadas = false;
 
 document.addEventListener("DOMContentLoaded", () => {
   texto("app-version", `v${CONFIG.VERSION}`);
@@ -16,6 +17,8 @@ document.addEventListener("DOMContentLoaded", () => {
       EstadosAdmin.renderizar();
     } else if (rotaAtual() === "categorias") {
       CategoriasAdmin.renderizar();
+    } else if (rotaAtual() === "cidades") {
+      CidadesAdmin.carregar(true);
     }
   });
 
@@ -55,8 +58,9 @@ async function renderizarRota() {
   const radios = document.getElementById("radios-page");
   const estados = document.getElementById("estados-page");
   const categorias = document.getElementById("categorias-page");
+  const cidades = document.getElementById("cidades-page");
 
-  const rotaValida = ["dashboard", "radios", "estados", "categorias"].includes(rota);
+  const rotaValida = ["dashboard", "radios", "estados", "categorias", "cidades"].includes(rota);
   const rotaFinal = rotaValida ? rota : "dashboard";
 
   if (!rotaValida) {
@@ -68,12 +72,23 @@ async function renderizarRota() {
   radios.classList.toggle("hidden", rotaFinal !== "radios");
   estados.classList.toggle("hidden", rotaFinal !== "estados");
   categorias.classList.toggle("hidden", rotaFinal !== "categorias");
+  cidades.classList.toggle("hidden", rotaFinal !== "cidades");
 
   document.querySelectorAll(".nav-link[data-route]").forEach((link) => {
     link.classList.toggle("active", link.dataset.route === rotaFinal);
   });
 
-  if (rotaFinal === "categorias") {
+  if (rotaFinal === "cidades") {
+    texto("page-title", "Cidades");
+    texto("page-subtitle", "Base nacional de municípios brasileiros");
+
+    if (!cidadesInicializadas) {
+      cidadesInicializadas = true;
+      await CidadesAdmin.iniciar();
+    } else {
+      CidadesAdmin.renderizar();
+    }
+  } else if (rotaFinal === "categorias") {
     texto("page-title", "Categorias");
     texto("page-subtitle", "Cadastro e organização das categorias de rádio");
 

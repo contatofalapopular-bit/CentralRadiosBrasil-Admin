@@ -1,20 +1,20 @@
 # Central Rádios Brasil — Painel Administrativo
 
-## Versão 1.4.0 — Commit 9
+## Versão 1.5.0 — Commit 10
 
-Cadastro de Categorias.
+Cadastro Nacional de Cidades.
 
 ### Funcionalidades
 
-- lista inicial de categorias de rádio;
-- busca por nome, descrição ou identificador;
-- filtro por status;
-- criar nova categoria;
-- editar categoria;
-- ativar ou desativar;
-- excluir do rascunho local;
-- restaurar lista inicial;
-- exportar `categorias.json`.
+- consulta à API oficial de Localidades do IBGE;
+- municípios com código oficial;
+- nome, estado, UF e região;
+- busca instantânea;
+- filtro por estado;
+- filtro por região;
+- cache local para melhorar o carregamento;
+- atualização manual pelo IBGE;
+- exportação de `cidades.json`.
 
-O módulo de rádios continua funcionando e poderá usar o arquivo exportado
-como fonte oficial das categorias.
+A tabela limita a exibição inicial aos primeiros 250 resultados para manter
+o navegador rápido. A busca e os filtros continuam abrangendo a lista inteira.

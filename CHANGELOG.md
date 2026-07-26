@@ -1,5 +1,14 @@
 # CHANGELOG
 
+## 1.5.0 — Cadastro Nacional de Cidades
+
+- Menu Cidades ativado.
+- Consulta à API oficial do IBGE.
+- Código oficial, estado, UF e região.
+- Busca e filtros.
+- Cache local.
+- Exportação de cidades.json.
+
 ## 1.4.0 — Cadastro de Categorias
 
 - Menu Categorias ativado.

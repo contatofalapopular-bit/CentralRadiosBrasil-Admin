@@ -223,3 +223,37 @@
 .category-modal {
   width: min(620px, 100%);
 }
+
+
+.cities-filters {
+  grid-template-columns: 2fr 1fr 1fr;
+}
+
+.cities-table {
+  min-width: 900px;
+}
+
+.cities-table code {
+  padding: 4px 7px;
+  border-radius: 6px;
+  background: var(--bg);
+  color: var(--text);
+}
+
+.table-note {
+  margin: 16px 0 0;
+  color: var(--muted);
+  font-size: 0.88rem;
+}
+
+#cidades-source-note {
+  display: block;
+  margin-top: 6px;
+  color: var(--muted);
+}
+
+@media (max-width: 800px) {
+  .cities-filters {
+    grid-template-columns: 1fr;
+  }
+}

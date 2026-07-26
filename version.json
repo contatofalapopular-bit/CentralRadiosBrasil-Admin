@@ -1,7 +1,7 @@
 {
   "app": "Central Rádios Brasil — Painel Administrativo",
-  "version": "1.4.0",
-  "release": "Cadastro de Categorias",
+  "version": "1.5.0",
+  "release": "Cadastro Nacional de Cidades",
   "build": "2026-07-25",
   "modules": {
     "dashboard": true,
@@ -9,7 +9,8 @@
     "categories": true,
     "streams": false,
     "settings": false,
-    "states": true
+    "states": true,
+    "cities": true
   },
   "features": [
     "radio-search",
@@ -32,7 +33,13 @@
     "categories-create",
     "categories-edit",
     "categories-toggle",
-    "categories-json-export"
+    "categories-json-export",
+    "ibge-municipalities-api",
+    "cities-search",
+    "cities-state-filter",
+    "cities-region-filter",
+    "cities-cache",
+    "cities-json-export"
   ],
   "fixes": [
     "load-estados-script",
