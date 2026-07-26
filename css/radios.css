@@ -35,3 +35,125 @@
   .radios-toolbar{flex-direction:column}.filters-panel{grid-template-columns:1fr}
   .form-grid{grid-template-columns:1fr}.full-field{grid-column:auto}
 }
+
+
+.file-button {
+  display: inline-flex;
+  align-items: center;
+  padding: 10px 14px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--surface);
+  color: var(--text);
+  cursor: pointer;
+}
+
+.file-button input {
+  display: none;
+}
+
+.filters-panel {
+  grid-template-columns: 2fr 1fr 1fr 1fr;
+}
+
+.form-grid textarea {
+  width: 100%;
+  resize: vertical;
+  padding: 11px 12px;
+  border: 1px solid var(--border);
+  border-radius: 9px;
+  background: var(--surface);
+  color: var(--text);
+  font: inherit;
+}
+
+.stream-url-cell {
+  max-width: 220px;
+}
+
+.stream-url-cell small {
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.stream-test-box {
+  padding: 15px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--bg);
+}
+
+.stream-test-box strong,
+.stream-test-box small {
+  display: block;
+}
+
+.stream-test-box small {
+  margin-top: 4px;
+  color: var(--muted);
+}
+
+.stream-test-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.stream-test-actions .secondary-button {
+  margin-left: 0;
+}
+
+.stream-test-result {
+  margin: 12px 0 0;
+  padding: 10px;
+  border-radius: 8px;
+  font-size: 0.88rem;
+}
+
+.stream-test-result.neutral {
+  background: #eceff2;
+  color: #555;
+}
+
+.stream-test-result.loading {
+  background: #fff2bf;
+  color: #665000;
+}
+
+.stream-test-result.success {
+  background: #d9f6e5;
+  color: #136637;
+}
+
+.stream-test-result.error {
+  background: #ffe0e0;
+  color: #8f2020;
+}
+
+.stream-status.testando {
+  background: #fff2bf;
+  color: #665000;
+}
+
+@media (max-width: 950px) {
+  .filters-panel {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (max-width: 650px) {
+  .filters-panel {
+    grid-template-columns: 1fr;
+  }
+
+  .toolbar-actions {
+    width: 100%;
+  }
+
+  .toolbar-actions > * {
+    width: 100%;
+    justify-content: center;
+  }
+}

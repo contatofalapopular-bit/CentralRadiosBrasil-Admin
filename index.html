@@ -7,13 +7,13 @@
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
   <meta http-equiv="Pragma" content="no-cache">
   <meta http-equiv="Expires" content="0">
-  <title>Central Rádios Brasil — Painel Administrativo v1.0.0</title>
+  <title>Central Rádios Brasil — Painel Administrativo v1.1.0</title>
 
-  <link rel="stylesheet" href="style.css?v=1.0.0">
-  <link rel="stylesheet" href="css/dashboard.css?v=1.0.0">
-  <link rel="stylesheet" href="css/radios.css?v=1.0.0">
+  <link rel="stylesheet" href="style.css?v=1.1.0">
+  <link rel="stylesheet" href="css/dashboard.css?v=1.1.0">
+  <link rel="stylesheet" href="css/radios.css?v=1.1.0">
 </head>
-<body data-app-version="1.0.0" data-build="base-oficial">
+<body data-app-version="1.1.0" data-build="base-oficial">
 <div class="app-shell">
   <aside class="sidebar">
     <div class="brand">
@@ -32,7 +32,7 @@
       <button class="nav-link disabled" disabled>⚙️ Configurações <small>Em breve</small></button>
     </nav>
 
-    <div class="sidebar-footer" id="app-version">v1.0.0</div>
+    <div class="sidebar-footer" id="app-version">v1.1.0</div>
   </aside>
 
   <div class="content-area">
@@ -97,6 +97,10 @@
           </div>
 
           <div class="toolbar-actions">
+            <label class="file-button">
+              ⬆ Importar radios.json
+              <input id="import-radios-input" type="file" accept=".json,application/json">
+            </label>
             <button id="export-radios-button" class="secondary-button">⬇ Exportar radios.json</button>
             <button id="new-radio-button" class="primary-button">＋ Nova rádio</button>
           </div>
@@ -124,6 +128,13 @@
           </label>
 
           <label>
+            Categoria
+            <select id="radio-category-filter">
+              <option value="">Todas as categorias</option>
+            </select>
+          </label>
+
+          <label>
             Status
             <select id="radio-status-filter">
               <option value="">Todos os status</option>
@@ -145,11 +156,12 @@
                   <th>Categoria</th>
                   <th>Status</th>
                   <th>Verificada</th>
+                  <th>Stream principal</th>
                   <th>Ações</th>
                 </tr>
               </thead>
               <tbody id="radios-table-body">
-                <tr><td colspan="7" class="empty-state">Carregando…</td></tr>
+                <tr><td colspan="8" class="empty-state">Carregando…</td></tr>
               </tbody>
             </table>
           </div>
@@ -173,22 +185,38 @@
       <div class="form-grid">
         <label class="full-field">
           Nome da rádio *
-          <input id="radio-name" required maxlength="120">
+          <input id="radio-name" required maxlength="120"
+            placeholder="Ex.: Rádio Fala Popular">
         </label>
 
         <label>
           Cidade *
-          <input id="radio-city" required maxlength="100">
+          <input id="radio-city" required maxlength="100"
+            placeholder="Rio Verde">
         </label>
 
         <label>
           Estado (UF) *
-          <input id="radio-state" required maxlength="2" placeholder="GO">
+          <input id="radio-state" required maxlength="2"
+            placeholder="GO">
         </label>
 
         <label>
           Categoria principal *
-          <input id="radio-category" required maxlength="80" placeholder="Jornalismo">
+          <input id="radio-category" required maxlength="80"
+            placeholder="Jornalismo">
+        </label>
+
+        <label>
+          Categorias adicionais
+          <input id="radio-extra-categories" maxlength="200"
+            placeholder="Notícias, Popular, Comunitária">
+        </label>
+
+        <label class="full-field">
+          Descrição
+          <textarea id="radio-description" rows="3" maxlength="500"
+            placeholder="Descrição curta da emissora"></textarea>
         </label>
 
         <label>
@@ -196,29 +224,72 @@
           <input id="radio-site" type="url" placeholder="https://">
         </label>
 
+        <label>
+          URL do logotipo
+          <input id="radio-logo" type="url" placeholder="https://">
+        </label>
+
+        <label>
+          Instagram
+          <input id="radio-instagram" type="url" placeholder="https://instagram.com/">
+        </label>
+
+        <label>
+          Facebook
+          <input id="radio-facebook" type="url" placeholder="https://facebook.com/">
+        </label>
+
+        <label class="full-field">
+          WhatsApp
+          <input id="radio-whatsapp" maxlength="30"
+            placeholder="5564999999999">
+        </label>
+
         <label class="full-field">
           URL do stream principal *
           <input id="radio-stream" type="url" required placeholder="https://">
         </label>
 
-        <label class="full-field">
-          URL do logotipo
-          <input id="radio-logo" type="url" placeholder="https://">
-        </label>
+        <div class="full-field stream-test-box">
+          <div>
+            <strong>Teste do stream</strong>
+            <small>
+              O teste tenta reproduzir o áudio diretamente no navegador.
+            </small>
+          </div>
+
+          <div class="stream-test-actions">
+            <button id="test-form-stream-button" type="button"
+              class="secondary-button">▶ Testar</button>
+            <button id="stop-form-stream-button" type="button"
+              class="secondary-button">■ Parar</button>
+          </div>
+
+          <p id="form-stream-result"
+            class="stream-test-result neutral">
+            Nenhum teste realizado.
+          </p>
+        </div>
 
         <label class="checkbox-field full-field">
           <input id="radio-verified" type="checkbox">
           Rádio verificada
         </label>
+
+        <label class="checkbox-field full-field">
+          <input id="radio-active" type="checkbox" checked>
+          Rádio ativa no catálogo
+        </label>
       </div>
 
       <p class="form-note">
-        Os dados serão salvos como rascunho neste navegador. Para atualizar o
-        GitHub, use “Exportar radios.json”.
+        Os dados são salvos como rascunho neste navegador. Para atualizar o
+        banco oficial, exporte o arquivo radios.json e publique-o no
+        repositório CentralRadiosBrasil-Dados.
       </p>
 
       <div class="modal-actions">
-        <button id="cancel-radio-form-bottom" type="button" class="secondary-button"
+        <button type="button" class="secondary-button"
           onclick="RadiosAdmin.fecharFormulario()">Cancelar</button>
         <button type="submit" class="primary-button">Salvar rascunho</button>
       </div>
@@ -226,11 +297,11 @@
   </section>
 </div>
 
-<script src="config.js?v=1.0.0"></script>
-<script src="js/utils.js?v=1.0.0"></script>
-<script src="js/api.js?v=1.0.0"></script>
-<script src="js/dashboard.js?v=1.0.0"></script>
-<script src="js/radios.js?v=1.0.0"></script>
-<script src="app.js?v=1.0.0"></script>
+<script src="config.js?v=1.1.0"></script>
+<script src="js/utils.js?v=1.1.0"></script>
+<script src="js/api.js?v=1.1.0"></script>
+<script src="js/dashboard.js?v=1.1.0"></script>
+<script src="js/radios.js?v=1.1.0"></script>
+<script src="app.js?v=1.1.0"></script>
 </body>
 </html>

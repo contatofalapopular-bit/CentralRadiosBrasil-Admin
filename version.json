@@ -1,7 +1,7 @@
 {
   "app": "Central Rádios Brasil — Painel Administrativo",
-  "version": "1.0.0",
-  "release": "Base Oficial",
+  "version": "1.1.0",
+  "release": "Cadastro completo de rádios",
   "build": "2026-07-25",
   "modules": {
     "dashboard": true,
@@ -9,5 +9,15 @@
     "categories": false,
     "streams": false,
     "settings": false
-  }
+  },
+  "features": [
+    "radio-search",
+    "radio-filters",
+    "radio-create",
+    "radio-edit",
+    "radio-delete-draft",
+    "stream-browser-test",
+    "json-import",
+    "json-export"
+  ]
 }

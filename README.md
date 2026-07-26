@@ -1,30 +1,32 @@
 # Central Rádios Brasil — Painel Administrativo
 
-## Base Oficial v1.0.0
+## Versão 1.1.0 — Commit 6
 
-Esta é a base estável oficial do Painel Administrativo.
+Cadastro completo de rádios construído sobre a Base Oficial v1.0.0.
 
-### Funcionalidades preservadas
+### Funcionalidades
 
-- Dashboard conectado ao repositório `CentralRadiosBrasil-Dados`;
-- leitura de `radios.json`, `categorias.json` e `versao.json`;
-- indicadores de rádios, cidades, estados, categorias e streams;
-- menu Rádios ativo;
-- listagem, busca e filtros;
-- cadastro e edição em rascunho local;
-- exclusão em rascunho local;
-- exportação do arquivo `radios.json`;
-- tema claro e escuro.
+- listar rádios;
+- pesquisar por nome, cidade, estado, categoria, site ou stream;
+- filtrar por estado, categoria e status;
+- cadastrar nova rádio;
+- editar rádio;
+- excluir do rascunho local;
+- testar a reprodução do stream no navegador;
+- parar o teste de áudio;
+- importar `radios.json`;
+- exportar `radios.json`;
+- validar campos obrigatórios e URLs;
+- cadastrar site, logotipo, redes sociais, WhatsApp e descrição;
+- marcar rádio como verificada ou ativa.
 
-### Consolidação técnica
+### Observação sobre o teste de stream
 
-- versão `1.0.0` escrita diretamente no HTML;
-- versão também controlada pelo `config.js`;
-- parâmetros de versão em todos os arquivos CSS e JavaScript;
-- arquivo público `version.json`;
-- arquivo `.nojekyll`;
-- nenhuma senha ou token do GitHub exposto no navegador.
+O teste usa o reprodutor de áudio do navegador. Alguns servidores podem
+bloquear a reprodução por formato, HTTPS, CORS ou políticas próprias. Portanto,
+uma falha no navegador não prova sozinha que a rádio está fora do ar.
 
-### Próximos módulos
+### Segurança
 
-Os próximos commits serão incrementais e preservarão esta base.
+Nenhum token ou senha do GitHub é colocado no site. As alterações ficam em
+rascunho local até o arquivo `radios.json` ser exportado e publicado.

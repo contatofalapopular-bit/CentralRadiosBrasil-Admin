@@ -54,3 +54,36 @@ function escaparHtml(valor) {
     .replaceAll('"', "&quot;")
     .replaceAll("'", "&#039;");
 }
+
+
+function validarUrlHttp(valor) {
+  try {
+    const url = new URL(valor);
+    return url.protocol === "http:" || url.protocol === "https:";
+  } catch {
+    return false;
+  }
+}
+
+function lerArquivoJson(arquivo) {
+  return new Promise((resolve, reject) => {
+    const leitor = new FileReader();
+
+    leitor.onload = () => {
+      try {
+        resolve(JSON.parse(leitor.result));
+      } catch {
+        reject(new Error("O arquivo selecionado não contém um JSON válido."));
+      }
+    };
+
+    leitor.onerror = () => reject(new Error("Não foi possível ler o arquivo."));
+    leitor.readAsText(arquivo, "utf-8");
+  });
+}
+
+function gerarSlug(valor) {
+  return normalizar(valor)
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "");
+}
