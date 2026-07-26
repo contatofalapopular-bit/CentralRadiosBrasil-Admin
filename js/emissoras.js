@@ -36,6 +36,9 @@ const EmissorasAdmin = {
   cidadesCache: [],
   streamsTemporarios: [],
   streamEditandoId: null,
+  ultimoRelatorioValidacao: null,
+  ultimoBancoOficial: null,
+  ultimoBancoEsp32: null,
 
   async iniciar() {
     if (!this.eventosRegistrados) {
@@ -107,6 +110,25 @@ const EmissorasAdmin = {
           this.fecharFormulario();
         }
       });
+
+    document.getElementById("close-validation-modal")
+      .addEventListener("click", () => this.fecharValidacao());
+
+    document.getElementById("validation-modal-backdrop")
+      .addEventListener("click", (evento) => {
+        if (evento.target.id === "validation-modal-backdrop") {
+          this.fecharValidacao();
+        }
+      });
+
+    document.getElementById("download-official-json-button")
+      .addEventListener("click", () => this.baixarBancoOficial());
+
+    document.getElementById("download-esp32-json-button")
+      .addEventListener("click", () => this.baixarBancoEsp32());
+
+    document.getElementById("download-validation-report-button")
+      .addEventListener("click", () => this.baixarRelatorioValidacao());
   },
 
   async carregar() {
@@ -1083,11 +1105,576 @@ const EmissorasAdmin = {
   },
 
   exportar() {
-    baixarJson("radios.json", {
-      schemaVersion: "2.0.0",
-      generatedAt: new Date().toISOString(),
-      total: this.emissoras.length,
-      radios: this.emissoras
+    const resultado = this.validarBanco();
+
+    this.ultimoRelatorioValidacao = resultado;
+    this.ultimoBancoOficial = this.gerarBancoOficial(resultado);
+    this.ultimoBancoEsp32 = this.gerarBancoEsp32(resultado);
+
+    this.exibirValidacao(resultado);
+  },
+
+  validarBanco() {
+    const erros = [];
+    const avisos = [];
+    const ids = new Map();
+    const slugs = new Map();
+    const urls = new Map();
+
+    const emissorasPublicaveis = this.emissoras.filter(
+      (emissora) =>
+        emissora.ativa !== false &&
+        emissora.publica !== false
+    );
+
+    this.emissoras.forEach((emissora, indice) => {
+      const referencia =
+        emissora.nome || emissora.id || `Registro ${indice + 1}`;
+      const localizacao = emissora.localizacao || {};
+      const streams = Array.isArray(emissora.streams)
+        ? emissora.streams
+        : [];
+
+      if (!String(emissora.id || "").trim()) {
+        erros.push({
+          emissora: referencia,
+          campo: "id",
+          mensagem: "A emissora não possui um ID."
+        });
+      } else {
+        const id = String(emissora.id).trim();
+
+        if (ids.has(id)) {
+          erros.push({
+            emissora: referencia,
+            campo: "id",
+            mensagem:
+              `ID duplicado com "${ids.get(id)}": ${id}`
+          });
+        } else {
+          ids.set(id, referencia);
+        }
+      }
+
+      if (!String(emissora.slug || "").trim()) {
+        avisos.push({
+          emissora: referencia,
+          campo: "slug",
+          mensagem: "O slug será gerado automaticamente."
+        });
+      } else {
+        const slug = String(emissora.slug).trim();
+
+        if (slugs.has(slug)) {
+          erros.push({
+            emissora: referencia,
+            campo: "slug",
+            mensagem:
+              `Slug duplicado com "${slugs.get(slug)}": ${slug}`
+          });
+        } else {
+          slugs.set(slug, referencia);
+        }
+      }
+
+      if (!String(emissora.nome || "").trim()) {
+        erros.push({
+          emissora: referencia,
+          campo: "nome",
+          mensagem: "O nome da emissora é obrigatório."
+        });
+      }
+
+      if (!String(localizacao.uf || "").trim()) {
+        erros.push({
+          emissora: referencia,
+          campo: "estado",
+          mensagem: "O estado é obrigatório."
+        });
+      }
+
+      if (!String(localizacao.cidade || "").trim()) {
+        erros.push({
+          emissora: referencia,
+          campo: "cidade",
+          mensagem: "A cidade é obrigatória."
+        });
+      }
+
+      if (!String(emissora.categoriaPrincipal || "").trim()) {
+        erros.push({
+          emissora: referencia,
+          campo: "categoria",
+          mensagem: "A categoria principal é obrigatória."
+        });
+      }
+
+      if (
+        emissora.ativa !== false &&
+        emissora.publica !== false &&
+        streams.length === 0
+      ) {
+        erros.push({
+          emissora: referencia,
+          campo: "streams",
+          mensagem:
+            "Uma emissora ativa e pública precisa ter pelo menos um stream."
+        });
+      }
+
+      const principais = streams.filter(
+        (stream) => stream.principal === true
+      );
+
+      if (streams.length && principais.length === 0) {
+        erros.push({
+          emissora: referencia,
+          campo: "stream principal",
+          mensagem: "Nenhum stream foi marcado como principal."
+        });
+      }
+
+      if (principais.length > 1) {
+        erros.push({
+          emissora: referencia,
+          campo: "stream principal",
+          mensagem:
+            "Mais de um stream foi marcado como principal."
+        });
+      }
+
+      streams.forEach((stream, streamIndice) => {
+        const nomeStream =
+          stream.nome || `Stream ${streamIndice + 1}`;
+        const url = String(stream.url || "").trim();
+
+        if (!url) {
+          erros.push({
+            emissora: referencia,
+            campo: nomeStream,
+            mensagem: "O stream não possui URL."
+          });
+          return;
+        }
+
+        if (!validarUrlHttp(url)) {
+          erros.push({
+            emissora: referencia,
+            campo: nomeStream,
+            mensagem:
+              "A URL do stream deve começar com http:// ou https://."
+          });
+        }
+
+        if (urls.has(url)) {
+          avisos.push({
+            emissora: referencia,
+            campo: nomeStream,
+            mensagem:
+              `A mesma URL também é usada por "${urls.get(url)}".`
+          });
+        } else {
+          urls.set(url, referencia);
+        }
+
+        if (url.startsWith("http://")) {
+          avisos.push({
+            emissora: referencia,
+            campo: nomeStream,
+            mensagem:
+              "O stream usa HTTP. HTTPS é preferível quando disponível."
+          });
+        }
+
+        if (!String(stream.codec || "").trim()) {
+          avisos.push({
+            emissora: referencia,
+            campo: nomeStream,
+            mensagem: "Codec não informado."
+          });
+        }
+      });
+
+      if (
+        emissora.tipo === "FM" &&
+        !String(emissora.frequencia || "").trim()
+      ) {
+        avisos.push({
+          emissora: referencia,
+          campo: "frequência",
+          mensagem: "Emissora FM sem frequência informada."
+        });
+      }
+
+      if (
+        emissora.tipo === "AM" &&
+        !String(emissora.frequencia || "").trim()
+      ) {
+        avisos.push({
+          emissora: referencia,
+          campo: "frequência",
+          mensagem: "Emissora AM sem frequência informada."
+        });
+      }
+
+      if (!String(emissora.logo || "").trim()) {
+        avisos.push({
+          emissora: referencia,
+          campo: "logotipo",
+          mensagem: "Logotipo não informado."
+        });
+      }
     });
+
+    return {
+      valido: erros.length === 0,
+      geradoEm: new Date().toISOString(),
+      totalCadastradas: this.emissoras.length,
+      totalPublicaveis: emissorasPublicaveis.length,
+      totalErros: erros.length,
+      totalAvisos: avisos.length,
+      erros,
+      avisos
+    };
+  },
+
+  normalizarStreamOficial(stream, indice) {
+    const url = String(stream.url || "").trim();
+    const monitoramento = stream.monitoramento || {};
+
+    return {
+      id: stream.id || `stream-${indice + 1}`,
+      nome: stream.nome || `Stream ${indice + 1}`,
+      url,
+      principal: stream.principal === true,
+      protocolo: url.startsWith("https://")
+        ? "HTTPS"
+        : url.startsWith("http://")
+          ? "HTTP"
+          : "OUTRO",
+      codec: String(stream.codec || "nao_informado").toLowerCase(),
+      bitrate: stream.bitrate ? Number(stream.bitrate) : null,
+      monitoramento: {
+        status:
+          monitoramento.status ||
+          stream.status ||
+          "nao_testado",
+        ultimaVerificacao:
+          monitoramento.ultimaVerificacao || null,
+        tempoRespostaMs:
+          monitoramento.tempoRespostaMs || null
+      }
+    };
+  },
+
+  normalizarEmissoraOficial(emissora) {
+    const localizacao = emissora.localizacao || {};
+    const contato = emissora.contato || {};
+    const redes = emissora.redesSociais || {};
+    const streams = Array.isArray(emissora.streams)
+      ? emissora.streams.map(
+          (stream, indice) =>
+            this.normalizarStreamOficial(stream, indice)
+        )
+      : [];
+
+    const principal =
+      streams.find((stream) => stream.principal === true) ||
+      streams[0] ||
+      null;
+
+    return {
+      id: emissora.id,
+      slug: emissora.slug || gerarSlug(emissora.nome),
+      nome: emissora.nome,
+      nomeFantasia: emissora.nomeFantasia || "",
+      razaoSocial: emissora.razaoSocial || "",
+      slogan: emissora.slogan || "",
+      descricao: emissora.descricao || "",
+      logo: emissora.logo || "",
+      tipo: emissora.tipo || "Web",
+      frequencia: emissora.frequencia || "",
+      site: emissora.site || "",
+      localizacao: {
+        pais: localizacao.pais || "Brasil",
+        uf: String(localizacao.uf || "").toUpperCase(),
+        cidade: localizacao.cidade || "",
+        cep: localizacao.cep || "",
+        endereco: localizacao.endereco || "",
+        latitude:
+          localizacao.latitude === "" ||
+          localizacao.latitude == null
+            ? null
+            : Number(localizacao.latitude),
+        longitude:
+          localizacao.longitude === "" ||
+          localizacao.longitude == null
+            ? null
+            : Number(localizacao.longitude)
+      },
+      classificacao: {
+        categoriaPrincipal:
+          emissora.categoriaPrincipal || "",
+        categorias: [
+          ...new Set(
+            Array.isArray(emissora.categorias)
+              ? emissora.categorias.filter(Boolean)
+              : [emissora.categoriaPrincipal].filter(Boolean)
+          )
+        ],
+        idioma: emissora.idioma || "pt-BR",
+        tags: Array.isArray(emissora.tags)
+          ? emissora.tags
+          : []
+      },
+      contato: {
+        telefone: contato.telefone || "",
+        whatsapp: contato.whatsapp || "",
+        email: contato.email || ""
+      },
+      redesSociais: {
+        facebook: redes.facebook || "",
+        instagram: redes.instagram || "",
+        youtube: redes.youtube || ""
+      },
+      status: {
+        ativa: emissora.ativa !== false,
+        publica: emissora.publica !== false,
+        verificada: emissora.verificada === true,
+        destaque: emissora.destaque === true
+      },
+      streams,
+      streamPrincipal: principal
+        ? {
+            id: principal.id,
+            url: principal.url,
+            codec: principal.codec,
+            bitrate: principal.bitrate
+          }
+        : null,
+      observacoes: emissora.observacoes || "",
+      criadoEm: emissora.criadoEm || null,
+      atualizadoEm: emissora.atualizadoEm || null
+    };
+  },
+
+  gerarBancoOficial(resultado) {
+    const radios = this.emissoras
+      .filter(
+        (emissora) =>
+          emissora.ativa !== false &&
+          emissora.publica !== false
+      )
+      .map((emissora) =>
+        this.normalizarEmissoraOficial(emissora)
+      )
+      .sort((a, b) =>
+        a.nome.localeCompare(b.nome, "pt-BR")
+      );
+
+    const totalStreams = radios.reduce(
+      (total, radio) => total + radio.streams.length,
+      0
+    );
+
+    return {
+      schemaVersion: CONFIG.RADIOS_SCHEMA_VERSION,
+      catalogo: {
+        nome: "Central Rádios Brasil",
+        pais: "Brasil",
+        idioma: "pt-BR",
+        origem:
+          `${CONFIG.GITHUB_OWNER}/${CONFIG.DADOS_REPO}`,
+        geradoEm: resultado.geradoEm
+      },
+      totais: {
+        emissoras: radios.length,
+        streams: totalStreams,
+        estados: new Set(
+          radios.map((radio) => radio.localizacao.uf)
+        ).size,
+        cidades: new Set(
+          radios.map(
+            (radio) =>
+              `${radio.localizacao.uf}:${radio.localizacao.cidade}`
+          )
+        ).size,
+        categorias: new Set(
+          radios.flatMap(
+            (radio) =>
+              radio.classificacao.categorias
+          )
+        ).size,
+        verificadas: radios.filter(
+          (radio) => radio.status.verificada
+        ).length
+      },
+      validacao: {
+        valido: resultado.valido,
+        erros: resultado.totalErros,
+        avisos: resultado.totalAvisos
+      },
+      radios
+    };
+  },
+
+  gerarBancoEsp32(resultado) {
+    const radios = this.emissoras
+      .filter(
+        (emissora) =>
+          emissora.ativa !== false &&
+          emissora.publica !== false
+      )
+      .map((emissora) => {
+        const streams = Array.isArray(emissora.streams)
+          ? emissora.streams
+          : [];
+
+        const principal =
+          streams.find(
+            (stream) => stream.principal === true
+          ) ||
+          streams[0] ||
+          null;
+
+        return {
+          id: emissora.id,
+          nome: emissora.nome,
+          uf: emissora.localizacao?.uf || "",
+          cidade:
+            emissora.localizacao?.cidade || "",
+          categoria:
+            emissora.categoriaPrincipal || "",
+          logo: emissora.logo || "",
+          url: principal?.url || "",
+          codec:
+            String(
+              principal?.codec || "nao_informado"
+            ).toLowerCase(),
+          bitrate:
+            principal?.bitrate
+              ? Number(principal.bitrate)
+              : null
+        };
+      })
+      .filter((radio) => radio.url)
+      .sort((a, b) =>
+        a.nome.localeCompare(b.nome, "pt-BR")
+      );
+
+    return {
+      schemaVersion: CONFIG.ESP32_SCHEMA_VERSION,
+      geradoEm: resultado.geradoEm,
+      total: radios.length,
+      radios
+    };
+  },
+
+  exibirValidacao(resultado) {
+    texto(
+      "validation-status-title",
+      resultado.valido
+        ? "Banco pronto para exportação"
+        : "Foram encontrados erros"
+    );
+
+    texto(
+      "validation-summary",
+      `${resultado.totalCadastradas} cadastrada(s), ` +
+      `${resultado.totalPublicaveis} publicável(is), ` +
+      `${resultado.totalErros} erro(s) e ` +
+      `${resultado.totalAvisos} aviso(s).`
+    );
+
+    texto("validation-errors-count", resultado.totalErros);
+    texto("validation-warnings-count", resultado.totalAvisos);
+    texto(
+      "validation-public-count",
+      resultado.totalPublicaveis
+    );
+
+    const listaErros =
+      document.getElementById("validation-errors-list");
+    const listaAvisos =
+      document.getElementById("validation-warnings-list");
+
+    listaErros.innerHTML = resultado.erros.length
+      ? resultado.erros.map((item) => `
+          <li>
+            <strong>${escaparHtml(item.emissora)}</strong>
+            <span>${escaparHtml(item.campo)} — ${escaparHtml(item.mensagem)}</span>
+          </li>
+        `).join("")
+      : '<li class="validation-ok">Nenhum erro encontrado.</li>';
+
+    listaAvisos.innerHTML = resultado.avisos.length
+      ? resultado.avisos.map((item) => `
+          <li>
+            <strong>${escaparHtml(item.emissora)}</strong>
+            <span>${escaparHtml(item.campo)} — ${escaparHtml(item.mensagem)}</span>
+          </li>
+        `).join("")
+      : '<li class="validation-ok">Nenhum aviso encontrado.</li>';
+
+    document.getElementById(
+      "download-official-json-button"
+    ).disabled = !resultado.valido;
+
+    document.getElementById(
+      "download-esp32-json-button"
+    ).disabled = !resultado.valido;
+
+    const statusBadge =
+      document.getElementById("validation-status-badge");
+
+    statusBadge.className =
+      `status-badge ${resultado.valido ? "success" : "error"}`;
+
+    statusBadge.textContent =
+      resultado.valido ? "Validação aprovada" : "Correções necessárias";
+
+    document.getElementById("validation-modal-backdrop")
+      .classList.remove("hidden");
+  },
+
+  fecharValidacao() {
+    document.getElementById("validation-modal-backdrop")
+      .classList.add("hidden");
+  },
+
+  baixarBancoOficial() {
+    if (
+      !this.ultimoRelatorioValidacao?.valido ||
+      !this.ultimoBancoOficial
+    ) {
+      alert("Corrija os erros antes de gerar o banco oficial.");
+      return;
+    }
+
+    baixarJson("radios.json", this.ultimoBancoOficial);
+  },
+
+  baixarBancoEsp32() {
+    if (
+      !this.ultimoRelatorioValidacao?.valido ||
+      !this.ultimoBancoEsp32
+    ) {
+      alert("Corrija os erros antes de gerar o banco para o ESP32.");
+      return;
+    }
+
+    baixarJson("radios-esp32.json", this.ultimoBancoEsp32);
+  },
+
+  baixarRelatorioValidacao() {
+    if (!this.ultimoRelatorioValidacao) {
+      alert("Execute a validação primeiro.");
+      return;
+    }
+
+    baixarJson(
+      "relatorio-validacao-radios.json",
+      this.ultimoRelatorioValidacao
+    );
   }
 };

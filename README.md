@@ -1,15 +1,29 @@
 # Central Rádios Brasil — Painel Administrativo
 
-## Versão 2.3.1 — Commit 12.2.1 Corretivo
+## Versão 2.4.0 — Commit 13.3
 
-Correção do carregamento de Estados e Cidades no formulário de Emissoras.
+Gerador definitivo do banco oficial de rádios.
 
-### Correções
+### Funcionalidades
 
-- os 26 estados e o Distrito Federal aparecem no campo Estado;
-- a lista de cidades é carregada conforme o estado escolhido;
-- o campo Cidade fica desabilitado até um estado ser selecionado;
-- ao editar uma emissora, estado e cidade salvos são selecionados;
-- trocar o estado atualiza imediatamente a lista de cidades;
-- cache local de cidades e consulta à API do IBGE foram reforçados;
-- todos os demais módulos e múltiplos streams foram preservados.
+- validação completa antes da exportação;
+- detecção de IDs e slugs duplicados;
+- verificação de nome, estado, cidade e categoria;
+- validação de streams e stream principal;
+- avisos sobre HTTP, codec, frequência e logotipo;
+- relatório detalhado de erros e avisos;
+- geração do `radios.json` oficial;
+- geração do `radios-esp32.json` compacto;
+- totais automáticos de emissoras, streams, estados, cidades e categorias;
+- exportação bloqueada enquanto existirem erros.
+
+### Arquivos gerados
+
+- `radios.json`: banco completo para o ecossistema;
+- `radios-esp32.json`: banco compacto para o firmware;
+- `relatorio-validacao-radios.json`: relatório técnico.
+
+### Próxima etapa
+
+Commit 13.4: validação final e publicação no repositório
+`CentralRadiosBrasil-Dados`.

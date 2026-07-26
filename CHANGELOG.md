@@ -1,5 +1,12 @@
 # CHANGELOG
 
+## 2.4.0 — Commit 13.3
+
+- Gerador definitivo do radios.json.
+- Validação antes da exportação.
+- Banco compacto radios-esp32.json.
+- Relatório de erros e avisos.
+
 ## 2.3.1 — Commit 12.2.1 Corretivo
 
 - Estados carregados corretamente no formulário de Emissoras.

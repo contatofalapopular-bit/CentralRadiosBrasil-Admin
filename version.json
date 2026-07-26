@@ -1,7 +1,7 @@
 {
   "app": "Central Rádios Brasil — Painel Administrativo",
-  "version": "2.3.1",
-  "release": "Correção de Estados e Cidades nas Emissoras",
+  "version": "2.4.0",
+  "release": "Gerador Definitivo do Banco Oficial — Etapa 13.3",
   "build": "2026-07-25",
   "modules": {
     "dashboard": true,
@@ -67,7 +67,12 @@
     "emissora-primary-stream",
     "emissora-backup-streams",
     "emissora-stream-edit",
-    "emissora-stream-remove"
+    "emissora-stream-remove",
+    "official-radios-schema-v3",
+    "radios-validation",
+    "validation-report",
+    "official-radios-export",
+    "esp32-compact-export"
   ],
   "fixes": [
     "load-estados-script",

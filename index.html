@@ -7,15 +7,15 @@
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
   <meta http-equiv="Pragma" content="no-cache">
   <meta http-equiv="Expires" content="0">
-  <title>Central Rádios Brasil — Painel Administrativo v2.3.1</title>
+  <title>Central Rádios Brasil — Painel Administrativo v2.4.0</title>
 
-  <link rel="stylesheet" href="style.css?v=2.3.1">
-  <link rel="stylesheet" href="css/dashboard.css?v=2.3.1">
-  <link rel="stylesheet" href="css/radios.css?v=2.3.1">
-  <link rel="stylesheet" href="css/streams.css?v=2.3.1">
-  <link rel="stylesheet" href="css/emissoras.css?v=2.3.1">
+  <link rel="stylesheet" href="style.css?v=2.4.0">
+  <link rel="stylesheet" href="css/dashboard.css?v=2.4.0">
+  <link rel="stylesheet" href="css/radios.css?v=2.4.0">
+  <link rel="stylesheet" href="css/streams.css?v=2.4.0">
+  <link rel="stylesheet" href="css/emissoras.css?v=2.4.0">
 </head>
-<body data-app-version="2.3.1" data-build="base-oficial">
+<body data-app-version="2.4.0" data-build="base-oficial">
 <div class="app-shell">
   <aside class="sidebar">
     <div class="brand">
@@ -37,7 +37,7 @@
       <button class="nav-link disabled" disabled>⚙️ Configurações <small>Em breve</small></button>
     </nav>
 
-    <div class="sidebar-footer" id="app-version">v2.3.1</div>
+    <div class="sidebar-footer" id="app-version">v2.4.0</div>
   </aside>
 
   <div class="content-area">
@@ -106,7 +106,7 @@
               ⬆ Importar radios.json
               <input id="import-radios-input" type="file" accept=".json,application/json">
             </label>
-            <button id="export-radios-button" class="secondary-button">⬇ Exportar radios.json</button>
+            <button id="export-radios-button" class="secondary-button">✓ Validar e gerar bancos</button>
             <button id="new-radio-button" class="primary-button">＋ Nova rádio</button>
           </div>
         </div>
@@ -473,7 +473,7 @@
                 accept=".json,application/json">
             </label>
             <button id="export-emissoras-button" class="secondary-button">
-              ⬇ Exportar radios.json
+              ✓ Validar e gerar bancos
             </button>
             <button id="new-emissora-button" class="primary-button">
               ＋ Nova emissora
@@ -1157,16 +1157,89 @@
 </div>
 
 
-<script src="config.js?v=2.3.1"></script>
-<script src="js/utils.js?v=2.3.1"></script>
-<script src="js/api.js?v=2.3.1"></script>
-<script src="js/dashboard.js?v=2.3.1"></script>
-<script src="js/radios.js?v=2.3.1"></script>
-<script src="js/estados.js?v=2.3.1"></script>
-<script src="js/categorias.js?v=2.3.1"></script>
-<script src="js/cidades.js?v=2.3.1"></script>
-<script src="js/streams.js?v=2.3.1"></script>
-<script src="js/emissoras.js?v=2.3.1"></script>
-<script src="app.js?v=2.3.1"></script>
+
+<div id="validation-modal-backdrop" class="modal-backdrop hidden">
+  <section class="modal-card validation-modal-card" role="dialog"
+    aria-modal="true" aria-labelledby="validation-status-title">
+
+    <div class="modal-header">
+      <div>
+        <span id="validation-status-badge"
+          class="status-badge loading">
+          Validação
+        </span>
+        <h2 id="validation-status-title">
+          Validação do banco oficial
+        </h2>
+      </div>
+
+      <button id="close-validation-modal" class="close-button"
+        type="button" aria-label="Fechar">×</button>
+    </div>
+
+    <p id="validation-summary" class="validation-summary">
+      Aguardando validação.
+    </p>
+
+    <section class="validation-stats">
+      <article>
+        <span>Publicáveis</span>
+        <strong id="validation-public-count">0</strong>
+      </article>
+      <article>
+        <span>Erros</span>
+        <strong id="validation-errors-count">0</strong>
+      </article>
+      <article>
+        <span>Avisos</span>
+        <strong id="validation-warnings-count">0</strong>
+      </article>
+    </section>
+
+    <div class="validation-columns">
+      <section>
+        <h3>Erros que impedem a exportação</h3>
+        <ul id="validation-errors-list"
+          class="validation-list"></ul>
+      </section>
+
+      <section>
+        <h3>Avisos para revisão</h3>
+        <ul id="validation-warnings-list"
+          class="validation-list"></ul>
+      </section>
+    </div>
+
+    <div class="modal-actions validation-actions">
+      <button id="download-validation-report-button"
+        type="button" class="secondary-button">
+        ⬇ Relatório
+      </button>
+
+      <button id="download-esp32-json-button"
+        type="button" class="secondary-button">
+        ⬇ radios-esp32.json
+      </button>
+
+      <button id="download-official-json-button"
+        type="button" class="primary-button">
+        ⬇ radios.json oficial
+      </button>
+    </div>
+  </section>
+</div>
+
+
+<script src="config.js?v=2.4.0"></script>
+<script src="js/utils.js?v=2.4.0"></script>
+<script src="js/api.js?v=2.4.0"></script>
+<script src="js/dashboard.js?v=2.4.0"></script>
+<script src="js/radios.js?v=2.4.0"></script>
+<script src="js/estados.js?v=2.4.0"></script>
+<script src="js/categorias.js?v=2.4.0"></script>
+<script src="js/cidades.js?v=2.4.0"></script>
+<script src="js/streams.js?v=2.4.0"></script>
+<script src="js/emissoras.js?v=2.4.0"></script>
+<script src="app.js?v=2.4.0"></script>
 </body>
 </html>
