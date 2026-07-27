@@ -37,6 +37,49 @@ button{cursor:pointer}
 .status-badge.loading{background:#f2c230;color:#111}
 .status-badge.success{background:#d9f6e5;color:#136637}
 .status-badge.error{background:#ffe0e0;color:#8f2020}
+.modal-header{
+  display:flex;
+  align-items:flex-start;
+  justify-content:space-between;
+  gap:16px;
+  padding:20px 24px;
+  background:var(--surface);
+  border-bottom:1px solid var(--border);
+}
+
+.modal-header span{
+  display:block;
+  margin-bottom:4px;
+  color:var(--muted);
+  font-size:.82rem;
+  font-weight:700;
+  text-transform:uppercase;
+  letter-spacing:.04em;
+}
+
+.modal-header h2{
+  margin:0;
+  color:var(--text);
+  font-size:1.5rem;
+  line-height:1.2;
+}
+
+.close-button{
+  flex:0 0 auto;
+  width:38px;
+  height:38px;
+  padding:0;
+  border:1px solid var(--border);
+  border-radius:10px;
+  background:var(--surface);
+  color:var(--text);
+  font-size:1.35rem;
+  line-height:1;
+}
+
+.close-button:hover{
+  background:var(--bg);
+}
 @media(max-width:800px){
   .app-shell{grid-template-columns:1fr}.sidebar{position:static;min-height:auto}
   .topbar{flex-wrap:wrap;padding:16px}.secondary-button{margin-left:0}.main-content{padding:18px}
