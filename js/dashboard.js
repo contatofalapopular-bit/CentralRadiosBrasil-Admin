@@ -37,7 +37,12 @@ async function carregarDashboard(semCache = false) {
         if (categoria) categorias.add(normalizar(categoria));
       });
 
-      if (radio.verificada === true) verificadas++;
+      if (
+  radio.status?.verificada === true ||
+  radio.verificada === true
+) {
+  verificadas++;
+}
 
       const listaStreams = Array.isArray(radio.streams) ? radio.streams : [];
       streams += listaStreams.length;
@@ -60,7 +65,7 @@ async function carregarDashboard(semCache = false) {
     texto("total-radios", radios.length);
     texto("total-cidades", cidades.size);
     texto("total-estados", estados.size);
-    texto("total-categorias", categorias.size || categoriasOficiais);
+texto("total-categorias", categorias.size);
     texto("total-streams", streams);
     texto("total-online", online);
     texto("total-offline", offline);
