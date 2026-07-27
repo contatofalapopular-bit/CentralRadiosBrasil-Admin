@@ -82,6 +82,7 @@ async function renderizarRota() {
   const streams = document.getElementById("streams-page");
   const emissoras = document.getElementById("emissoras-page");
   const publicacao = document.getElementById("publicacao-page");
+  const configuracoes = document.getElementById("configuracoes-page");
 
   const rotasValidas = [
     "dashboard",
@@ -91,7 +92,7 @@ async function renderizarRota() {
     "cidades",
     "streams",
     "emissoras",
-    "publicacao"
+    "publicacao","configuracoes"
   ];
 
   const rotaValida = rotasValidas.includes(rota);
@@ -141,7 +142,10 @@ async function renderizarRota() {
     "hidden",
     rotaFinal !== "publicacao"
   );
-
+configuracoes.classList.toggle(
+  "hidden",
+  rotaFinal !== "configuracoes"
+);
   document
     .querySelectorAll(".nav-link[data-route]")
     .forEach((link) => {
@@ -151,7 +155,14 @@ async function renderizarRota() {
       );
     });
 
- if (rotaFinal === "publicacao") {
+if (rotaFinal === "configuracoes") {
+  texto("page-title", "Configurações");
+
+  texto(
+    "page-subtitle",
+    "Preferências e informações técnicas do painel"
+  );
+} else if (rotaFinal === "publicacao") {
   texto("page-title", "Publicação");
 
   texto(
