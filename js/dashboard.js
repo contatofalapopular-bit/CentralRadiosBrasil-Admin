@@ -21,8 +21,7 @@ async function carregarDashboard(semCache = false) {
     const categorias = new Set();
 
     let streams = 0;
-    let online = 0;
-    let offline = 0;
+    
     let verificadas = 0;
 
     radios.forEach((radio) => {
@@ -45,19 +44,9 @@ async function carregarDashboard(semCache = false) {
 }
 
       const listaStreams = Array.isArray(radio.streams) ? radio.streams : [];
-      streams += listaStreams.length;
+      
 
-      listaStreams.forEach((stream) => {
-        const status =
-          stream.monitoramento?.status ??
-          stream.status ??
-          radio.status ??
-          "nao_testado";
-
-        if (status === "online") online++;
-        if (status === "offline") offline++;
-      });
-    });
+    
 
     const categoriasOficiais =
       (docCategorias.categorias || []).filter((categoria) => categoria.ativa !== false).length;
@@ -67,8 +56,7 @@ async function carregarDashboard(semCache = false) {
     texto("total-estados", estados.size);
 texto("total-categorias", categorias.size);
     texto("total-streams", streams);
-    texto("total-online", online);
-    texto("total-offline", offline);
+   
     texto("total-verificadas", verificadas);
     texto(
       "dataset-version",
