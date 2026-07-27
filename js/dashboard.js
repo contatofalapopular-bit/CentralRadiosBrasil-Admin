@@ -44,11 +44,10 @@ async function carregarDashboard(semCache = false) {
 }
 
       const listaStreams = Array.isArray(radio.streams) ? radio.streams : [];
-      
-
+      streams += listaStreams.length;
+});
     
-
-    const categoriasOficiais =
+ const categoriasOficiais =
       (docCategorias.categorias || []).filter((categoria) => categoria.ativa !== false).length;
 
     texto("total-radios", radios.length);
