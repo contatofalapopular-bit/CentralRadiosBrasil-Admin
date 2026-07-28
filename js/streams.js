@@ -263,85 +263,139 @@ const StreamsAdmin = {
   },
 
   editar(id) {
-    const stream = this.streams.find((item) => item.id === id);
-    if (stream) this.abrirFormulario(stream);
-  },
+  const stream = this.streams.find(
+    (item) => String(item.id) === String(id)
+  );
 
-  salvar(evento) {
-    evento.preventDefault();
+  if (!stream) {
+    alert("Não foi possível localizar este stream.");
+    return;
+  }
 
-    const radioNome = document.getElementById("stream-radio-name").value.trim();
-    const nome = document.getElementById("stream-name").value.trim();
-    const url = document.getElementById("stream-url").value.trim();
-    const codec = document.getElementById("stream-codec").value.trim();
-    const bitrateValor = document.getElementById("stream-bitrate").value.trim();
-    const principal = document.getElementById("stream-principal").checked;
+  this.abrirFormulario(stream);
+},
 
-    if (!radioNome || !nome || !url) {
-      alert("Preencha os campos obrigatórios.");
-      return;
-    }
+ salvar(evento) {
+  evento.preventDefault();
 
-    if (!validarUrlHttp(url)) {
-      alert("A URL deve começar com http:// ou https://.");
-      return;
-    }
+  const radioNome = document
+    .getElementById("stream-radio-name")
+    .value.trim();
 
-    const duplicado = this.streams.find((item) => {
-      if (item.id === this.editandoId) return false;
-      return normalizar(item.url) === normalizar(url);
-    });
+  const nome = document
+    .getElementById("stream-name")
+    .value.trim();
 
-    if (duplicado) {
-      alert("Este endereço de stream já está cadastrado.");
-      return;
-    }
+  const url = document
+    .getElementById("stream-url")
+    .value.trim();
 
-    const anterior = this.editandoId
-      ? this.streams.find((item) => item.id === this.editandoId)
+  const codec = document
+    .getElementById("stream-codec")
+    .value.trim();
+
+  const bitrateValor = document
+    .getElementById("stream-bitrate")
+    .value.trim();
+
+  const principal = document
+    .getElementById("stream-principal")
+    .checked;
+
+  if (!radioNome || !nome || !url) {
+    alert("Preencha os campos obrigatórios.");
+    return;
+  }
+
+  if (!validarUrlHttp(url)) {
+    alert("A URL deve começar com http:// ou https://.");
+    return;
+  }
+
+  const indiceEdicao = this.editandoId !== null
+    ? this.streams.findIndex(
+        (item) => String(item.id) === String(this.editandoId)
+      )
+    : -1;
+
+  const duplicado = this.streams.find((item, indice) => {
+    if (indice === indiceEdicao) return false;
+
+    return normalizar(item.url) === normalizar(url);
+  });
+
+  if (duplicado) {
+    alert("Este endereço de stream já está cadastrado.");
+    return;
+  }
+
+  if (this.editandoId !== null && indiceEdicao === -1) {
+    alert(
+      "O stream original não foi encontrado. " +
+      "Atualize a página e tente novamente."
+    );
+    return;
+  }
+
+  const anterior =
+    indiceEdicao >= 0
+      ? this.streams[indiceEdicao]
       : null;
 
-    const atualizado = {
-      ...(anterior || {}),
-      id: anterior?.id || `stream-${Date.now()}`,
-      radioId: anterior?.radioId || "",
-      radioNome,
-      nome,
-      url,
-      codec: codec || "Não informado",
-      bitrate: bitrateValor ? Number(bitrateValor) : null,
-      protocolo: url.startsWith("https://") ? "HTTPS" : "HTTP",
-      principal,
-      status: anterior?.status || "nao_testado",
-      ultimaVerificacao: anterior?.ultimaVerificacao || null,
-      tempoRespostaMs: anterior?.tempoRespostaMs || null
-    };
+  const atualizado = {
+    ...(anterior || {}),
+    id: anterior?.id || `stream-${Date.now()}`,
+    radioId: anterior?.radioId || "",
+    radioNome,
+    nome,
+    url,
+    codec: codec || "Não informado",
+    bitrate: bitrateValor
+      ? Number(bitrateValor)
+      : null,
+    protocolo: url.startsWith("https://")
+      ? "HTTPS"
+      : "HTTP",
+    principal,
+    status: anterior?.status || "nao_testado",
+    ultimaVerificacao:
+      anterior?.ultimaVerificacao || null,
+    tempoRespostaMs:
+      anterior?.tempoRespostaMs || null
+  };
 
-    if (anterior) {
-      const indice = this.streams.findIndex((item) => item.id === anterior.id);
-      this.streams[indice] = atualizado;
-    } else {
-      this.streams.push(atualizado);
-    }
+  if (indiceEdicao >= 0) {
+    this.streams.splice(indiceEdicao, 1, atualizado);
+  } else {
+    this.streams.push(atualizado);
+  }
 
-    this.salvarLocal();
-    this.fecharFormulario();
-  },
+  this.salvarLocal();
+  this.fecharFormulario();
+},
 
-  excluir(id) {
-    const stream = this.streams.find((item) => item.id === id);
-    if (!stream) return;
+ excluir(id) {
+  const stream = this.streams.find(
+    (item) => String(item.id) === String(id)
+  );
 
-    const confirmou = confirm(
-      `Excluir o stream "${stream.nome}" de "${stream.radioNome}" do rascunho local?`
-    );
+  if (!stream) {
+    alert("Não foi possível localizar este stream.");
+    return;
+  }
 
-    if (!confirmou) return;
+  const confirmou = confirm(
+    `Excluir o stream "${stream.nome}" de "${stream.radioNome}" do rascunho local?`
+  );
 
-    this.streams = this.streams.filter((item) => item.id !== id);
-    this.salvarLocal();
-  },
+  if (!confirmou) return;
 
+  this.streams = this.streams.filter(
+    (item) => String(item.id) !== String(id)
+  );
+
+  this.salvarLocal();
+},
   salvarLocal() {
     localStorage.setItem(
       CONFIG.STREAMS_STORAGE_KEY,
@@ -351,7 +405,9 @@ const StreamsAdmin = {
   },
 
   testar(id) {
-    const stream = this.streams.find((item) => item.id === id);
+const stream = this.streams.find(
+  (item) => String(item.id) === String(id)
+);
     if (!stream) return;
 
     stream.status = "testando";
