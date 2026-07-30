@@ -138,3 +138,10 @@
 - Correção definitiva da identificação de versão.
 - Controle de cache por versão.
 - Preparação para desenvolvimento incremental.
+
+## 3.1.2 — Commit 21.2
+- Dashboard passa a ler versão e data diretamente do `radios.json` publicado.
+- Publicação grava `datasetVersion`, `generatedAt` e `catalogo.versaoPainel` no banco oficial.
+- Indicadores vazios agora mostram `0`, nunca traço.
+- Identidade visual atualizada para azul-marinho, azul-ciano, branco e vermelho da logomarca.
+- Logomarca oficial aplicada no menu lateral.
