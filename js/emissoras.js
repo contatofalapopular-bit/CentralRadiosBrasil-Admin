@@ -39,6 +39,14 @@ const EmissorasAdmin = {
     "rejeitada"
   ],
 
+  planosPermitidos: ["gratuito", "parceira_verificada", "premium"],
+  statusSeloPermitidos: [
+    "nao_configurado",
+    "aguardando_instalacao",
+    "verificado",
+    "suspenso"
+  ],
+
   emissoras: [],
   documentoOriginal: null,
   editandoId: null,
@@ -95,6 +103,12 @@ const EmissorasAdmin = {
 
     document.getElementById("emissora-form")
       .addEventListener("submit", (evento) => this.salvar(evento));
+
+    document.getElementById("emissora-form")
+      .addEventListener("input", () => this.atualizarPainelFluxo());
+
+    document.getElementById("emissora-form")
+      .addEventListener("change", () => this.atualizarPainelFluxo());
 
     document.getElementById("cancel-emissora-form")
       .addEventListener("click", () => this.fecharFormulario());
@@ -219,6 +233,13 @@ const EmissorasAdmin = {
       statusCadastro: this.normalizarStatusCadastro(
         radio.statusCadastro || radio.status?.cadastro || "publicada"
       ),
+      plano: this.normalizarPlano(radio.plano || "gratuito"),
+      seloOficial: {
+        ...(radio.seloOficial || {}),
+        status: this.normalizarStatusSelo(
+          radio.seloOficial?.status || "nao_configurado"
+        )
+      },
       observacoes: radio.observacoes || "",
       streams: Array.isArray(radio.streams) ? radio.streams : [],
       criadoEm: radio.criadoEm || new Date().toISOString(),
@@ -250,6 +271,96 @@ const EmissorasAdmin = {
     };
 
     return rotulos[this.normalizarStatusCadastro(status)] || "Publicada";
+  },
+
+  normalizarPlano(valor) {
+    const plano = String(valor || "").trim();
+    return this.planosPermitidos.includes(plano) ? plano : "gratuito";
+  },
+
+  normalizarStatusSelo(valor) {
+    const status = String(valor || "").trim();
+    return this.statusSeloPermitidos.includes(status)
+      ? status
+      : "nao_configurado";
+  },
+
+  proximoPassoStatus(status) {
+    const passos = {
+      cadastro_recebido: "Próximo passo: revisar os dados recebidos.",
+      em_analise: "Próximo passo: concluir a análise administrativa.",
+      aprovada: "Próximo passo: preparar a emissora para publicação.",
+      aguardando_selo: "Próximo passo: confirmar a instalação do Selo Oficial.",
+      publicada: "Cadastro publicado e disponível no catálogo.",
+      suspensa: "Revise o motivo da suspensão antes de reativar.",
+      rejeitada: "Revise as pendências antes de reabrir o cadastro."
+    };
+    return passos[this.normalizarStatusCadastro(status)] || passos.publicada;
+  },
+
+  obterDadosPerfilFormulario() {
+    const valor = (id) => String(document.getElementById(id)?.value || "").trim();
+    const redesPreenchidas = [
+      valor("emissora-facebook"),
+      valor("emissora-instagram"),
+      valor("emissora-youtube")
+    ].some(Boolean);
+    const contatoPreenchido = [
+      valor("emissora-phone"),
+      valor("emissora-whatsapp"),
+      valor("emissora-email")
+    ].some(Boolean);
+
+    return [
+      { rotulo: "Nome da emissora", completo: Boolean(valor("emissora-name")) },
+      { rotulo: "Tipo da emissora", completo: Boolean(valor("emissora-type")) },
+      { rotulo: "Categoria principal", completo: Boolean(valor("emissora-category")) },
+      { rotulo: "Estado e cidade", completo: Boolean(valor("emissora-state") && valor("emissora-city")) },
+      { rotulo: "Ao menos um stream", completo: this.streamsTemporarios.length > 0 },
+      { rotulo: "Descrição", completo: Boolean(valor("emissora-description")) },
+      { rotulo: "Nome fantasia ou slogan", completo: Boolean(valor("emissora-fantasy-name") || valor("emissora-slogan")) },
+      { rotulo: "Contato", completo: contatoPreenchido },
+      { rotulo: "Site", completo: Boolean(valor("emissora-site")) },
+      { rotulo: "Rede social", completo: redesPreenchidas }
+    ];
+  },
+
+  atualizarPainelFluxo() {
+    const statusSelect = document.getElementById("emissora-status-cadastro");
+    if (!statusSelect) return;
+
+    const status = this.normalizarStatusCadastro(
+      statusSelect.value,
+      this.editandoId ? "publicada" : "cadastro_recebido"
+    );
+    const badge = document.getElementById("emissora-workflow-status");
+    badge.className = `registration-status registration-status--${status}`;
+    badge.textContent = this.rotuloStatusCadastro(status);
+    texto("emissora-workflow-next-step", this.proximoPassoStatus(status));
+
+    const itens = this.obterDadosPerfilFormulario();
+    const concluidos = itens.filter((item) => item.completo).length;
+    const percentual = Math.round((concluidos / itens.length) * 100);
+    texto("emissora-profile-percent", `${percentual}%`);
+    texto("emissora-profile-items-count", `${concluidos} de ${itens.length} concluídos`);
+    texto(
+      "emissora-profile-summary",
+      percentual === 100
+        ? "Perfil completo. Revise os dados antes da publicação."
+        : `Faltam ${itens.length - concluidos} item(ns) para completar o perfil.`
+    );
+
+    const progresso = document.getElementById("emissora-profile-progress");
+    progresso.setAttribute("aria-valuenow", String(percentual));
+    document.getElementById("emissora-profile-progress-bar").style.width = `${percentual}%`;
+
+    document.getElementById("emissora-profile-checklist").innerHTML = itens
+      .map((item) => `
+        <li class="${item.completo ? "is-complete" : "is-pending"}">
+          <span aria-hidden="true">${item.completo ? "✓" : "○"}</span>
+          ${escaparHtml(item.rotulo)}
+        </li>
+      `).join("");
   },
 
   async carregarEstadosFormulario() {
@@ -604,6 +715,9 @@ const EmissorasAdmin = {
     document.getElementById("emissora-public").checked = true;
     document.getElementById("emissora-status-cadastro").value =
       "cadastro_recebido";
+    document.getElementById("emissora-plano").value = "gratuito";
+    document.getElementById("emissora-selo-status").value =
+      "nao_configurado";
 
     if (emissora) {
       const localizacao = emissora.localizacao || {};
@@ -665,6 +779,10 @@ const EmissorasAdmin = {
         emissora.observacoes || "";
       document.getElementById("emissora-status-cadastro").value =
         this.normalizarStatusCadastro(emissora.statusCadastro);
+      document.getElementById("emissora-plano").value =
+        this.normalizarPlano(emissora.plano);
+      document.getElementById("emissora-selo-status").value =
+        this.normalizarStatusSelo(emissora.seloOficial?.status);
 
       document.getElementById("emissora-active").checked =
         emissora.ativa !== false;
@@ -676,6 +794,8 @@ const EmissorasAdmin = {
       document.getElementById("emissora-state").value = "";
       this.atualizarCidadesFormulario();
     }
+
+    this.atualizarPainelFluxo();
 
     document.getElementById("emissora-modal-backdrop")
       .classList.remove("hidden");
@@ -862,6 +982,7 @@ const EmissorasAdmin = {
 
     this.garantirPrincipalExistente();
     this.renderizarStreamsTemporarios();
+    this.atualizarPainelFluxo();
     this.fecharStreamFormulario();
   },
 
@@ -880,6 +1001,7 @@ const EmissorasAdmin = {
 
     this.garantirPrincipalExistente();
     this.renderizarStreamsTemporarios();
+    this.atualizarPainelFluxo();
   },
 
   garantirPrincipalUnico() {
@@ -1020,6 +1142,15 @@ const EmissorasAdmin = {
         document.getElementById("emissora-status-cadastro").value,
         anterior ? "publicada" : "cadastro_recebido"
       ),
+      plano: this.normalizarPlano(
+        document.getElementById("emissora-plano").value
+      ),
+      seloOficial: {
+        ...(anterior?.seloOficial || {}),
+        status: this.normalizarStatusSelo(
+          document.getElementById("emissora-selo-status").value
+        )
+      },
       ativa: document.getElementById("emissora-active").checked,
       verificada: document.getElementById("emissora-verified").checked,
       publica: document.getElementById("emissora-public").checked,
@@ -1053,6 +1184,8 @@ const EmissorasAdmin = {
     copia.slug = `${gerarSlug(original.nome)}-copia-${agora}`;
     copia.nome = `${original.nome} - Cópia`;
     copia.statusCadastro = "cadastro_recebido";
+    copia.plano = "gratuito";
+    copia.seloOficial = { status: "nao_configurado" };
     copia.verificada = false;
     copia.publica = false;
     copia.criadoEm = new Date().toISOString();
@@ -1496,6 +1629,10 @@ const EmissorasAdmin = {
       statusCadastro: this.normalizarStatusCadastro(
         emissora.statusCadastro
       ),
+      plano: this.normalizarPlano(emissora.plano),
+      seloOficial: {
+        status: this.normalizarStatusSelo(emissora.seloOficial?.status)
+      },
       status: {
         ativa: emissora.ativa !== false,
         publica: emissora.publica !== false,
