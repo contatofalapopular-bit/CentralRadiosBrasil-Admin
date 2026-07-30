@@ -1453,223 +1453,132 @@ const EmissorasAdmin = {
     this.exibirValidacao(resultado);
   },
 
-  validarBanco() {
-    const erros = [];
+  calcularPerfilEmissora(emissora) {
+    const localizacao = emissora.localizacao || {};
+    const contato = emissora.contato || {};
+    const redes = emissora.redesSociais || {};
+    const streams = Array.isArray(emissora.streams) ? emissora.streams : [];
+    const itens = [
+      Boolean(String(emissora.nome || "").trim()),
+      Boolean(String(emissora.tipo || "").trim()),
+      Boolean(String(emissora.categoriaPrincipal || "").trim()),
+      Boolean(String(localizacao.uf || "").trim() && String(localizacao.cidade || "").trim()),
+      streams.length > 0,
+      Boolean(String(emissora.descricao || "").trim()),
+      Boolean(String(emissora.nomeFantasia || "").trim() || String(emissora.slogan || "").trim()),
+      Boolean(String(contato.telefone || "").trim() || String(contato.whatsapp || "").trim() || String(contato.email || "").trim()),
+      Boolean(String(emissora.site || "").trim()),
+      Boolean(String(redes.facebook || "").trim() || String(redes.instagram || "").trim() || String(redes.youtube || "").trim())
+    ];
+    const concluidos = itens.filter(Boolean).length;
+    return {
+      concluidos,
+      total: itens.length,
+      percentual: Math.round((concluidos / itens.length) * 100)
+    };
+  },
+
+  avaliarProntidaoEmissora(emissora, indice = 0) {
+    const referencia = emissora.nome || emissora.id || `Registro ${indice + 1}`;
+    const localizacao = emissora.localizacao || {};
+    const streams = Array.isArray(emissora.streams) ? emissora.streams : [];
+    const principais = streams.filter((stream) => stream.principal === true);
+    const principal = principais[0] || streams[0] || null;
+    const perfil = this.calcularPerfilEmissora(emissora);
+    const statusCadastro = this.normalizarStatusCadastro(emissora.statusCadastro);
+    const bloqueios = [];
+    const pendencias = [];
     const avisos = [];
-    const ids = new Map();
-    const slugs = new Map();
-    const urls = new Map();
 
-    const emissorasPublicaveis = this.emissoras.filter(
-      (emissora) =>
-        emissora.ativa !== false &&
-        emissora.publica !== false
-    );
+    const exigir = (condicao, campo, mensagem) => {
+      if (!condicao) bloqueios.push({ emissora: referencia, campo, mensagem });
+    };
 
-    this.emissoras.forEach((emissora, indice) => {
-      const referencia =
-        emissora.nome || emissora.id || `Registro ${indice + 1}`;
-      const localizacao = emissora.localizacao || {};
-      const streams = Array.isArray(emissora.streams)
-        ? emissora.streams
-        : [];
+    exigir(String(emissora.id || "").trim(), "id", "A emissora não possui um ID.");
+    exigir(String(emissora.nome || "").trim(), "nome", "O nome da emissora é obrigatório.");
+    exigir(String(emissora.tipo || "").trim(), "tipo", "O tipo da emissora é obrigatório.");
+    exigir(String(localizacao.uf || "").trim(), "estado", "O estado é obrigatório.");
+    exigir(String(localizacao.cidade || "").trim(), "cidade", "A cidade é obrigatória.");
+    exigir(String(emissora.categoriaPrincipal || "").trim(), "categoria", "A categoria principal é obrigatória.");
+    exigir(streams.length > 0, "streams", "É necessário cadastrar pelo menos um stream.");
+    exigir(principais.length <= 1, "stream principal", "Mais de um stream foi marcado como principal.");
+    exigir(!streams.length || Boolean(principal), "stream principal", "Nenhum stream principal foi encontrado.");
 
-      if (!String(emissora.id || "").trim()) {
-        erros.push({
-          emissora: referencia,
-          campo: "id",
-          mensagem: "A emissora não possui um ID."
-        });
-      } else {
-        const id = String(emissora.id).trim();
+    if (principal) {
+      const url = String(principal.url || "").trim();
+      exigir(Boolean(url), "stream principal", "O stream principal não possui URL.");
+      exigir(!url || validarUrlHttp(url), "stream principal", "A URL do stream principal deve começar com http:// ou https://.");
+    }
 
-        if (ids.has(id)) {
-          erros.push({
-            emissora: referencia,
-            campo: "id",
-            mensagem:
-              `ID duplicado com "${ids.get(id)}": ${id}`
-          });
-        } else {
-          ids.set(id, referencia);
-        }
-      }
+    if (emissora.ativa === false) {
+      bloqueios.push({ emissora: referencia, campo: "situação", mensagem: "A emissora está inativa." });
+    }
+    if (emissora.publica === false) {
+      bloqueios.push({ emissora: referencia, campo: "catálogo", mensagem: "A exibição no catálogo público está desativada." });
+    }
+    if (["suspensa", "rejeitada"].includes(statusCadastro)) {
+      bloqueios.push({ emissora: referencia, campo: "status do cadastro", mensagem: `O cadastro está ${this.rotuloStatusCadastro(statusCadastro).toLowerCase()}.` });
+    } else if (statusCadastro !== "publicada") {
+      pendencias.push({ emissora: referencia, campo: "status do cadastro", mensagem: `Altere o status para “Publicada”. Status atual: ${this.rotuloStatusCadastro(statusCadastro)}.` });
+    }
 
-      if (!String(emissora.slug || "").trim()) {
-        avisos.push({
-          emissora: referencia,
-          campo: "slug",
-          mensagem: "O slug será gerado automaticamente."
-        });
-      } else {
-        const slug = String(emissora.slug).trim();
+    if (perfil.percentual < 70) {
+      pendencias.push({ emissora: referencia, campo: "perfil", mensagem: `Perfil com ${perfil.percentual}%. O mínimo recomendado para publicação é 70%.` });
+    }
+    if (!String(emissora.logo || "").trim()) {
+      avisos.push({ emissora: referencia, campo: "logotipo", mensagem: "Logotipo não informado; a emissora pode ser publicada, mas o catálogo ficará menos completo." });
+    }
+    if (principal && String(principal.url || "").startsWith("http://")) {
+      avisos.push({ emissora: referencia, campo: "stream", mensagem: "O stream usa HTTP. HTTPS é preferível quando disponível." });
+    }
 
-        if (slugs.has(slug)) {
-          erros.push({
-            emissora: referencia,
-            campo: "slug",
-            mensagem:
-              `Slug duplicado com "${slugs.get(slug)}": ${slug}`
-          });
-        } else {
-          slugs.set(slug, referencia);
-        }
-      }
+    let classificacao = "apta";
+    if (bloqueios.length) classificacao = "bloqueada";
+    else if (pendencias.length) classificacao = "pendente";
 
-      if (!String(emissora.nome || "").trim()) {
-        erros.push({
-          emissora: referencia,
-          campo: "nome",
-          mensagem: "O nome da emissora é obrigatório."
-        });
-      }
-
-      if (!String(localizacao.uf || "").trim()) {
-        erros.push({
-          emissora: referencia,
-          campo: "estado",
-          mensagem: "O estado é obrigatório."
-        });
-      }
-
-      if (!String(localizacao.cidade || "").trim()) {
-        erros.push({
-          emissora: referencia,
-          campo: "cidade",
-          mensagem: "A cidade é obrigatória."
-        });
-      }
-
-      if (!String(emissora.categoriaPrincipal || "").trim()) {
-        erros.push({
-          emissora: referencia,
-          campo: "categoria",
-          mensagem: "A categoria principal é obrigatória."
-        });
-      }
-
-      if (
-        emissora.ativa !== false &&
-        emissora.publica !== false &&
-        streams.length === 0
-      ) {
-        erros.push({
-          emissora: referencia,
-          campo: "streams",
-          mensagem:
-            "Uma emissora ativa e pública precisa ter pelo menos um stream."
-        });
-      }
-
-      const principais = streams.filter(
-        (stream) => stream.principal === true
-      );
-
-      if (streams.length && principais.length === 0) {
-        erros.push({
-          emissora: referencia,
-          campo: "stream principal",
-          mensagem: "Nenhum stream foi marcado como principal."
-        });
-      }
-
-      if (principais.length > 1) {
-        erros.push({
-          emissora: referencia,
-          campo: "stream principal",
-          mensagem:
-            "Mais de um stream foi marcado como principal."
-        });
-      }
-
-      streams.forEach((stream, streamIndice) => {
-        const nomeStream =
-          stream.nome || `Stream ${streamIndice + 1}`;
-        const url = String(stream.url || "").trim();
-
-        if (!url) {
-          erros.push({
-            emissora: referencia,
-            campo: nomeStream,
-            mensagem: "O stream não possui URL."
-          });
-          return;
-        }
-
-        if (!validarUrlHttp(url)) {
-          erros.push({
-            emissora: referencia,
-            campo: nomeStream,
-            mensagem:
-              "A URL do stream deve começar com http:// ou https://."
-          });
-        }
-
-        if (urls.has(url)) {
-          avisos.push({
-            emissora: referencia,
-            campo: nomeStream,
-            mensagem:
-              `A mesma URL também é usada por "${urls.get(url)}".`
-          });
-        } else {
-          urls.set(url, referencia);
-        }
-
-        if (url.startsWith("http://")) {
-          avisos.push({
-            emissora: referencia,
-            campo: nomeStream,
-            mensagem:
-              "O stream usa HTTP. HTTPS é preferível quando disponível."
-          });
-        }
-
-        if (!String(stream.codec || "").trim()) {
-          avisos.push({
-            emissora: referencia,
-            campo: nomeStream,
-            mensagem: "Codec não informado."
-          });
-        }
-      });
-
-      if (
-        emissora.tipo === "FM" &&
-        !String(emissora.frequencia || "").trim()
-      ) {
-        avisos.push({
-          emissora: referencia,
-          campo: "frequência",
-          mensagem: "Emissora FM sem frequência informada."
-        });
-      }
-
-      if (
-        emissora.tipo === "AM" &&
-        !String(emissora.frequencia || "").trim()
-      ) {
-        avisos.push({
-          emissora: referencia,
-          campo: "frequência",
-          mensagem: "Emissora AM sem frequência informada."
-        });
-      }
-
-      if (!String(emissora.logo || "").trim()) {
-        avisos.push({
-          emissora: referencia,
-          campo: "logotipo",
-          mensagem: "Logotipo não informado."
-        });
-      }
-    });
+    const requisitosAtendidos = 10 - Math.min(10, bloqueios.length + pendencias.length);
+    const prontidao = Math.max(0, Math.min(100, Math.round((requisitosAtendidos / 10) * 70 + perfil.percentual * 0.30)));
 
     return {
-      valido: erros.length === 0,
+      id: emissora.id,
+      nome: referencia,
+      classificacao,
+      prontidao,
+      perfil: perfil.percentual,
+      bloqueios,
+      pendencias,
+      avisos
+    };
+  },
+
+  validarBanco() {
+    const avaliacoes = this.emissoras.map((emissora, indice) =>
+      this.avaliarProntidaoEmissora(emissora, indice)
+    );
+
+    const aptas = avaliacoes.filter((item) => item.classificacao === "apta");
+    const pendentes = avaliacoes.filter((item) => item.classificacao === "pendente");
+    const bloqueadas = avaliacoes.filter((item) => item.classificacao === "bloqueada");
+    const erros = bloqueadas.flatMap((item) => item.bloqueios);
+    const avisos = [
+      ...pendentes.flatMap((item) => item.pendencias),
+      ...avaliacoes.flatMap((item) => item.avisos)
+    ];
+    const qualidadeMedia = avaliacoes.length
+      ? Math.round(avaliacoes.reduce((total, item) => total + item.prontidao, 0) / avaliacoes.length)
+      : 0;
+
+    return {
+      valido: aptas.length > 0,
       geradoEm: new Date().toISOString(),
       totalCadastradas: this.emissoras.length,
-      totalPublicaveis: emissorasPublicaveis.length,
+      totalPublicaveis: aptas.length,
+      totalAptas: aptas.length,
+      totalPendentes: pendentes.length,
+      totalBloqueadas: bloqueadas.length,
+      qualidadeMedia,
+      emissorasAptasIds: aptas.map((item) => item.id),
+      avaliacoes,
       totalErros: erros.length,
       totalAvisos: avisos.length,
       erros,
@@ -1810,10 +1719,9 @@ const EmissorasAdmin = {
 
   gerarBancoOficial(resultado) {
     const radios = this.emissoras
-      .filter(
-        (emissora) =>
-          emissora.ativa !== false &&
-          emissora.publica !== false
+      .filter((emissora) =>
+        Array.isArray(resultado.emissorasAptasIds) &&
+        resultado.emissorasAptasIds.includes(emissora.id)
       )
       .map((emissora) =>
         this.normalizarEmissoraOficial(emissora)
@@ -1870,10 +1778,9 @@ const EmissorasAdmin = {
 
   gerarBancoEsp32(resultado) {
     const radios = this.emissoras
-      .filter(
-        (emissora) =>
-          emissora.ativa !== false &&
-          emissora.publica !== false
+      .filter((emissora) =>
+        Array.isArray(resultado.emissorasAptasIds) &&
+        resultado.emissorasAptasIds.includes(emissora.id)
       )
      .map((emissora) => {
   const streams = Array.isArray(emissora.streams)
