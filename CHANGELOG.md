@@ -1,3 +1,21 @@
+# Changelog
+
+## 3.0.0 — Commit 20: Refinamentos da Publicação Inteligente
+
+- Barra de prontidão com cores por faixa de qualidade.
+- Checklist detalhado por emissora, com requisitos atendidos, pendências, bloqueios e avisos.
+- Resumo executivo da publicação com resultado do catálogo.
+- Botão “Publicar no GitHub” bloqueado até a validação gerar os dois bancos oficiais.
+- Melhorias de acessibilidade e responsividade na tela de publicação.
+
+## 2.9.0 — Commit 19: Publicação Inteligente
+
+- Classificação automática de emissoras por prontidão.
+- Publicação exclusiva das emissoras aptas.
+- Relatório visual de pendências, bloqueios e avisos.
+- Geração integrada dos bancos oficial e ESP32.
+- Versões e cache dos arquivos sincronizados.
+
 # CHANGELOG
 
 ## 2.4.0 — Commit 13.3
