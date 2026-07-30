@@ -141,7 +141,7 @@ body.dark-theme{
   --bg:#040b1c;--surface:#0a1731;--text:#f5f9ff;--muted:#a9bbd6;
   --border:#20375d;--primary:#15b9ff;--primary-dark:#079ee8;--sidebar:#010612;
 }
-.brand-logo{width:54px;height:54px;flex:0 0 54px;border-radius:50%;object-fit:cover;border:2px solid #16baff;box-shadow:0 0 0 3px #ffffff18,0 8px 20px #0008}
+.brand-mark{width:54px;height:54px;flex:0 0 54px;border-radius:50%;display:grid;place-items:center;background:linear-gradient(145deg,#071f63 0%,#087fd1 55%,#16c8ff 100%);border:2px solid #16c8ff;box-shadow:0 0 0 3px #ffffff18,0 8px 20px #0008;color:#fff;font-size:1.05rem;font-weight:900;letter-spacing:.04em;text-shadow:0 1px 2px #00143f}
 .sidebar{background:linear-gradient(180deg,#02091a 0%,#061846 58%,#03102f 100%)}
 .nav-link.active,.nav-link:hover{background:linear-gradient(135deg,#087fd1,#10b8f4);box-shadow:0 8px 20px #059de638}
 .primary-button{background:linear-gradient(135deg,#087fd1,#10b8f4);border-color:#079ee8}
@@ -159,3 +159,5 @@ body.dark-theme{
 .readiness-card--apta{border-left-color:#079ee8}.readiness-track span.progress-excellent{background:linear-gradient(90deg,#071f63,#079ee8,#16c8ff)}
 .readiness-status--apta{background:#d9f5ff;color:#056b9e!important}
 .publication-summary--success{border-left-color:#079ee8}.publication-summary--success>div:first-child>span{background:#d9f5ff;color:#056b9e}
+
+@media(max-width:520px){.brand-mark{width:46px;height:46px;flex-basis:46px;font-size:.92rem}.brand{gap:10px}.brand strong{font-size:.92rem}.brand span{font-size:.75rem}}
