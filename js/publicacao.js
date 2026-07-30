@@ -1,676 +1,109 @@
 /**
- * Central de Publicação Oficial
- * Commit 14.1
- *
- * Este módulo reutiliza a validação e os geradores já existentes
- * no módulo de Emissoras, evitando duplicação de regras.
+ * Commit 19 — Publicação Inteligente
+ * Classifica emissoras como aptas, pendentes ou bloqueadas e publica apenas as aptas.
  */
-
 let publicacaoEventosRegistrados = false;
-const PUBLICADOR_URL =
-  "https://broken-bar-45e2.contatofalapopular.workers.dev/publicar";
+const PUBLICADOR_URL = "https://broken-bar-45e2.contatofalapopular.workers.dev/publicar";
 
-/**
- * Inicializa a página de Publicação.
- *
- * Esta função é chamada pelo app.js na primeira abertura da rota.
- */
 function iniciarPublicacao() {
   registrarEventosPublicacao();
   atualizarResumoPublicacao();
 }
 
-/**
- * Atualiza os números e o estado visual da Central de Publicação.
- */
-function atualizarResumoPublicacao() {
-  const resumo = obterResumoPublicacao();
-
-  definirTexto(
-    "publicacao-total-emissoras",
-    resumo.totalEmissoras
-  );
-
-  definirTexto(
-    "publicacao-total-publicaveis",
-    resumo.totalPublicaveis
-  );
-
-  definirTexto(
-    "publicacao-total-erros",
-    resumo.totalErros
-  );
-
-  definirTexto(
-    "publicacao-total-avisos",
-    resumo.totalAvisos
-  );
-
-  atualizarStatusPublicacao(resumo);
+function obterResultadoInteligente() {
+  if (typeof EmissorasAdmin === "undefined") return null;
+  if (!Array.isArray(EmissorasAdmin.emissoras) || !EmissorasAdmin.emissoras.length) return null;
+  return EmissorasAdmin.validarBanco();
 }
 
-/**
- * Obtém os dados disponíveis no painel e no armazenamento local.
- */
-function obterResumoPublicacao() {
-  const emissoras = obterEmissorasPublicacao();
+function atualizarResumoPublicacao(resultado = obterResultadoInteligente()) {
+  const total = resultado?.totalCadastradas || 0;
+  definirTexto("publicacao-total-emissoras", total);
+  definirTexto("publicacao-total-aptas", resultado?.totalAptas || 0);
+  definirTexto("publicacao-total-pendentes", resultado?.totalPendentes || 0);
+  definirTexto("publicacao-total-bloqueadas", resultado?.totalBloqueadas || 0);
+  definirTexto("publicacao-qualidade-media", `${resultado?.qualidadeMedia || 0}%`);
+  renderizarAvaliacoesPublicacao(resultado);
 
-  const totalEmissorasPainel = obterNumeroElemento(
-    "emissoras-total-count"
-  );
-
-  const totalErros = obterNumeroElemento(
-    "validation-errors-count"
-  );
-
-  const totalAvisos = obterNumeroElemento(
-    "validation-warnings-count"
-  );
-
-  const totalPublicaveisModal = obterNumeroElemento(
-    "validation-public-count"
-  );
-
-  const totalEmissoras =
-    totalEmissorasPainel > 0
-      ? totalEmissorasPainel
-      : emissoras.length;
-
-  const totalPublicaveis =
-    totalPublicaveisModal > 0
-      ? totalPublicaveisModal
-      : Math.max(totalEmissoras - totalErros, 0);
-
-  return {
-    totalEmissoras,
-    totalPublicaveis,
-    totalErros,
-    totalAvisos
-  };
+  if (!total) atualizarBadgePublicacao("loading", "Aguardando dados");
+  else if (resultado.totalAptas > 0) atualizarBadgePublicacao("success", "Publicação disponível");
+  else atualizarBadgePublicacao("error", "Nenhuma emissora apta");
 }
 
-/**
- * Procura o banco de emissoras salvo no navegador.
- */
-function obterEmissorasPublicacao() {
-  const chavesPossiveis = [
-    CONFIG.EMISSORAS_STORAGE_KEY,
-    CONFIG.RADIOS_STORAGE_KEY,
-    "centralRadiosBrasil_emissoras",
-    "central-radios-brasil-emissoras",
-    "crb-emissoras",
-    "emissoras"
-  ].filter(Boolean);
-
-  for (const chave of chavesPossiveis) {
-    try {
-      const conteudoSalvo = localStorage.getItem(chave);
-
-      if (!conteudoSalvo) {
-        continue;
-      }
-
-      const dados = JSON.parse(conteudoSalvo);
-      const emissoras = extrairListaEmissoras(dados);
-
-      if (emissoras.length > 0) {
-        return emissoras;
-      }
-    } catch (erro) {
-      console.warn(
-        `Não foi possível ler o banco salvo em "${chave}".`,
-        erro
-      );
-    }
-  }
-
-  return [];
-}
-
-/**
- * Aceita bancos salvos como array ou dentro de um objeto.
- */
-function extrairListaEmissoras(dados) {
-  if (Array.isArray(dados)) {
-    return dados;
-  }
-
-  if (!dados || typeof dados !== "object") {
-    return [];
-  }
-
-  const propriedadesPossiveis = [
-    "emissoras",
-    "radios",
-    "items",
-    "dados"
-  ];
-
-  for (const propriedade of propriedadesPossiveis) {
-    if (Array.isArray(dados[propriedade])) {
-      return dados[propriedade];
-    }
-  }
-
-  return [];
-}
-
-/**
- * Registra os eventos somente uma vez.
- */
 function registrarEventosPublicacao() {
-  if (publicacaoEventosRegistrados) {
-    return;
-  }
-
+  if (publicacaoEventosRegistrados) return;
   publicacaoEventosRegistrados = true;
-
-  const atualizarButton = document.getElementById(
-    "publicacao-refresh-button"
-  );
-
-  const validarButton = document.getElementById(
-    "publicacao-validar-button"
-  );
-
-  const gerarRadiosButton = document.getElementById(
-    "publicacao-gerar-radios-button"
-  );
-
-  const gerarEsp32Button = document.getElementById(
-    "publicacao-gerar-esp32-button"
-  );
-
-  atualizarButton?.addEventListener("click", () => {
-    atualizarResumoPublicacao();
-  });
-
-  validarButton?.addEventListener("click", () => {
-    executarValidacaoPublicacao();
-  });
-
-  gerarRadiosButton?.addEventListener("click", () => {
-    gerarBancoOficialPublicacao();
-  });
-
-  gerarEsp32Button?.addEventListener("click", () => {
-    gerarBancoEsp32Publicacao();
-  });
-
+  document.getElementById("publicacao-refresh-button")?.addEventListener("click", () => atualizarResumoPublicacao());
+  document.getElementById("publicacao-validar-button")?.addEventListener("click", executarValidacaoPublicacao);
+  document.getElementById("publicacao-gerar-radios-button")?.addEventListener("click", gerarBancoOficialPublicacao);
+  document.getElementById("publicacao-gerar-esp32-button")?.addEventListener("click", gerarBancoEsp32Publicacao);
   criarBotaoPublicarGithub();
 }
 
-/**
- * Reutiliza a validação já implementada no módulo de Emissoras.
- */
 function executarValidacaoPublicacao() {
-  atualizarBadgePublicacao(
-    "loading",
-    "Validando banco"
-  );
-
-  definirTexto(
-    "publicacao-resumo",
-    "A validação do banco oficial está sendo executada."
-  );
-
-  limparProblemasPublicacao();
-  desativarGeradoresPublicacao();
-
-  if (
-    typeof EmissorasAdmin === "undefined" ||
-    typeof EmissorasAdmin.exportar !== "function"
-  ) {
-    atualizarBadgePublicacao(
-      "error",
-      "Validação indisponível"
-    );
-
-    adicionarProblemaPublicacao(
-      "O módulo de validação das emissoras não está disponível."
-    );
-
+  if (typeof EmissorasAdmin === "undefined" || typeof EmissorasAdmin.exportar !== "function") {
+    atualizarBadgePublicacao("error", "Validação indisponível");
     return;
   }
-
+  atualizarBadgePublicacao("loading", "Analisando emissoras");
   EmissorasAdmin.exportar();
-
   const resultado = EmissorasAdmin.ultimoRelatorioValidacao;
-
-if (!resultado) {
-  atualizarBadgePublicacao(
-    "error",
-    "Falha na validação"
-  );
-
-  definirTexto(
-    "publicacao-resumo",
-    "O módulo de Emissoras não retornou o relatório da validação."
-  );
-
-  adicionarProblemaPublicacao(
-    "Não foi possível obter o resultado da validação oficial."
-  );
-
-  desativarGeradoresPublicacao();
-  return;
-}
-
-concluirValidacaoPublicacao();
-}
-/**
- * Lê o resultado produzido pela modal de validação existente.
- */
-function concluirValidacaoPublicacao() {
-  const resumo = obterResumoPublicacao();
-
-  atualizarResumoPublicacao();
-  importarProblemasDaValidacao();
-
-  if (resumo.totalErros > 0) {
-    atualizarBadgePublicacao(
-      "error",
-      "Banco com erros"
-    );
-
-    definirTexto(
-      "publicacao-resumo",
-      `${resumo.totalErros} erro(s) impedem a geração dos bancos oficiais.`
-    );
-
+  atualizarResumoPublicacao(resultado);
+  renderizarAvaliacoesPublicacao(resultado);
+  if (resultado?.valido) {
+    ativarGeradoresPublicacao();
+    definirTexto("publicacao-resumo", `${resultado.totalAptas} emissora(s) apta(s) serão incluídas. ${resultado.totalPendentes} pendente(s) e ${resultado.totalBloqueadas} bloqueada(s) ficarão fora dos arquivos.`);
+  } else {
     desativarGeradoresPublicacao();
+    definirTexto("publicacao-resumo", "Nenhuma emissora está apta. Corrija as pendências ou bloqueios antes de gerar os bancos oficiais.");
+  }
+}
+
+function renderizarAvaliacoesPublicacao(resultado) {
+  const lista = document.getElementById("publicacao-avaliacoes-list");
+  if (!lista) return;
+  const avaliacoes = resultado?.avaliacoes || [];
+  if (!avaliacoes.length) {
+    lista.innerHTML = '<div class="publicacao-empty">Nenhuma emissora disponível para análise.</div>';
     return;
   }
-
-  atualizarBadgePublicacao(
-    "success",
-    "Banco validado"
-  );
-
-  definirTexto(
-    "publicacao-resumo",
-    resumo.totalAvisos > 0
-      ? `Banco validado com ${resumo.totalAvisos} aviso(s) para revisão.`
-      : "Banco validado com sucesso e pronto para gerar os arquivos oficiais."
-  );
-
-  ativarGeradoresPublicacao();
+  lista.innerHTML = avaliacoes.map((item) => {
+    const problemas = [...item.bloqueios, ...item.pendencias, ...item.avisos];
+    const rotulo = item.classificacao === "apta" ? "Pronta" : item.classificacao === "pendente" ? "Pendente" : "Bloqueada";
+    return `<article class="readiness-card readiness-card--${item.classificacao}">
+      <div class="readiness-head"><div><strong>${escaparHtml(item.nome)}</strong><span>${rotulo}</span></div><b>${item.prontidao}%</b></div>
+      <div class="readiness-track"><span style="width:${item.prontidao}%"></span></div>
+      ${problemas.length ? `<ul>${problemas.map((p) => `<li><strong>${escaparHtml(p.campo)}:</strong> ${escaparHtml(p.mensagem)}</li>`).join("")}</ul>` : '<p class="readiness-ok">✓ Todos os requisitos de publicação foram atendidos.</p>'}
+    </article>`;
+  }).join("");
 }
 
-/**
- * Copia erros e avisos da validação existente para a nova página.
- */
-function importarProblemasDaValidacao() {
-  limparProblemasPublicacao();
-
-  const listasOriginais = [
-    document.getElementById("validation-errors-list"),
-    document.getElementById("validation-warnings-list")
-  ];
-
-  let totalImportado = 0;
-
-  listasOriginais.forEach((lista) => {
-    if (!lista) {
-      return;
-    }
-
-    lista.querySelectorAll("li").forEach((item) => {
-      const mensagem = item.textContent.trim();
-
-      if (!mensagem) {
-        return;
-      }
-
-      adicionarProblemaPublicacao(mensagem);
-      totalImportado += 1;
-    });
-  });
-
-  if (totalImportado === 0) {
-    adicionarProblemaPublicacao(
-      "Nenhum problema impeditivo foi encontrado."
-    );
-  }
-}
-
-/**
- * Aciona os botões de download já existentes na modal.
- */
 function gerarBancoOficialPublicacao() {
-  if (
-    typeof EmissorasAdmin === "undefined" ||
-    typeof EmissorasAdmin.baixarBancoOficial !== "function"
-  ) {
-    atualizarBadgePublicacao(
-      "error",
-      "Gerador indisponível"
-    );
-
-    adicionarProblemaPublicacao(
-      "O gerador de radios.json não está disponível."
-    );
-
-    return;
-  }
-
+  if (!EmissorasAdmin?.ultimoRelatorioValidacao?.valido) return alert("Valide o banco primeiro.");
   EmissorasAdmin.baixarBancoOficial();
-
-  atualizarBadgePublicacao(
-    "success",
-    "radios.json gerado"
-  );
-
-  definirTexto(
-    "publicacao-resumo",
-    "O arquivo radios.json foi preparado para download."
-  );
 }
-
 function gerarBancoEsp32Publicacao() {
-  if (
-    typeof EmissorasAdmin === "undefined" ||
-    typeof EmissorasAdmin.baixarBancoEsp32 !== "function"
-  ) {
-    atualizarBadgePublicacao(
-      "error",
-      "Gerador indisponível"
-    );
-
-    adicionarProblemaPublicacao(
-      "O gerador de radios-esp32.json não está disponível."
-    );
-
-    return;
-  }
-
+  if (!EmissorasAdmin?.ultimoRelatorioValidacao?.valido) return alert("Valide o banco primeiro.");
   EmissorasAdmin.baixarBancoEsp32();
-
-  atualizarBadgePublicacao(
-    "success",
-    "radios-esp32.json gerado"
-  );
-
-  definirTexto(
-    "publicacao-resumo",
-    "O arquivo radios-esp32.json foi preparado para download."
-  );
 }
-
-/**
- * Atualiza o badge principal conforme os números conhecidos.
- */
-function atualizarStatusPublicacao(resumo) {
-  if (resumo.totalEmissoras === 0) {
-    atualizarBadgePublicacao(
-      "loading",
-      "Aguardando verificação"
-    );
-
-    return;
-  }
-
-  if (resumo.totalErros > 0) {
-    atualizarBadgePublicacao(
-      "error",
-      "Banco com erros"
-    );
-
-    desativarGeradoresPublicacao();
-    return;
-  }
-
-  if (resumo.totalPublicaveis > 0) {
-    atualizarBadgePublicacao(
-      "success",
-      "Banco disponível"
-    );
-  }
-}
-
-/**
- * Altera o texto e a classe do badge da página.
- */
 function atualizarBadgePublicacao(tipo, mensagem) {
-  const badge = document.getElementById(
-    "publicacao-status-badge"
-  );
-
-  if (!badge) {
-    return;
-  }
-
-  badge.classList.remove(
-    "loading",
-    "success",
-    "error",
-    "warning"
-  );
-
-  badge.classList.add(tipo);
-  badge.textContent = mensagem;
+  const badge=document.getElementById("publicacao-status-badge"); if(!badge)return;
+  badge.className=`status-badge ${tipo}`; badge.textContent=mensagem;
 }
-
-function ativarGeradoresPublicacao() {
-  const gerarRadiosButton = document.getElementById(
-    "publicacao-gerar-radios-button"
-  );
-
-  const gerarEsp32Button = document.getElementById(
-    "publicacao-gerar-esp32-button"
-  );
-
-  if (gerarRadiosButton) {
-    gerarRadiosButton.disabled = false;
-  }
-
-  if (gerarEsp32Button) {
-    gerarEsp32Button.disabled = false;
-  }
-}
-
-function desativarGeradoresPublicacao() {
-  const gerarRadiosButton = document.getElementById(
-    "publicacao-gerar-radios-button"
-  );
-
-  const gerarEsp32Button = document.getElementById(
-    "publicacao-gerar-esp32-button"
-  );
-
-  if (gerarRadiosButton) {
-    gerarRadiosButton.disabled = true;
-  }
-
-  if (gerarEsp32Button) {
-    gerarEsp32Button.disabled = true;
-  }
-}
-
-function limparProblemasPublicacao() {
-  const lista = document.getElementById(
-    "publicacao-problemas-list"
-  );
-
-  if (lista) {
-    lista.innerHTML = "";
-  }
-}
-
-function adicionarProblemaPublicacao(mensagem) {
-  const lista = document.getElementById(
-    "publicacao-problemas-list"
-  );
-
-  if (!lista) {
-    return;
-  }
-
-  const item = document.createElement("li");
-  item.textContent = mensagem;
-  lista.appendChild(item);
-}
-
-function obterNumeroElemento(id) {
-  const elemento = document.getElementById(id);
-
-  if (!elemento) {
-    return 0;
-  }
-
-  const numero = Number.parseInt(
-    elemento.textContent.replace(/\D/g, ""),
-    10
-  );
-
-  return Number.isNaN(numero) ? 0 : numero;
-}
-
-function definirTexto(id, valor) {
-  const elemento = document.getElementById(id);
-
-  if (elemento) {
-    elemento.textContent = String(valor);
-  }
-}
+function ativarGeradoresPublicacao(){["publicacao-gerar-radios-button","publicacao-gerar-esp32-button"].forEach(id=>{const e=document.getElementById(id);if(e)e.disabled=false;});}
+function desativarGeradoresPublicacao(){["publicacao-gerar-radios-button","publicacao-gerar-esp32-button"].forEach(id=>{const e=document.getElementById(id);if(e)e.disabled=true;});}
+function definirTexto(id,valor){const e=document.getElementById(id);if(e)e.textContent=String(valor);}
 
 function criarBotaoPublicarGithub() {
-  if (document.getElementById("publicacao-publicar-github-button")) {
-    return;
-  }
-
-  const validarButton = document.getElementById(
-    "publicacao-validar-button"
-  );
-
-  const areaBotoes = validarButton?.parentElement;
-
-  if (!areaBotoes) {
-    console.error(
-      "Não foi possível encontrar a área dos botões de publicação."
-    );
-    return;
-  }
-
-  const botao = document.createElement("button");
-
-  botao.id = "publicacao-publicar-github-button";
-  botao.type = "button";
-  botao.className = "primary-button";
-  botao.textContent = "🚀 Publicar no GitHub";
-
-  botao.addEventListener("click", () => {
-    publicarBancosNoGithub();
-  });
-
-  areaBotoes.appendChild(botao);
+  if (document.getElementById("publicacao-publicar-github-button")) return;
+  const area=document.getElementById("publicacao-validar-button")?.parentElement;if(!area)return;
+  const botao=document.createElement("button");botao.id="publicacao-publicar-github-button";botao.type="button";botao.className="primary-button";botao.textContent="🚀 Publicar no GitHub";
+  botao.addEventListener("click", publicarBancosNoGithub);area.appendChild(botao);
 }
-
-async function publicarBancosNoGithub() {
-  if (
-    typeof EmissorasAdmin === "undefined" ||
-    !EmissorasAdmin.ultimoRelatorioValidacao?.valido ||
-    !EmissorasAdmin.ultimoBancoOficial ||
-    !EmissorasAdmin.ultimoBancoEsp32
-  ) {
-    alert(
-      "Primeiro clique em “Validar banco” e confirme que a validação foi aprovada."
-    );
-    return;
-  }
-
-  const chave = window.prompt(
-    "Digite a chave de publicação criada na Cloudflare:"
-  );
-
-  if (!chave || !chave.trim()) {
-    return;
-  }
-
-  const botao = document.getElementById(
-    "publicacao-publicar-github-button"
-  );
-
-  const textoOriginal = botao?.textContent;
-
-  if (botao) {
-    botao.disabled = true;
-    botao.textContent = "Publicando...";
-  }
-
-  atualizarBadgePublicacao(
-    "loading",
-    "Publicando no GitHub"
-  );
-
-  definirTexto(
-    "publicacao-resumo",
-    "Enviando radios.json e radios-esp32.json para o repositório oficial."
-  );
-
-  try {
-    const resposta = await fetch(PUBLICADOR_URL, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "X-Publication-Key": chave.trim()
-      },
-      body: JSON.stringify({
-        radios: EmissorasAdmin.ultimoBancoOficial,
-        radiosEsp32: EmissorasAdmin.ultimoBancoEsp32,
-        mensagem: "Publicação oficial dos bancos de rádios"
-      })
-    });
-
-    let resultado;
-
-    try {
-      resultado = await resposta.json();
-    } catch {
-      throw new Error(
-        `O servidor retornou uma resposta inválida. Código ${resposta.status}.`
-      );
-    }
-
-    if (!resposta.ok || !resultado.ok) {
-      throw new Error(
-        resultado.erro || "Não foi possível concluir a publicação."
-      );
-    }
-
-    atualizarBadgePublicacao(
-      "success",
-      "Publicado com sucesso"
-    );
-
-    definirTexto(
-      "publicacao-resumo",
-      "radios.json e radios-esp32.json foram publicados no GitHub."
-    );
-
-    alert(
-      "Publicação concluída com sucesso!\n\nOs dois bancos foram enviados ao GitHub."
-    );
-  } catch (erro) {
-    console.error("Erro ao publicar:", erro);
-
-    atualizarBadgePublicacao(
-      "error",
-      "Falha na publicação"
-    );
-
-    definirTexto(
-      "publicacao-resumo",
-      erro.message || "Não foi possível publicar os bancos."
-    );
-
-    alert(
-      `Falha na publicação:\n\n${erro.message}`
-    );
-  } finally {
-    if (botao) {
-      botao.disabled = false;
-      botao.textContent = textoOriginal;
-    }
-  }
+async function publicarBancosNoGithub(){
+  if(!EmissorasAdmin?.ultimoRelatorioValidacao?.valido||!EmissorasAdmin.ultimoBancoOficial||!EmissorasAdmin.ultimoBancoEsp32){alert("Primeiro valide o banco e confirme que existe ao menos uma emissora apta.");return;}
+  const chave=window.prompt("Digite a chave de publicação criada na Cloudflare:");if(!chave?.trim())return;
+  const botao=document.getElementById("publicacao-publicar-github-button");const original=botao?.textContent;if(botao){botao.disabled=true;botao.textContent="Publicando...";}
+  try{const resposta=await fetch(PUBLICADOR_URL,{method:"POST",headers:{"Content-Type":"application/json","X-Publication-Key":chave.trim()},body:JSON.stringify({radios:EmissorasAdmin.ultimoBancoOficial,radiosEsp32:EmissorasAdmin.ultimoBancoEsp32,mensagem:"Commit 19 - Publicação inteligente"})});const resultado=await resposta.json();if(!resposta.ok||!resultado.ok)throw new Error(resultado.erro||"Não foi possível concluir a publicação.");atualizarBadgePublicacao("success","Publicado com sucesso");alert("Publicação concluída. Somente emissoras aptas foram enviadas.");}
+  catch(erro){console.error(erro);atualizarBadgePublicacao("error","Falha na publicação");alert(`Falha na publicação:\n\n${erro.message}`);}finally{if(botao){botao.disabled=false;botao.textContent=original;}}
 }
