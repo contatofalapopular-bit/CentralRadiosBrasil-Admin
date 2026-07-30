@@ -29,6 +29,16 @@ const EmissorasAdmin = {
     { uf: "TO", nome: "Tocantins" }
   ],
 
+  statusCadastroPermitidos: [
+    "cadastro_recebido",
+    "em_analise",
+    "aprovada",
+    "aguardando_selo",
+    "publicada",
+    "suspensa",
+    "rejeitada"
+  ],
+
   emissoras: [],
   documentoOriginal: null,
   editandoId: null,
@@ -135,7 +145,10 @@ const EmissorasAdmin = {
     const salvo = localStorage.getItem(CONFIG.EMISSORAS_STORAGE_KEY);
 
     if (salvo) {
-      this.emissoras = JSON.parse(salvo);
+      const listaSalva = JSON.parse(salvo);
+      this.emissoras = Array.isArray(listaSalva)
+        ? listaSalva.map((radio) => this.normalizarEmissoraExistente(radio))
+        : [];
       this.preencherFiltros();
       this.renderizar();
       this.atualizarAvisoRascunho();
@@ -203,6 +216,9 @@ const EmissorasAdmin = {
       ativa: radio.ativa !== false,
       verificada: radio.verificada === true,
       publica: radio.publica !== false,
+      statusCadastro: this.normalizarStatusCadastro(
+        radio.statusCadastro || radio.status?.cadastro || "publicada"
+      ),
       observacoes: radio.observacoes || "",
       streams: Array.isArray(radio.streams) ? radio.streams : [],
       criadoEm: radio.criadoEm || new Date().toISOString(),
@@ -215,6 +231,25 @@ const EmissorasAdmin = {
     if (tipo === "FM") return "FM";
     if (tipo === "AM") return "AM";
     return "Web";
+  },
+
+  normalizarStatusCadastro(valor, padrao = "publicada") {
+    const status = String(valor || "").trim();
+    return this.statusCadastroPermitidos.includes(status) ? status : padrao;
+  },
+
+  rotuloStatusCadastro(status) {
+    const rotulos = {
+      cadastro_recebido: "Cadastro recebido",
+      em_analise: "Em análise",
+      aprovada: "Aprovada",
+      aguardando_selo: "Aguardando selo",
+      publicada: "Publicada",
+      suspensa: "Suspensa",
+      rejeitada: "Rejeitada"
+    };
+
+    return rotulos[this.normalizarStatusCadastro(status)] || "Publicada";
   },
 
   async carregarEstadosFormulario() {
@@ -430,10 +465,15 @@ const EmissorasAdmin = {
           emissora.id
         ].join(" ")).includes(busca);
 
+      const statusCadastro = this.normalizarStatusCadastro(
+        emissora.statusCadastro
+      );
+
       const correspondeStatus =
         !status ||
         (status === "ativa" && emissora.ativa !== false) ||
-        (status === "inativa" && emissora.ativa === false);
+        (status === "inativa" && emissora.ativa === false) ||
+        statusCadastro === status;
 
       return (
         correspondeBusca &&
@@ -500,6 +540,9 @@ const EmissorasAdmin = {
 
     tbody.innerHTML = lista.map((emissora) => {
       const localizacao = emissora.localizacao || {};
+      const statusCadastro = this.normalizarStatusCadastro(
+        emissora.statusCadastro
+      );
 
       return `
         <tr>
@@ -514,9 +557,12 @@ const EmissorasAdmin = {
           <td>${escaparHtml(emissora.categoriaPrincipal || "—")}</td>
           <td>${Array.isArray(emissora.streams) ? emissora.streams.length : 0}</td>
           <td>
-            <span class="state-status ${emissora.ativa !== false ? "active" : "inactive"}">
-              ${emissora.ativa !== false ? "Ativa" : "Inativa"}
+            <span class="registration-status registration-status--${statusCadastro}">
+              ${escaparHtml(this.rotuloStatusCadastro(statusCadastro))}
             </span>
+            <small class="emissora-activity-status">
+              ${emissora.ativa !== false ? "Ativa" : "Inativa"}
+            </small>
           </td>
           <td class="actions-cell">
             <button class="table-button"
@@ -556,6 +602,8 @@ const EmissorasAdmin = {
     document.getElementById("emissora-country").value = "Brasil";
     document.getElementById("emissora-active").checked = true;
     document.getElementById("emissora-public").checked = true;
+    document.getElementById("emissora-status-cadastro").value =
+      "cadastro_recebido";
 
     if (emissora) {
       const localizacao = emissora.localizacao || {};
@@ -615,6 +663,8 @@ const EmissorasAdmin = {
         redes.youtube || "";
       document.getElementById("emissora-notes").value =
         emissora.observacoes || "";
+      document.getElementById("emissora-status-cadastro").value =
+        this.normalizarStatusCadastro(emissora.statusCadastro);
 
       document.getElementById("emissora-active").checked =
         emissora.ativa !== false;
@@ -966,6 +1016,10 @@ const EmissorasAdmin = {
       },
       observacoes:
         document.getElementById("emissora-notes").value.trim(),
+      statusCadastro: this.normalizarStatusCadastro(
+        document.getElementById("emissora-status-cadastro").value,
+        anterior ? "publicada" : "cadastro_recebido"
+      ),
       ativa: document.getElementById("emissora-active").checked,
       verificada: document.getElementById("emissora-verified").checked,
       publica: document.getElementById("emissora-public").checked,
@@ -998,7 +1052,9 @@ const EmissorasAdmin = {
     copia.id = `${gerarSlug(original.nome)}-copia-${agora}`;
     copia.slug = `${gerarSlug(original.nome)}-copia-${agora}`;
     copia.nome = `${original.nome} - Cópia`;
+    copia.statusCadastro = "cadastro_recebido";
     copia.verificada = false;
+    copia.publica = false;
     copia.criadoEm = new Date().toISOString();
     copia.atualizadoEm = new Date().toISOString();
 
@@ -1437,6 +1493,9 @@ const EmissorasAdmin = {
         instagram: redes.instagram || "",
         youtube: redes.youtube || ""
       },
+      statusCadastro: this.normalizarStatusCadastro(
+        emissora.statusCadastro
+      ),
       status: {
         ativa: emissora.ativa !== false,
         publica: emissora.publica !== false,
