@@ -145,3 +145,9 @@
 - Indicadores vazios agora mostram `0`, nunca traço.
 - Identidade visual atualizada para azul-marinho, azul-ciano, branco e vermelho da logomarca.
 - Logomarca oficial aplicada no menu lateral.
+
+## 3.1.3 — Commit 21.2.1
+- Corrige a versão exibida no Dashboard: usa a versão da publicação/painel e não `schemaVersion`.
+- Remove a imagem inexistente da marca no menu lateral.
+- Cria o círculo `CRB` inteiramente em CSS, nas cores azul-marinho, azul-ciano e branco do painel.
+- Mantém o cabeçalho da marca responsivo em telas menores.
