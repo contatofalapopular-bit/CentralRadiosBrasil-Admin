@@ -1272,15 +1272,78 @@
             </select>
           </label>
 
-          <label>
-            Selo Oficial
-            <select id="emissora-selo-status">
-              <option value="nao_configurado">Não configurado</option>
-              <option value="aguardando_instalacao">Aguardando instalação</option>
-              <option value="verificado">Verificado</option>
-              <option value="suspenso">Suspenso</option>
-            </select>
-          </label>
+          <section class="official-seal-card full-field" aria-labelledby="official-seal-title">
+            <div class="official-seal-heading">
+              <div>
+                <span class="official-seal-kicker">Identidade e autenticidade</span>
+                <strong id="official-seal-title">🏅 Selo Oficial</strong>
+              </div>
+              <span id="emissora-selo-badge" class="seal-status seal-status--nao_solicitado">Não solicitado</span>
+            </div>
+
+            <div class="form-grid official-seal-grid">
+              <label>
+                Status do selo
+                <select id="emissora-selo-status">
+                  <option value="nao_solicitado">Não solicitado</option>
+                  <option value="solicitado">Solicitado</option>
+                  <option value="em_analise">Em análise</option>
+                  <option value="aguardando_validacao">Aguardando validação</option>
+                  <option value="verificado">Verificado</option>
+                  <option value="suspenso">Suspenso</option>
+                </select>
+              </label>
+
+              <label>
+                Código oficial
+                <div class="input-with-action">
+                  <input id="emissora-selo-codigo" type="text" readonly
+                    placeholder="Gerado ao salvar a solicitação">
+                  <button id="generate-seal-code-button" type="button" class="secondary-button compact-button">
+                    Gerar código
+                  </button>
+                </div>
+              </label>
+
+              <label>
+                Domínio verificado
+                <input id="emissora-selo-dominio" type="text" maxlength="180"
+                  placeholder="Ex.: radioexemplo.com.br">
+              </label>
+
+              <label>
+                Método de validação
+                <select id="emissora-selo-metodo">
+                  <option value="nao_definido">Não definido</option>
+                  <option value="dns">Registro DNS</option>
+                  <option value="arquivo_html">Arquivo HTML</option>
+                  <option value="meta_tag">Meta tag</option>
+                  <option value="manual">Validação manual</option>
+                </select>
+              </label>
+
+              <label>
+                Última verificação
+                <input id="emissora-selo-ultima-verificacao" type="datetime-local">
+              </label>
+
+              <label>
+                Página pública de verificação
+                <input id="emissora-selo-pagina" type="text" readonly
+                  placeholder="Disponível quando houver código oficial">
+              </label>
+            </div>
+
+            <div class="seal-history-panel">
+              <div class="seal-history-heading">
+                <strong>Histórico do selo</strong>
+                <small>As mudanças de status são registradas ao salvar.</small>
+              </div>
+              <ol id="emissora-selo-historico" class="seal-history-list">
+                <li class="empty-state">Nenhuma movimentação registrada.</li>
+              </ol>
+            </div>
+          </section>
 
           <div class="workflow-checklist-card full-field">
             <div class="workflow-checklist-heading">
@@ -1471,7 +1534,7 @@
 <script src="js/categorias.js?v=2.4.0"></script>
 <script src="js/cidades.js?v=2.4.0"></script>
 <script src="js/streams.js?v=2.4.0"></script>
-<script src="js/emissoras.js?v=2.6.0"></script>
+<script src="js/emissoras.js?v=2.7.0"></script>
 <script src="js/publicacao.js?v=2.4.0"></script>
 <script src="app.js?v=2.4.0"></script>
 </body>
