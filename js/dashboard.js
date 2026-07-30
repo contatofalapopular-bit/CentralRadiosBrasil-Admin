@@ -12,13 +12,8 @@ async function carregarDashboard(semCache = false) {
   try {
     const docRadios = await API.carregar("radios.json", semCache);
     let docCategorias = { categorias: [] };
-    let docVersao = {};
 
     try { docCategorias = await API.carregar("categorias.json", semCache); } catch (e) { console.warn("categorias.json indisponível", e); }
-    try { docVersao = await API.carregar("version.json", semCache); }
-    catch (_) {
-      try { docVersao = await API.carregar("versao.json", semCache); } catch (e) { console.warn("Arquivo de versão externo indisponível", e); }
-    }
 
     const radios = Array.isArray(docRadios) ? docRadios : (docRadios.radios || []);
     const total = radios.length;
@@ -76,18 +71,18 @@ async function carregarDashboard(semCache = false) {
     texto("dashboard-ready-count", publicadas);
     texto("dashboard-pending-count", 0);
 
-    // A versão exibida é a versão de publicação/painel, não a versão do schema.
-    // schemaVersion descreve apenas o formato técnico do JSON e pode permanecer 1.0.0/3.0.0.
-    const versao = docRadios.datasetVersion
-      ?? docRadios.catalogo?.versaoPainel
-      ?? docVersao.datasetVersion
-      ?? docVersao.version
-      ?? CONFIG.VERSION;
+    // O radios.json oficial é a única fonte de verdade para versão e data.
+    // Não usamos version.json aqui, pois ele pertence ao painel e pode ficar desatualizado.
+    const versao = String(
+      docRadios.datasetVersion
+      || docRadios.catalogo?.versaoPainel
+      || docRadios.schemaVersion
+      || CONFIG.VERSION
+    ).trim();
     const atualizadoEm = docRadios.generatedAt
-      ?? docRadios.catalogo?.geradoEm
-      ?? docRadios.geradoEm
-      ?? docVersao.generatedAt
-      ?? docVersao.updatedAt;
+      || docRadios.catalogo?.geradoEm
+      || docRadios.geradoEm
+      || null;
 
     texto("dataset-version", versao);
     texto("dashboard-data-source", `Fonte: ${CONFIG.DADOS_REPO}/radios.json`);
