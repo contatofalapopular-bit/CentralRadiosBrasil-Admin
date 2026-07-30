@@ -10,7 +10,7 @@
   <title>Central Rádios Brasil — Painel Administrativo v2.4.0</title>
 
   <link rel="stylesheet" href="style.css?v=2.4.0">
-  <link rel="stylesheet" href="css/dashboard.css?v=2.4.0">
+  <link rel="stylesheet" href="css/dashboard.css?v=2.8.0">
   <link rel="stylesheet" href="css/radios.css?v=2.4.0">
   <link rel="stylesheet" href="css/streams.css?v=2.4.0">
   <link rel="stylesheet" href="css/emissoras.css?v=2.6.0">
@@ -57,34 +57,120 @@
 
     <main class="main-content">
       <section id="dashboard-page">
-        <section class="welcome-panel">
+        <section class="welcome-panel executive-welcome">
           <div>
             <span id="connection-badge" class="status-badge loading">
               Conectando ao banco de dados
             </span>
-            <h2>Visão geral do catálogo</h2>
+            <h2>Centro de comando nacional</h2>
             <p>
-              Os números são carregados automaticamente do repositório
-              CentralRadiosBrasil-Dados.
+              Acompanhe cadastro, publicação, cobertura, streams e Selo Oficial
+              em uma única visão executiva.
             </p>
           </div>
 
           <div class="dataset-info">
             <span>Versão do banco</span>
             <strong id="dataset-version">—</strong>
+            <small id="dashboard-data-source">Fonte: carregando…</small>
             <small id="last-update">Última atualização: carregando…</small>
           </div>
         </section>
 
-        <section class="dashboard-grid">
-          <article class="dashboard-card"><b>📻</b><div><span>Total de rádios</span><strong id="total-radios">—</strong><small>Emissoras cadastradas</small></div></article>
-          <article class="dashboard-card"><b>🏙️</b><div><span>Cidades</span><strong id="total-cidades">—</strong><small>Cidades com emissoras</small></div></article>
-          <article class="dashboard-card"><b>🗺️</b><div><span>Estados</span><strong id="total-estados">—</strong><small>Estados com emissoras</small></div></article>
-         <article class="dashboard-card"><b>🎵</b><div><span>Categorias</span><strong id="total-categorias">—</strong><small>Categorias cadastradas</small></div></article>
-         
-          
-          <article class="dashboard-card"><b>📡</b><div><span>Streams</span><strong id="total-streams">—</strong><small>Streams cadastrados</small></div></article>
-          <article class="dashboard-card"><b>✅</b><div><span>Verificadas</span><strong id="total-verificadas">—</strong><small>Rádios verificadas</small></div></article>
+        <section class="dashboard-kpis" aria-label="Indicadores principais">
+          <article class="executive-kpi">
+            <span class="kpi-icon">📻</span>
+            <div><small>Total de emissoras</small><strong id="total-radios">—</strong><span id="total-radios-detail">Base nacional</span></div>
+          </article>
+          <article class="executive-kpi kpi-success">
+            <span class="kpi-icon">🌐</span>
+            <div><small>Publicadas</small><strong id="total-publicadas">—</strong><span id="publicadas-percentual">— do total</span></div>
+          </article>
+          <article class="executive-kpi kpi-warning">
+            <span class="kpi-icon">🔎</span>
+            <div><small>Em análise</small><strong id="total-em-analise">—</strong><span>Aguardando decisão</span></div>
+          </article>
+          <article class="executive-kpi kpi-danger">
+            <span class="kpi-icon">⛔</span>
+            <div><small>Suspensas ou rejeitadas</small><strong id="total-bloqueadas">—</strong><span>Exigem atenção</span></div>
+          </article>
+          <article class="executive-kpi">
+            <span class="kpi-icon">🏅</span>
+            <div><small>Selo verificado</small><strong id="total-selo-verificado">—</strong><span id="selo-percentual">— do total</span></div>
+          </article>
+          <article class="executive-kpi">
+            <span class="kpi-icon">📡</span>
+            <div><small>Total de streams</small><strong id="total-streams">—</strong><span id="streams-seguros">— em HTTPS</span></div>
+          </article>
+        </section>
+
+        <section class="executive-grid executive-grid-main">
+          <article class="executive-panel">
+            <header class="panel-heading">
+              <div><span>Fluxo administrativo</span><h3>Status dos cadastros</h3></div>
+              <button type="button" class="dashboard-link-button" data-dashboard-route="emissoras">Ver emissoras</button>
+            </header>
+            <div id="dashboard-status-list" class="metric-list"></div>
+          </article>
+
+          <article class="executive-panel">
+            <header class="panel-heading">
+              <div><span>Identidade e autenticidade</span><h3>Selo Oficial</h3></div>
+            </header>
+            <div id="dashboard-seal-list" class="metric-list"></div>
+          </article>
+        </section>
+
+        <section class="executive-grid executive-grid-wide">
+          <article class="executive-panel">
+            <header class="panel-heading">
+              <div><span>Cobertura nacional</span><h3>Estados com mais emissoras</h3></div>
+              <strong id="total-estados">— estados</strong>
+            </header>
+            <div id="dashboard-states-list" class="ranking-list"></div>
+          </article>
+
+          <article class="executive-panel">
+            <header class="panel-heading">
+              <div><span>Conteúdo do catálogo</span><h3>Principais categorias</h3></div>
+              <strong id="total-categorias">— categorias</strong>
+            </header>
+            <div id="dashboard-categories-list" class="ranking-list"></div>
+          </article>
+
+          <article class="executive-panel">
+            <header class="panel-heading">
+              <div><span>Saúde técnica</span><h3>Streams e compatibilidade</h3></div>
+              <button type="button" class="dashboard-link-button" data-dashboard-route="streams">Abrir streams</button>
+            </header>
+            <div id="dashboard-stream-health" class="health-grid"></div>
+          </article>
+        </section>
+
+        <section class="executive-grid executive-grid-main">
+          <article class="executive-panel">
+            <header class="panel-heading">
+              <div><span>Operação</span><h3>Prontidão para publicação</h3></div>
+              <button type="button" class="dashboard-link-button" data-dashboard-route="publicacao">Abrir publicação</button>
+            </header>
+            <div class="readiness-grid">
+              <div class="readiness-item readiness-ready"><span>Prontas</span><strong id="dashboard-ready-count">—</strong><small>Ativas, públicas e com stream</small></div>
+              <div class="readiness-item readiness-pending"><span>Com pendências</span><strong id="dashboard-pending-count">—</strong><small>Precisam de correção</small></div>
+            </div>
+            <div id="dashboard-pending-summary" class="attention-list"></div>
+          </article>
+
+          <article class="executive-panel">
+            <header class="panel-heading">
+              <div><span>Dimensão da rede</span><h3>Alcance do catálogo</h3></div>
+            </header>
+            <div class="network-summary">
+              <div><span>🏙️</span><strong id="total-cidades">—</strong><small>Cidades</small></div>
+              <div><span>🗺️</span><strong id="network-total-estados">—</strong><small>Estados</small></div>
+              <div><span>✅</span><strong id="total-verificadas">—</strong><small>Verificadas</small></div>
+              <div><span>💎</span><strong id="dashboard-premium-count">—</strong><small>Planos avançados</small></div>
+            </div>
+          </article>
         </section>
 
         <section id="error-panel" class="error-panel hidden">
@@ -93,6 +179,7 @@
           <button id="retry-button">Tentar novamente</button>
         </section>
       </section>
+
 
       <section id="radios-page" class="hidden">
         <div class="radios-toolbar">
@@ -1528,7 +1615,7 @@
 <script src="config.js?v=2.4.0"></script>
 <script src="js/utils.js?v=2.4.0"></script>
 <script src="js/api.js?v=2.4.0"></script>
-<script src="js/dashboard.js?v=2.4.0"></script>
+<script src="js/dashboard.js?v=2.8.0"></script>
 <script src="js/radios.js?v=2.4.0"></script>
 <script src="js/estados.js?v=2.4.0"></script>
 <script src="js/categorias.js?v=2.4.0"></script>
