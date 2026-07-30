@@ -41,10 +41,20 @@ const EmissorasAdmin = {
 
   planosPermitidos: ["gratuito", "parceira_verificada", "premium"],
   statusSeloPermitidos: [
-    "nao_configurado",
-    "aguardando_instalacao",
+    "nao_solicitado",
+    "solicitado",
+    "em_analise",
+    "aguardando_validacao",
     "verificado",
     "suspenso"
+  ],
+
+  metodosSeloPermitidos: [
+    "nao_definido",
+    "dns",
+    "arquivo_html",
+    "meta_tag",
+    "manual"
   ],
 
   emissoras: [],
@@ -109,6 +119,9 @@ const EmissorasAdmin = {
 
     document.getElementById("emissora-form")
       .addEventListener("change", () => this.atualizarPainelFluxo());
+
+    document.getElementById("generate-seal-code-button")
+      .addEventListener("click", () => this.gerarCodigoSeloFormulario());
 
     document.getElementById("cancel-emissora-form")
       .addEventListener("click", () => this.fecharFormulario());
@@ -237,8 +250,17 @@ const EmissorasAdmin = {
       seloOficial: {
         ...(radio.seloOficial || {}),
         status: this.normalizarStatusSelo(
-          radio.seloOficial?.status || "nao_configurado"
-        )
+          radio.seloOficial?.status || "nao_solicitado"
+        ),
+        codigo: radio.seloOficial?.codigo || "",
+        dominio: radio.seloOficial?.dominio || "",
+        metodo: this.normalizarMetodoSelo(
+          radio.seloOficial?.metodo || "nao_definido"
+        ),
+        ultimaVerificacao: radio.seloOficial?.ultimaVerificacao || "",
+        historico: Array.isArray(radio.seloOficial?.historico)
+          ? radio.seloOficial.historico
+          : []
       },
       observacoes: radio.observacoes || "",
       streams: Array.isArray(radio.streams) ? radio.streams : [],
@@ -279,10 +301,96 @@ const EmissorasAdmin = {
   },
 
   normalizarStatusSelo(valor) {
-    const status = String(valor || "").trim();
+    const legado = {
+      nao_configurado: "nao_solicitado",
+      aguardando_instalacao: "aguardando_validacao"
+    };
+    const recebido = String(valor || "").trim();
+    const status = legado[recebido] || recebido;
     return this.statusSeloPermitidos.includes(status)
       ? status
-      : "nao_configurado";
+      : "nao_solicitado";
+  },
+
+  rotuloStatusSelo(status) {
+    const rotulos = {
+      nao_solicitado: "Não solicitado",
+      solicitado: "Solicitado",
+      em_analise: "Em análise",
+      aguardando_validacao: "Aguardando validação",
+      verificado: "Verificado",
+      suspenso: "Suspenso"
+    };
+    return rotulos[this.normalizarStatusSelo(status)] || "Não solicitado";
+  },
+
+  normalizarMetodoSelo(valor) {
+    const metodo = String(valor || "").trim();
+    return this.metodosSeloPermitidos.includes(metodo)
+      ? metodo
+      : "nao_definido";
+  },
+
+  gerarCodigoSelo() {
+    const ano = new Date().getFullYear();
+    const sufixo = String(Date.now()).slice(-6);
+    return `CRB-${ano}-${sufixo}`;
+  },
+
+  gerarCodigoSeloFormulario() {
+    const campo = document.getElementById("emissora-selo-codigo");
+    if (!campo.value) campo.value = this.gerarCodigoSelo();
+    this.atualizarPainelSelo();
+  },
+
+  paginaPublicaSelo(codigo) {
+    return codigo
+      ? `centralradiosbrasil.com.br/verificar/${encodeURIComponent(codigo)}`
+      : "";
+  },
+
+  formatarDataHora(valor) {
+    if (!valor) return "Data não informada";
+    const data = new Date(valor);
+    return Number.isNaN(data.getTime())
+      ? String(valor)
+      : data.toLocaleString("pt-BR");
+  },
+
+  atualizarPainelSelo(historico = null) {
+    const status = this.normalizarStatusSelo(
+      document.getElementById("emissora-selo-status")?.value
+    );
+    const badge = document.getElementById("emissora-selo-badge");
+    if (badge) {
+      badge.className = `seal-status seal-status--${status}`;
+      badge.textContent = this.rotuloStatusSelo(status);
+    }
+
+    const codigo = String(
+      document.getElementById("emissora-selo-codigo")?.value || ""
+    ).trim();
+    const pagina = document.getElementById("emissora-selo-pagina");
+    if (pagina) pagina.value = this.paginaPublicaSelo(codigo);
+
+    const lista = document.getElementById("emissora-selo-historico");
+    if (!lista) return;
+    const itens = Array.isArray(historico)
+      ? historico
+      : (this.editandoId
+          ? this.emissoras.find((item) => item.id === this.editandoId)?.seloOficial?.historico
+          : []);
+    lista.innerHTML = itens?.length
+      ? [...itens].reverse().map((item) => `
+          <li>
+            <span class="seal-history-marker"></span>
+            <div>
+              <strong>${escaparHtml(this.rotuloStatusSelo(item.status))}</strong>
+              <small>${escaparHtml(this.formatarDataHora(item.data))}</small>
+            </div>
+          </li>
+        `).join("")
+      : '<li class="empty-state">Nenhuma movimentação registrada.</li>';
   },
 
   proximoPassoStatus(status) {
@@ -353,6 +461,8 @@ const EmissorasAdmin = {
     const progresso = document.getElementById("emissora-profile-progress");
     progresso.setAttribute("aria-valuenow", String(percentual));
     document.getElementById("emissora-profile-progress-bar").style.width = `${percentual}%`;
+
+    this.atualizarPainelSelo();
 
     document.getElementById("emissora-profile-checklist").innerHTML = itens
       .map((item) => `
@@ -713,6 +823,12 @@ const EmissorasAdmin = {
     document.getElementById("emissora-country").value = "Brasil";
     document.getElementById("emissora-active").checked = true;
     document.getElementById("emissora-public").checked = true;
+    document.getElementById("emissora-selo-status").value = "nao_solicitado";
+    document.getElementById("emissora-selo-codigo").value = "";
+    document.getElementById("emissora-selo-dominio").value = "";
+    document.getElementById("emissora-selo-metodo").value = "nao_definido";
+    document.getElementById("emissora-selo-ultima-verificacao").value = "";
+    document.getElementById("emissora-selo-pagina").value = "";
     document.getElementById("emissora-status-cadastro").value =
       "cadastro_recebido";
     document.getElementById("emissora-plano").value = "gratuito";
@@ -783,6 +899,16 @@ const EmissorasAdmin = {
         this.normalizarPlano(emissora.plano);
       document.getElementById("emissora-selo-status").value =
         this.normalizarStatusSelo(emissora.seloOficial?.status);
+      document.getElementById("emissora-selo-codigo").value =
+        emissora.seloOficial?.codigo || "";
+      document.getElementById("emissora-selo-dominio").value =
+        emissora.seloOficial?.dominio || "";
+      document.getElementById("emissora-selo-metodo").value =
+        this.normalizarMetodoSelo(emissora.seloOficial?.metodo);
+      document.getElementById("emissora-selo-ultima-verificacao").value =
+        emissora.seloOficial?.ultimaVerificacao
+          ? String(emissora.seloOficial.ultimaVerificacao).slice(0, 16)
+          : "";
 
       document.getElementById("emissora-active").checked =
         emissora.ativa !== false;
@@ -1145,12 +1271,36 @@ const EmissorasAdmin = {
       plano: this.normalizarPlano(
         document.getElementById("emissora-plano").value
       ),
-      seloOficial: {
-        ...(anterior?.seloOficial || {}),
-        status: this.normalizarStatusSelo(
+      seloOficial: (() => {
+        const statusAnterior = this.normalizarStatusSelo(
+          anterior?.seloOficial?.status || "nao_solicitado"
+        );
+        const statusNovo = this.normalizarStatusSelo(
           document.getElementById("emissora-selo-status").value
-        )
-      },
+        );
+        let codigo = document.getElementById("emissora-selo-codigo").value.trim();
+        if (!codigo && statusNovo !== "nao_solicitado") {
+          codigo = this.gerarCodigoSelo();
+        }
+        const historico = Array.isArray(anterior?.seloOficial?.historico)
+          ? structuredClone(anterior.seloOficial.historico)
+          : [];
+        if (!anterior || statusNovo !== statusAnterior) {
+          historico.push({ status: statusNovo, data: new Date().toISOString() });
+        }
+        return {
+          ...(anterior?.seloOficial || {}),
+          status: statusNovo,
+          codigo,
+          dominio: document.getElementById("emissora-selo-dominio").value.trim(),
+          metodo: this.normalizarMetodoSelo(
+            document.getElementById("emissora-selo-metodo").value
+          ),
+          ultimaVerificacao:
+            document.getElementById("emissora-selo-ultima-verificacao").value || null,
+          historico
+        };
+      })(),
       ativa: document.getElementById("emissora-active").checked,
       verificada: document.getElementById("emissora-verified").checked,
       publica: document.getElementById("emissora-public").checked,
@@ -1630,9 +1780,6 @@ const EmissorasAdmin = {
         emissora.statusCadastro
       ),
       plano: this.normalizarPlano(emissora.plano),
-      seloOficial: {
-        status: this.normalizarStatusSelo(emissora.seloOficial?.status)
-      },
       status: {
         ativa: emissora.ativa !== false,
         publica: emissora.publica !== false,
@@ -1648,6 +1795,13 @@ const EmissorasAdmin = {
             bitrate: principal.bitrate
           }
         : null,
+      seloOficial: {
+        status: this.normalizarStatusSelo(emissora.seloOficial?.status),
+        codigo: emissora.seloOficial?.codigo || "",
+        dominio: emissora.seloOficial?.dominio || "",
+        metodo: this.normalizarMetodoSelo(emissora.seloOficial?.metodo),
+        ultimaVerificacao: emissora.seloOficial?.ultimaVerificacao || null
+      },
       observacoes: emissora.observacoes || "",
       criadoEm: emissora.criadoEm || null,
       atualizadoEm: emissora.atualizadoEm || null
