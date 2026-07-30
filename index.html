@@ -7,15 +7,15 @@
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
   <meta http-equiv="Pragma" content="no-cache">
   <meta http-equiv="Expires" content="0">
-  <title>Central Rádios Brasil — Painel Administrativo v3.0.0</title>
+  <title>Central Rádios Brasil — Painel Administrativo v3.1.0</title>
 
-  <link rel="stylesheet" href="style.css?v=3.0.0">
-  <link rel="stylesheet" href="css/dashboard.css?v=3.0.0">
-  <link rel="stylesheet" href="css/radios.css?v=3.0.0">
-  <link rel="stylesheet" href="css/streams.css?v=3.0.0">
-  <link rel="stylesheet" href="css/emissoras.css?v=3.0.0">
+  <link rel="stylesheet" href="style.css?v=3.1.0">
+  <link rel="stylesheet" href="css/dashboard.css?v=3.1.0">
+  <link rel="stylesheet" href="css/radios.css?v=3.1.0">
+  <link rel="stylesheet" href="css/streams.css?v=3.1.0">
+  <link rel="stylesheet" href="css/emissoras.css?v=3.1.0">
 </head>
-<body data-app-version="3.0.0" data-build="base-oficial">
+<body data-app-version="3.1.0" data-build="base-oficial">
 <div class="app-shell">
   <aside class="sidebar">
     <div class="brand">
@@ -713,7 +713,7 @@
     <div>
       <span id="publicacao-status-badge" class="status-badge loading">Aguardando dados</span>
       <h2>Publicação Inteligente</h2>
-      <p>O sistema analisa a prontidão e inclui somente emissoras aptas nos bancos oficiais.</p>
+      <p>O sistema analisa a prontidão e inclui somente emissoras aptas nos bancos oficiais.</p><div class="publication-meta"><span>Última validação: <strong id="publicacao-ultima-validacao">Ainda não realizada</strong></span><span id="publicacao-sync-status" class="publication-sync publication-sync--stale">Catálogo ainda não validado</span></div>
     </div>
     <div class="toolbar-actions">
       <button id="publicacao-refresh-button" type="button" class="secondary-button">↻ Atualizar</button>
@@ -742,6 +742,13 @@
   <section class="publicacao-grid">
     <article class="publicacao-card"><h3>radios.json</h3><p>Banco completo do catálogo, contendo somente emissoras aptas.</p><button id="publicacao-gerar-radios-button" type="button" class="secondary-button" disabled>↓ Gerar radios.json</button></article>
     <article class="publicacao-card"><h3>radios-esp32.json</h3><p>Banco otimizado para o aparelho, contendo somente streams válidos.</p><button id="publicacao-gerar-esp32-button" type="button" class="secondary-button" disabled>↓ Gerar radios-esp32.json</button></article>
+  </section>
+
+  <section id="publicacao-resultado-operacao" class="publication-result" hidden aria-live="polite"></section>
+
+  <section class="publicacao-card publication-history-card">
+    <div class="publicacao-card-header"><div><span class="status-badge loading">Histórico</span><h3>Últimas publicações neste navegador</h3></div></div>
+    <div id="publicacao-historico-list" class="publication-history-list"></div>
   </section>
 </section>
     
@@ -1510,17 +1517,17 @@
 </div>
 
 
-<script src="config.js?v=3.0.0"></script>
-<script src="js/utils.js?v=3.0.0"></script>
-<script src="js/api.js?v=3.0.0"></script>
-<script src="js/dashboard.js?v=3.0.0"></script>
-<script src="js/radios.js?v=3.0.0"></script>
-<script src="js/estados.js?v=3.0.0"></script>
-<script src="js/categorias.js?v=3.0.0"></script>
-<script src="js/cidades.js?v=3.0.0"></script>
-<script src="js/streams.js?v=3.0.0"></script>
-<script src="js/emissoras.js?v=3.0.0"></script>
-<script src="js/publicacao.js?v=3.0.0"></script>
-<script src="app.js?v=3.0.0"></script>
+<script src="config.js?v=3.1.0"></script>
+<script src="js/utils.js?v=3.1.0"></script>
+<script src="js/api.js?v=3.1.0"></script>
+<script src="js/dashboard.js?v=3.1.0"></script>
+<script src="js/radios.js?v=3.1.0"></script>
+<script src="js/estados.js?v=3.1.0"></script>
+<script src="js/categorias.js?v=3.1.0"></script>
+<script src="js/cidades.js?v=3.1.0"></script>
+<script src="js/streams.js?v=3.1.0"></script>
+<script src="js/emissoras.js?v=3.1.0"></script>
+<script src="js/publicacao.js?v=3.1.0"></script>
+<script src="app.js?v=3.1.0"></script>
 </body>
 </html>
