@@ -76,11 +76,12 @@ async function carregarDashboard(semCache = false) {
     texto("dashboard-ready-count", publicadas);
     texto("dashboard-pending-count", 0);
 
+    // A versão exibida é a versão de publicação/painel, não a versão do schema.
+    // schemaVersion descreve apenas o formato técnico do JSON e pode permanecer 1.0.0/3.0.0.
     const versao = docRadios.datasetVersion
       ?? docRadios.catalogo?.versaoPainel
       ?? docVersao.datasetVersion
       ?? docVersao.version
-      ?? docRadios.schemaVersion
       ?? CONFIG.VERSION;
     const atualizadoEm = docRadios.generatedAt
       ?? docRadios.catalogo?.geradoEm
