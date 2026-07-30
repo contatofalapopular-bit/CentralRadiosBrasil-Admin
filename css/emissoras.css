@@ -264,3 +264,29 @@
     grid-template-columns: 1fr;
   }
 }
+
+
+/* Commit 15 — Fluxo oficial de cadastro */
+.registration-status {
+  display: inline-flex;
+  align-items: center;
+  padding: 5px 9px;
+  border-radius: 999px;
+  font-size: 0.76rem;
+  font-weight: 800;
+  line-height: 1.2;
+  white-space: nowrap;
+}
+
+.registration-status--cadastro_recebido { background: #e8edf3; color: #435066; }
+.registration-status--em_analise { background: #dbeafe; color: #1d4ed8; }
+.registration-status--aprovada { background: #dcfce7; color: #15803d; }
+.registration-status--aguardando_selo { background: #ffedd5; color: #c2410c; }
+.registration-status--publicada { background: #d1fae5; color: #047857; }
+.registration-status--suspensa { background: #fee2e2; color: #b91c1c; }
+.registration-status--rejeitada { background: #e5e7eb; color: #111827; }
+
+.emissora-activity-status {
+  margin-top: 6px !important;
+  font-size: 0.72rem;
+}
