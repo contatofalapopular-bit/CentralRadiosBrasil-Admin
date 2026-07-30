@@ -1,5 +1,5 @@
 /**
- * Commit 21 — Conclusão da Publicação Inteligente
+ * Commit 21.1 — Ajustes finais da Publicação Inteligente
  * Fecha o módulo com rastreabilidade, histórico, status de sincronização e ações por emissora.
  */
 let publicacaoEventosRegistrados = false;
@@ -83,15 +83,18 @@ function renderizarAvaliacoesPublicacao(resultado) {
     return;
   }
 
-  lista.innerHTML = avaliacoes.map((item) => {
-    const rotulo = item.classificacao === "apta" ? "Pronta" : item.classificacao === "pendente" ? "Pendente" : "Bloqueada";
+  const registroValidacao = obterUltimaValidacao();
+  const metadados = `<div class="readiness-validation-meta"><div><span>Última validação</span><strong>${escaparHtml(formatarDataHora(registroValidacao?.data))}</strong></div><div><span>Status do catálogo</span><strong class="${registroValidacao?.valido ? "is-synced" : "is-pending"}">${registroValidacao?.valido ? "✓ Catálogo validado" : "Aguardando validação"}</strong></div></div>`;
+
+  lista.innerHTML = metadados + avaliacoes.map((item) => {
+    const rotulo = item.classificacao === "apta" ? "PRONTA PARA PUBLICAÇÃO" : item.classificacao === "pendente" ? "PENDENTE" : "BLOQUEADA";
     const classeFaixa = obterClasseProntidao(item.prontidao);
     const requisitos = montarRequisitosPublicacao(item);
 
     return `<article class="readiness-card readiness-card--${item.classificacao}">
       <div class="readiness-head">
-        <div class="readiness-title"><span class="readiness-radio-icon" aria-hidden="true">📻</span><div><strong>${escaparHtml(item.nome)}</strong><span class="readiness-status readiness-status--${item.classificacao}">${rotulo} para publicação</span></div></div>
-        <b>${item.prontidao}%</b>
+        <div class="readiness-title"><span class="readiness-radio-icon" aria-hidden="true">📻</span><div><strong>${escaparHtml(item.nome)}</strong><span class="readiness-status readiness-status--${item.classificacao}"><span class="readiness-status-dot" aria-hidden="true"></span>${rotulo}</span></div></div>
+        <div class="readiness-head-actions"><b>${item.prontidao}%</b><button type="button" class="secondary-button readiness-open-button readiness-open-button--top" data-open-emissoras="1">Ver cadastro</button></div>
       </div>
       <div class="readiness-track" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${item.prontidao}" aria-label="Prontidão de ${escaparHtml(item.nome)}">
         <span class="${classeFaixa}" style="width:${item.prontidao}%"></span>
@@ -99,7 +102,6 @@ function renderizarAvaliacoesPublicacao(resultado) {
       <div class="readiness-requirements">
         ${requisitos.map((requisito) => `<div class="requirement-item requirement-item--${requisito.tipo}"><span>${requisito.icone}</span><div><strong>${escaparHtml(requisito.titulo)}</strong><small>${escaparHtml(requisito.texto)}</small></div></div>`).join("")}
       </div>
-      <div class="readiness-actions"><button type="button" class="secondary-button readiness-open-button" data-open-emissoras="1">Ver cadastro da emissora</button></div>
     </article>`;
   }).join("");
 }
