@@ -1,3 +1,11 @@
+# Commit 21.2.2 — Correção definitiva da versão do Dashboard
+
+- Dashboard passa a usar exclusivamente `datasetVersion` do `radios.json` oficial.
+- Fallback compatível para `catalogo.versaoPainel` e `schemaVersion`.
+- Removida a leitura de `version.json` no Dashboard, evitando exibição de versões antigas.
+- Cache dos arquivos do painel renovado para a versão 3.1.4.
+- Marca lateral permanece em CSS com as iniciais CRB, sem imagem externa.
+
 # Changelog
 
 ## 3.1.1 — Ajustes finais da Publicação Inteligente
