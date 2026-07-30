@@ -14,7 +14,7 @@
   <link rel="stylesheet" href="css/radios.css?v=2.4.0">
   <link rel="stylesheet" href="css/streams.css?v=2.4.0">
   <link rel="stylesheet" href="css/emissoras.css?v=2.6.0">
-  <link rel="stylesheet" href="css/publicacao.css?v=2.4.0">
+  <link rel="stylesheet" href="css/publicacao.css?v=2.9.0">
 </head>
 <body data-app-version="2.4.0" data-build="base-oficial">
 <div class="app-shell">
@@ -710,141 +710,36 @@
   </section>
 </section>
    <section id="publicacao-page" class="hidden">
-  <div class="radios-toolbar">
+  <div class="radios-toolbar publicacao-hero">
     <div>
-      <span id="publicacao-status-badge" class="status-badge loading">
-        Aguardando verificação
-      </span>
-
-      <h2>Central de Publicação</h2>
-
-      <p>
-        Valide e prepare os bancos oficiais da
-        Central Rádios Brasil.
-      </p>
+      <span id="publicacao-status-badge" class="status-badge loading">Aguardando dados</span>
+      <h2>Publicação Inteligente</h2>
+      <p>O sistema analisa a prontidão e inclui somente emissoras aptas nos bancos oficiais.</p>
     </div>
-
     <div class="toolbar-actions">
-      <button
-        id="publicacao-refresh-button"
-        type="button"
-        class="secondary-button">
-        ↻ Atualizar resumo
-      </button>
-
-      <button
-        id="publicacao-validar-button"
-        type="button"
-        class="primary-button">
-        ✓ Validar banco
-      </button>
+      <button id="publicacao-refresh-button" type="button" class="secondary-button">↻ Atualizar</button>
+      <button id="publicacao-validar-button" type="button" class="primary-button">✓ Validar e preparar</button>
     </div>
   </div>
 
-  <section class="emissoras-stats publicacao-stats">
-    <article>
-      <span>Total de emissoras</span>
-      <strong id="publicacao-total-emissoras">0</strong>
-    </article>
-
-    <article>
-      <span>Publicáveis</span>
-      <strong id="publicacao-total-publicaveis">0</strong>
-    </article>
-
-    <article>
-      <span>Erros</span>
-      <strong id="publicacao-total-erros">0</strong>
-    </article>
-
-    <article>
-      <span>Avisos</span>
-      <strong id="publicacao-total-avisos">0</strong>
-    </article>
-  </section>
-
-  <section class="publicacao-grid">
-
-    <article class="publicacao-card">
-      <div class="publicacao-card-header">
-        <div>
-          <span class="status-badge success">
-            Banco principal
-          </span>
-
-          <h3>radios.json</h3>
-        </div>
-      </div>
-
-      <p>
-        Banco completo utilizado pelo painel administrativo
-        e pelos serviços da Central Rádios Brasil.
-      </p>
-
-      <div class="publicacao-card-actions">
-        <button
-          id="publicacao-gerar-radios-button"
-          type="button"
-          class="secondary-button"
-          disabled>
-          ↓ Gerar radios.json
-        </button>
-      </div>
-    </article>
-
-    <article class="publicacao-card">
-      <div class="publicacao-card-header">
-        <div>
-          <span class="status-badge success">
-            Banco ESP32
-          </span>
-
-          <h3>radios-esp32.json</h3>
-        </div>
-      </div>
-
-      <p>
-        Versão otimizada para utilização
-        no firmware da Central Rádios Brasil.
-      </p>
-
-      <div class="publicacao-card-actions">
-        <button
-          id="publicacao-gerar-esp32-button"
-          type="button"
-          class="secondary-button"
-          disabled>
-          ↓ Gerar radios-esp32.json
-        </button>
-      </div>
-    </article>
-
+  <section class="publicacao-kpis">
+    <article><span>Analisadas</span><strong id="publicacao-total-emissoras">0</strong></article>
+    <article class="kpi-ready"><span>Prontas</span><strong id="publicacao-total-aptas">0</strong></article>
+    <article class="kpi-pending"><span>Pendentes</span><strong id="publicacao-total-pendentes">0</strong></article>
+    <article class="kpi-blocked"><span>Bloqueadas</span><strong id="publicacao-total-bloqueadas">0</strong></article>
+    <article><span>Qualidade média</span><strong id="publicacao-qualidade-media">0%</strong></article>
   </section>
 
   <section class="publicacao-card publicacao-relatorio">
-
-    <div class="publicacao-card-header">
-      <div>
-        <span class="status-badge loading">
-          Relatório
-        </span>
-
-        <h3>Resultado da validação</h3>
-      </div>
-    </div>
-
-    <p id="publicacao-resumo">
-      Clique em <strong>Validar banco</strong> para verificar
-      todas as emissoras antes da publicação.
-    </p>
-
-    <ul
-      id="publicacao-problemas-list"
-      class="validation-list">
-    </ul>
-
+    <div class="publicacao-card-header"><div><span class="status-badge loading">Relatório</span><h3>Prontidão por emissora</h3></div></div>
+    <p id="publicacao-resumo">Clique em <strong>Validar e preparar</strong> para gerar o diagnóstico oficial.</p>
+    <div id="publicacao-avaliacoes-list" class="readiness-list"></div>
   </section>
 
+  <section class="publicacao-grid">
+    <article class="publicacao-card"><h3>radios.json</h3><p>Banco completo do catálogo, contendo somente emissoras aptas.</p><button id="publicacao-gerar-radios-button" type="button" class="secondary-button" disabled>↓ Gerar radios.json</button></article>
+    <article class="publicacao-card"><h3>radios-esp32.json</h3><p>Banco otimizado para o aparelho, contendo somente streams válidos.</p><button id="publicacao-gerar-esp32-button" type="button" class="secondary-button" disabled>↓ Gerar radios-esp32.json</button></article>
+  </section>
 </section>
     
     </main>
@@ -1621,8 +1516,8 @@
 <script src="js/categorias.js?v=2.4.0"></script>
 <script src="js/cidades.js?v=2.4.0"></script>
 <script src="js/streams.js?v=2.4.0"></script>
-<script src="js/emissoras.js?v=2.7.0"></script>
-<script src="js/publicacao.js?v=2.4.0"></script>
+<script src="js/emissoras.js?v=2.9.0"></script>
+<script src="js/publicacao.js?v=2.9.0"></script>
 <script src="app.js?v=2.4.0"></script>
 </body>
 </html>
