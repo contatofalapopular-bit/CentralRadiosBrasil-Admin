@@ -1,5 +1,16 @@
 # Changelog
 
+## 3.1.0 — Commit 21: Conclusão da Publicação Inteligente
+
+- Cartões de emissora com status destacado e acesso ao cadastro.
+- Registro da data e hora da última validação.
+- Indicador de catálogo validado, sincronizando, sincronizado ou com falha.
+- Confirmação detalhada dos arquivos publicados.
+- Histórico local das últimas publicações e falhas.
+- Ajustes finais de responsividade, mensagens e estados dos botões.
+- Encerramento funcional do módulo Publicação.
+
+
 ## 3.0.0 — Commit 20: Refinamentos da Publicação Inteligente
 
 - Barra de prontidão com cores por faixa de qualidade.
