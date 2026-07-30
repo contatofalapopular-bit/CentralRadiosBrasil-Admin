@@ -1,13 +1,17 @@
 /**
- * Commit 20 — Refinamentos da Publicação Inteligente
- * Melhora a experiência visual, detalha requisitos e protege a publicação sem validação.
+ * Commit 21 — Conclusão da Publicação Inteligente
+ * Fecha o módulo com rastreabilidade, histórico, status de sincronização e ações por emissora.
  */
 let publicacaoEventosRegistrados = false;
 const PUBLICADOR_URL = "https://broken-bar-45e2.contatofalapopular.workers.dev/publicar";
+const PUBLICACAO_HISTORICO_KEY = "crb-admin-publicacao-historico-v1";
+const PUBLICACAO_VALIDACAO_KEY = "crb-admin-publicacao-ultima-validacao-v1";
 
 function iniciarPublicacao() {
   registrarEventosPublicacao();
   atualizarResumoPublicacao();
+  renderizarMetadadosPublicacao();
+  renderizarHistoricoPublicacao();
 }
 
 function obterResultadoInteligente() {
@@ -26,6 +30,7 @@ function atualizarResumoPublicacao(resultado = obterResultadoInteligente()) {
   renderizarAvaliacoesPublicacao(resultado);
   renderizarResumoExecutivo(resultado);
   atualizarEstadoBotaoGithub();
+  atualizarSincronizacaoPublicacao();
 
   if (!total) atualizarBadgePublicacao("loading", "Aguardando dados");
   else if (resultado.totalAptas > 0) atualizarBadgePublicacao("success", "Publicação disponível");
@@ -39,6 +44,9 @@ function registrarEventosPublicacao() {
   document.getElementById("publicacao-validar-button")?.addEventListener("click", executarValidacaoPublicacao);
   document.getElementById("publicacao-gerar-radios-button")?.addEventListener("click", gerarBancoOficialPublicacao);
   document.getElementById("publicacao-gerar-esp32-button")?.addEventListener("click", gerarBancoEsp32Publicacao);
+  document.getElementById("publicacao-avaliacoes-list")?.addEventListener("click", (evento) => {
+    if (evento.target.closest("[data-open-emissoras]")) window.location.hash = "#/emissoras";
+  });
   criarBotaoPublicarGithub();
   desativarGeradoresPublicacao();
   atualizarEstadoBotaoGithub();
@@ -56,9 +64,11 @@ function executarValidacaoPublicacao() {
   renderizarAvaliacoesPublicacao(resultado);
   renderizarResumoExecutivo(resultado);
   if (resultado?.valido) {
+    salvarUltimaValidacao(resultado);
     ativarGeradoresPublicacao();
     definirTexto("publicacao-resumo", `${resultado.totalAptas} emissora(s) apta(s) serão incluídas. ${resultado.totalPendentes} pendente(s) e ${resultado.totalBloqueadas} bloqueada(s) ficarão fora dos arquivos.`);
   } else {
+    salvarUltimaValidacao(resultado);
     desativarGeradoresPublicacao();
     definirTexto("publicacao-resumo", "Nenhuma emissora está apta. Corrija as pendências ou bloqueios antes de gerar os bancos oficiais.");
   }
@@ -80,7 +90,7 @@ function renderizarAvaliacoesPublicacao(resultado) {
 
     return `<article class="readiness-card readiness-card--${item.classificacao}">
       <div class="readiness-head">
-        <div><strong>${escaparHtml(item.nome)}</strong><span>${rotulo}</span></div>
+        <div class="readiness-title"><span class="readiness-radio-icon" aria-hidden="true">📻</span><div><strong>${escaparHtml(item.nome)}</strong><span class="readiness-status readiness-status--${item.classificacao}">${rotulo} para publicação</span></div></div>
         <b>${item.prontidao}%</b>
       </div>
       <div class="readiness-track" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${item.prontidao}" aria-label="Prontidão de ${escaparHtml(item.nome)}">
@@ -89,6 +99,7 @@ function renderizarAvaliacoesPublicacao(resultado) {
       <div class="readiness-requirements">
         ${requisitos.map((requisito) => `<div class="requirement-item requirement-item--${requisito.tipo}"><span>${requisito.icone}</span><div><strong>${escaparHtml(requisito.titulo)}</strong><small>${escaparHtml(requisito.texto)}</small></div></div>`).join("")}
       </div>
+      <div class="readiness-actions"><button type="button" class="secondary-button readiness-open-button" data-open-emissoras="1">Ver cadastro da emissora</button></div>
     </article>`;
   }).join("");
 }
@@ -185,6 +196,54 @@ async function publicarBancosNoGithub(){
   if(!EmissorasAdmin?.ultimoRelatorioValidacao?.valido||!EmissorasAdmin.ultimoBancoOficial||!EmissorasAdmin.ultimoBancoEsp32){alert("Primeiro valide o banco e confirme que existe ao menos uma emissora apta.");return;}
   const chave=window.prompt("Digite a chave de publicação criada na Cloudflare:");if(!chave?.trim())return;
   const botao=document.getElementById("publicacao-publicar-github-button");const original=botao?.textContent;if(botao){botao.disabled=true;botao.textContent="Publicando...";}
-  try{const resposta=await fetch(PUBLICADOR_URL,{method:"POST",headers:{"Content-Type":"application/json","X-Publication-Key":chave.trim()},body:JSON.stringify({radios:EmissorasAdmin.ultimoBancoOficial,radiosEsp32:EmissorasAdmin.ultimoBancoEsp32,mensagem:"Commit 20 - Refinamentos da publicação inteligente"})});const resultado=await resposta.json();if(!resposta.ok||!resultado.ok)throw new Error(resultado.erro||"Não foi possível concluir a publicação.");atualizarBadgePublicacao("success","Publicado com sucesso");alert("Publicação concluída. Somente emissoras aptas foram enviadas.");}
-  catch(erro){console.error(erro);atualizarBadgePublicacao("error","Falha na publicação");alert(`Falha na publicação:\n\n${erro.message}`);}finally{if(botao){botao.textContent=original;}atualizarEstadoBotaoGithub();}
+  atualizarSincronizacaoPublicacao("publishing");
+  try{
+    const resposta=await fetch(PUBLICADOR_URL,{method:"POST",headers:{"Content-Type":"application/json","X-Publication-Key":chave.trim()},body:JSON.stringify({radios:EmissorasAdmin.ultimoBancoOficial,radiosEsp32:EmissorasAdmin.ultimoBancoEsp32,mensagem:"Commit 21 - Conclusão da Publicação Inteligente"})});
+    const resultado=await resposta.json();
+    if(!resposta.ok||!resultado.ok)throw new Error(resultado.erro||"Não foi possível concluir a publicação.");
+    const aptas=EmissorasAdmin.ultimoRelatorioValidacao?.totalAptas||0;
+    registrarHistoricoPublicacao({status:"success",aptas,mensagem:"radios.json e radios-esp32.json publicados no GitHub"});
+    atualizarBadgePublicacao("success","Publicado com sucesso");
+    atualizarSincronizacaoPublicacao("synced");
+    renderizarHistoricoPublicacao();
+    mostrarResultadoPublicacao(true, aptas);
+  }
+  catch(erro){
+    console.error(erro);
+    registrarHistoricoPublicacao({status:"error",aptas:0,mensagem:erro.message});
+    atualizarBadgePublicacao("error","Falha na publicação");
+    atualizarSincronizacaoPublicacao("error");
+    renderizarHistoricoPublicacao();
+    mostrarResultadoPublicacao(false,0,erro.message);
+  }finally{if(botao){botao.textContent=original;}atualizarEstadoBotaoGithub();}
+}
+
+function salvarUltimaValidacao(resultado){
+  const registro={data:new Date().toISOString(),valido:Boolean(resultado?.valido),aptas:resultado?.totalAptas||0,pendentes:resultado?.totalPendentes||0,bloqueadas:resultado?.totalBloqueadas||0};
+  localStorage.setItem(PUBLICACAO_VALIDACAO_KEY,JSON.stringify(registro));
+  renderizarMetadadosPublicacao();
+  atualizarSincronizacaoPublicacao("validated");
+}
+function obterUltimaValidacao(){try{return JSON.parse(localStorage.getItem(PUBLICACAO_VALIDACAO_KEY)||"null");}catch{return null;}}
+function formatarDataHora(iso){if(!iso)return "Ainda não realizada";const data=new Date(iso);if(Number.isNaN(data.getTime()))return "Data indisponível";return new Intl.DateTimeFormat("pt-BR",{dateStyle:"short",timeStyle:"short"}).format(data);}
+function renderizarMetadadosPublicacao(){const registro=obterUltimaValidacao();definirTexto("publicacao-ultima-validacao",formatarDataHora(registro?.data));}
+function atualizarSincronizacaoPublicacao(estado){
+  const el=document.getElementById("publicacao-sync-status");if(!el)return;
+  const validado=Boolean(EmissorasAdmin?.ultimoRelatorioValidacao?.valido);
+  const mapa={publishing:["syncing","Publicando arquivos..."],synced:["synced","Catálogo sincronizado"],error:["error","Falha na sincronização"],validated:["ready","Validado — aguardando publicação"]};
+  const [classe,texto]=mapa[estado]||(!validado?["stale","Catálogo ainda não validado"]:["ready","Validado — aguardando publicação"]);
+  el.className=`publication-sync publication-sync--${classe}`;el.textContent=texto;
+}
+function obterHistoricoPublicacao(){try{const dados=JSON.parse(localStorage.getItem(PUBLICACAO_HISTORICO_KEY)||"[]");return Array.isArray(dados)?dados:[];}catch{return [];}}
+function registrarHistoricoPublicacao(item){const historico=obterHistoricoPublicacao();historico.unshift({...item,data:new Date().toISOString()});localStorage.setItem(PUBLICACAO_HISTORICO_KEY,JSON.stringify(historico.slice(0,8)));}
+function renderizarHistoricoPublicacao(){
+  const lista=document.getElementById("publicacao-historico-list");if(!lista)return;const historico=obterHistoricoPublicacao();
+  if(!historico.length){lista.innerHTML='<div class="publication-history-empty">Nenhuma publicação registrada neste navegador.</div>';return;}
+  lista.innerHTML=historico.map(item=>`<div class="publication-history-item publication-history-item--${item.status}"><span>${item.status==="success"?"✓":"!"}</span><div><strong>${item.status==="success"?`${item.aptas} emissora(s) publicada(s)`:"Publicação não concluída"}</strong><small>${escaparHtml(item.mensagem||"")} · ${formatarDataHora(item.data)}</small></div></div>`).join("");
+}
+function mostrarResultadoPublicacao(sucesso,aptas,erro=""){
+  const painel=document.getElementById("publicacao-resultado-operacao");if(!painel)return;
+  painel.className=`publication-result publication-result--${sucesso?"success":"error"}`;
+  painel.innerHTML=sucesso?`<strong>✓ Publicação concluída</strong><span>✓ radios.json publicado</span><span>✓ radios-esp32.json publicado</span><span>✓ GitHub sincronizado</span><span>✓ ${aptas} emissora(s) incluída(s)</span>`:`<strong>✕ Publicação não concluída</strong><span>${escaparHtml(erro)}</span>`;
+  painel.hidden=false;
 }
