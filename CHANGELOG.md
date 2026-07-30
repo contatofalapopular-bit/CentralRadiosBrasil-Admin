@@ -1,5 +1,12 @@
 # Changelog
 
+## 3.1.1 — Ajustes finais da Publicação Inteligente
+
+- Badge de status destacado: pronta, pendente ou bloqueada.
+- Última validação e situação do catálogo exibidas também junto ao relatório.
+- Botão **Ver cadastro** movido para o cabeçalho do cartão da emissora.
+- Ajustes finais de responsividade do cartão.
+
 ## 3.1.0 — Commit 21: Conclusão da Publicação Inteligente
 
 - Cartões de emissora com status destacado e acesso ao cadastro.
