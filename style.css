@@ -119,3 +119,13 @@ button{cursor:pointer}
 .publication-result{display:grid;gap:7px;margin-top:20px;padding:18px 20px;border-radius:14px;border:1px solid}.publication-result strong{font-size:1rem}.publication-result span{font-size:.86rem}.publication-result--success{background:#f0fdf4;border-color:#86efac;color:#166534}.publication-result--error{background:#fef2f2;border-color:#fca5a5;color:#991b1b}
 .publication-history-card{margin-top:20px}.publication-history-list{display:grid;gap:10px}.publication-history-item{display:flex;align-items:flex-start;gap:11px;padding:12px;border:1px solid #e2e8f0;border-radius:11px;background:#f8fafc}.publication-history-item>span{width:28px;height:28px;display:grid;place-items:center;border-radius:50%;font-weight:900}.publication-history-item div{display:grid;gap:3px}.publication-history-item small{color:#64748b}.publication-history-item--success>span{background:#dcfce7;color:#15803d}.publication-history-item--error>span{background:#fee2e2;color:#b91c1c}.publication-history-empty{padding:18px;text-align:center;color:#64748b;background:#f8fafc;border-radius:11px}
 @media(max-width:640px){.readiness-head{align-items:flex-start}.readiness-title{align-items:flex-start}.readiness-actions{justify-content:stretch}.readiness-open-button{width:100%}.publication-meta{flex-direction:column;gap:6px}}
+
+
+/* Commit 21.1 — três ajustes finais */
+.readiness-status{align-items:center;gap:6px;text-transform:uppercase;letter-spacing:.035em;box-shadow:inset 0 0 0 1px rgba(15,23,42,.05)}
+.readiness-status-dot{width:7px;height:7px;border-radius:50%;background:currentColor;flex:0 0 7px}
+.readiness-head-actions{display:flex!important;flex-direction:row!important;align-items:center;gap:12px!important}
+.readiness-open-button--top{white-space:nowrap;padding:8px 12px;font-size:.78rem}
+.readiness-validation-meta{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-bottom:14px;padding:14px 16px;border:1px solid #dbe3ec;border-radius:12px;background:#f8fafc}
+.readiness-validation-meta>div{display:grid;gap:4px}.readiness-validation-meta span{font-size:.72rem;font-weight:800;text-transform:uppercase;letter-spacing:.04em;color:#64748b}.readiness-validation-meta strong{font-size:.9rem;color:#0f172a}.readiness-validation-meta .is-synced{color:#15803d}.readiness-validation-meta .is-pending{color:#a16207}
+@media(max-width:700px){.readiness-head{flex-direction:column;align-items:stretch}.readiness-head-actions{justify-content:space-between}.readiness-validation-meta{grid-template-columns:1fr}.readiness-open-button--top{padding:8px 10px}}
