@@ -13,7 +13,7 @@
   <link rel="stylesheet" href="css/dashboard.css?v=2.4.0">
   <link rel="stylesheet" href="css/radios.css?v=2.4.0">
   <link rel="stylesheet" href="css/streams.css?v=2.4.0">
-  <link rel="stylesheet" href="css/emissoras.css?v=2.4.0">
+  <link rel="stylesheet" href="css/emissoras.css?v=2.5.0">
   <link rel="stylesheet" href="css/publicacao.css?v=2.4.0">
 </head>
 <body data-app-version="2.4.0" data-build="base-oficial">
@@ -550,9 +550,16 @@
           </label>
 
           <label>
-            Status
+            Status do cadastro
             <select id="emissora-status-filter">
               <option value="">Todos os status</option>
+              <option value="cadastro_recebido">Cadastro recebido</option>
+              <option value="em_analise">Em análise</option>
+              <option value="aprovada">Aprovada</option>
+              <option value="aguardando_selo">Aguardando selo</option>
+              <option value="publicada">Publicada</option>
+              <option value="suspensa">Suspensa</option>
+              <option value="rejeitada">Rejeitada</option>
               <option value="ativa">Ativas</option>
               <option value="inativa">Inativas</option>
             </select>
@@ -1219,6 +1226,19 @@
       <legend>⚙️ Administração e publicação</legend>
 
         <div class="form-grid">
+          <label>
+            Status do cadastro
+            <select id="emissora-status-cadastro" required>
+              <option value="cadastro_recebido">Cadastro recebido</option>
+              <option value="em_analise">Em análise</option>
+              <option value="aprovada">Aprovada</option>
+              <option value="aguardando_selo">Aguardando selo</option>
+              <option value="publicada">Publicada</option>
+              <option value="suspensa">Suspensa</option>
+              <option value="rejeitada">Rejeitada</option>
+            </select>
+          </label>
+
           <label class="full-field">
             Observações
             <textarea id="emissora-notes" rows="3" maxlength="700"></textarea>
@@ -1400,7 +1420,7 @@
 <script src="js/categorias.js?v=2.4.0"></script>
 <script src="js/cidades.js?v=2.4.0"></script>
 <script src="js/streams.js?v=2.4.0"></script>
-<script src="js/emissoras.js?v=2.4.0"></script>
+<script src="js/emissoras.js?v=2.5.0"></script>
 <script src="js/publicacao.js?v=2.4.0"></script>
 <script src="app.js?v=2.4.0"></script>
 </body>
