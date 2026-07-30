@@ -1737,13 +1737,16 @@ const EmissorasAdmin = {
 
     return {
       schemaVersion: CONFIG.RADIOS_SCHEMA_VERSION,
+      generatedAt: resultado.geradoEm,
+      datasetVersion: CONFIG.VERSION,
       catalogo: {
         nome: "Central Rádios Brasil",
         pais: "Brasil",
         idioma: "pt-BR",
         origem:
           `${CONFIG.GITHUB_OWNER}/${CONFIG.DADOS_REPO}`,
-        geradoEm: resultado.geradoEm
+        geradoEm: resultado.geradoEm,
+        versaoPainel: CONFIG.VERSION
       },
       totais: {
         emissoras: radios.length,
