@@ -129,3 +129,33 @@ button{cursor:pointer}
 .readiness-validation-meta{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-bottom:14px;padding:14px 16px;border:1px solid #dbe3ec;border-radius:12px;background:#f8fafc}
 .readiness-validation-meta>div{display:grid;gap:4px}.readiness-validation-meta span{font-size:.72rem;font-weight:800;text-transform:uppercase;letter-spacing:.04em;color:#64748b}.readiness-validation-meta strong{font-size:.9rem;color:#0f172a}.readiness-validation-meta .is-synced{color:#15803d}.readiness-validation-meta .is-pending{color:#a16207}
 @media(max-width:700px){.readiness-head{flex-direction:column;align-items:stretch}.readiness-head-actions{justify-content:space-between}.readiness-validation-meta{grid-template-columns:1fr}.readiness-open-button--top{padding:8px 10px}}
+
+/* Commit 21.2 — Identidade visual oficial Central Rádios Brasil */
+:root{
+  --bg:#eef4fb;--surface:#ffffff;--text:#071a3d;--muted:#5e6f89;
+  --border:#cedaed;--primary:#079ee8;--primary-dark:#0578bd;
+  --secondary:#071f63;--accent:#ed162f;--sidebar:#030b20;
+  --success:#098b58;--danger:#d91f36;
+}
+body.dark-theme{
+  --bg:#040b1c;--surface:#0a1731;--text:#f5f9ff;--muted:#a9bbd6;
+  --border:#20375d;--primary:#15b9ff;--primary-dark:#079ee8;--sidebar:#010612;
+}
+.brand-logo{width:54px;height:54px;flex:0 0 54px;border-radius:50%;object-fit:cover;border:2px solid #16baff;box-shadow:0 0 0 3px #ffffff18,0 8px 20px #0008}
+.sidebar{background:linear-gradient(180deg,#02091a 0%,#061846 58%,#03102f 100%)}
+.nav-link.active,.nav-link:hover{background:linear-gradient(135deg,#087fd1,#10b8f4);box-shadow:0 8px 20px #059de638}
+.primary-button{background:linear-gradient(135deg,#087fd1,#10b8f4);border-color:#079ee8}
+.primary-button:hover{background:linear-gradient(135deg,#056cb5,#079ee8)}
+.topbar{border-bottom-color:#bdd6ee}
+.status-badge.success{background:#d8f8f0;color:#08714b}
+.publicacao-hero,.welcome-panel{background:linear-gradient(135deg,#061b5d 0%,#08378d 52%,#079ee8 100%)}
+.dataset-info{background:#02091f66;border-color:#77d9ff55}
+.executive-kpi{border-color:#d3e0f1}
+.executive-kpi.kpi-success{border-top-color:#08a06a}.executive-kpi.kpi-warning{border-top-color:#f2a900}.executive-kpi.kpi-danger{border-top-color:#ed162f}
+.dashboard-link-button:hover{border-color:#079ee8;color:#0578bd}
+.metric-track span,.ranking-track span{background:linear-gradient(90deg,#071f63,#079ee8,#16c8ff)}
+.brand strong{color:#fff}.brand span{color:#b9d8ff}
+.sidebar-footer{color:#8ecfff}
+.readiness-card--apta{border-left-color:#079ee8}.readiness-track span.progress-excellent{background:linear-gradient(90deg,#071f63,#079ee8,#16c8ff)}
+.readiness-status--apta{background:#d9f5ff;color:#056b9e!important}
+.publication-summary--success{border-left-color:#079ee8}.publication-summary--success>div:first-child>span{background:#d9f5ff;color:#056b9e}
