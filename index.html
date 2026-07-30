@@ -13,7 +13,7 @@
   <link rel="stylesheet" href="css/dashboard.css?v=2.4.0">
   <link rel="stylesheet" href="css/radios.css?v=2.4.0">
   <link rel="stylesheet" href="css/streams.css?v=2.4.0">
-  <link rel="stylesheet" href="css/emissoras.css?v=2.5.0">
+  <link rel="stylesheet" href="css/emissoras.css?v=2.6.0">
   <link rel="stylesheet" href="css/publicacao.css?v=2.4.0">
 </head>
 <body data-app-version="2.4.0" data-build="base-oficial">
@@ -1222,10 +1222,34 @@
         </div>
       </fieldset>
 
-      <fieldset class="form-section">
-      <legend>⚙️ Administração e publicação</legend>
+      <fieldset class="form-section administration-section">
+        <legend>⚙️ Administração e publicação</legend>
 
-        <div class="form-grid">
+        <div class="emissora-workflow-panel">
+          <div class="workflow-status-card">
+            <span class="workflow-card-label">Status atual</span>
+            <strong id="emissora-workflow-status"
+              class="registration-status registration-status--cadastro_recebido">
+              Cadastro recebido
+            </strong>
+            <small id="emissora-workflow-next-step">Próximo passo: revisar os dados recebidos.</small>
+          </div>
+
+          <div class="workflow-progress-card">
+            <div class="workflow-progress-heading">
+              <span>Perfil da emissora</span>
+              <strong id="emissora-profile-percent">0%</strong>
+            </div>
+            <div class="workflow-progress-track" role="progressbar"
+              aria-label="Perfil completo" aria-valuemin="0" aria-valuemax="100"
+              aria-valuenow="0" id="emissora-profile-progress">
+              <span id="emissora-profile-progress-bar"></span>
+            </div>
+            <small id="emissora-profile-summary">Preencha os dados para calcular o perfil.</small>
+          </div>
+        </div>
+
+        <div class="form-grid administration-grid">
           <label>
             Status do cadastro
             <select id="emissora-status-cadastro" required>
@@ -1238,6 +1262,33 @@
               <option value="rejeitada">Rejeitada</option>
             </select>
           </label>
+
+          <label>
+            Plano
+            <select id="emissora-plano">
+              <option value="gratuito">Gratuito</option>
+              <option value="parceira_verificada">Parceira verificada</option>
+              <option value="premium">Premium</option>
+            </select>
+          </label>
+
+          <label>
+            Selo Oficial
+            <select id="emissora-selo-status">
+              <option value="nao_configurado">Não configurado</option>
+              <option value="aguardando_instalacao">Aguardando instalação</option>
+              <option value="verificado">Verificado</option>
+              <option value="suspenso">Suspenso</option>
+            </select>
+          </label>
+
+          <div class="workflow-checklist-card full-field">
+            <div class="workflow-checklist-heading">
+              <strong>Checklist do perfil</strong>
+              <span id="emissora-profile-items-count">0 de 10 concluídos</span>
+            </div>
+            <ul id="emissora-profile-checklist" class="workflow-checklist"></ul>
+          </div>
 
           <label class="full-field">
             Observações
@@ -1420,7 +1471,7 @@
 <script src="js/categorias.js?v=2.4.0"></script>
 <script src="js/cidades.js?v=2.4.0"></script>
 <script src="js/streams.js?v=2.4.0"></script>
-<script src="js/emissoras.js?v=2.5.0"></script>
+<script src="js/emissoras.js?v=2.6.0"></script>
 <script src="js/publicacao.js?v=2.4.0"></script>
 <script src="app.js?v=2.4.0"></script>
 </body>
