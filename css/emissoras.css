@@ -290,3 +290,118 @@
   margin-top: 6px !important;
   font-size: 0.72rem;
 }
+
+
+/* Commit 16 — Painel visual, perfil, plano e selo */
+.emissora-workflow-panel {
+  display: grid;
+  grid-template-columns: minmax(220px, 0.8fr) minmax(280px, 1.2fr);
+  gap: 14px;
+  margin-bottom: 18px;
+}
+
+.workflow-status-card,
+.workflow-progress-card,
+.workflow-checklist-card {
+  padding: 16px;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  background: var(--bg);
+}
+
+.workflow-status-card {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 9px;
+}
+
+.workflow-card-label {
+  color: var(--muted);
+  font-size: 0.75rem;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.workflow-status-card small,
+.workflow-progress-card small {
+  color: var(--muted);
+  line-height: 1.4;
+}
+
+.workflow-progress-heading,
+.workflow-checklist-heading {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  align-items: center;
+}
+
+.workflow-progress-heading strong {
+  font-size: 1.35rem;
+}
+
+.workflow-progress-track {
+  height: 12px;
+  margin: 14px 0 10px;
+  overflow: hidden;
+  border-radius: 999px;
+  background: var(--border);
+}
+
+.workflow-progress-track span {
+  display: block;
+  width: 0;
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, #b91c1c, #dc2626);
+  transition: width 180ms ease;
+}
+
+.administration-grid {
+  align-items: start;
+}
+
+.workflow-checklist-heading span {
+  color: var(--muted);
+  font-size: 0.82rem;
+}
+
+.workflow-checklist {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px 18px;
+  margin: 14px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.workflow-checklist li {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  font-size: 0.86rem;
+}
+
+.workflow-checklist li span {
+  display: inline-grid;
+  width: 21px;
+  height: 21px;
+  flex: 0 0 21px;
+  place-items: center;
+  border-radius: 50%;
+  font-weight: 900;
+}
+
+.workflow-checklist .is-complete { color: #166534; }
+.workflow-checklist .is-complete span { background: #dcfce7; }
+.workflow-checklist .is-pending { color: var(--muted); }
+.workflow-checklist .is-pending span { background: var(--border); }
+
+@media (max-width: 750px) {
+  .emissora-workflow-panel,
+  .workflow-checklist {
+    grid-template-columns: 1fr;
+  }
+}
