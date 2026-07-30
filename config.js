@@ -1,6 +1,6 @@
 const CONFIG = Object.freeze({
   APP_NAME: "Central Rádios Brasil",
-  VERSION: "3.1.2",
+  VERSION: "3.1.3",
   GITHUB_OWNER: "contatofalapopular-bit",
   DADOS_REPO: "CentralRadiosBrasil-Dados",
   DADOS_BRANCH: "main",
@@ -12,6 +12,6 @@ const CONFIG = Object.freeze({
   IBGE_MUNICIPIOS_URL: "https://servicodados.ibge.gov.br/api/v1/localidades/municipios",
   STREAMS_STORAGE_KEY: "crb-admin-streams-rascunho-v1",
   EMISSORAS_STORAGE_KEY: "crb-admin-emissoras-rascunho-v1",
-  RADIOS_SCHEMA_VERSION: "3.1.2",
+  RADIOS_SCHEMA_VERSION: "3.1.3",
   ESP32_SCHEMA_VERSION: "1.0.0"
 });
