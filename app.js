@@ -5,46 +5,58 @@ let cidadesInicializadas = false;
 let streamsInicializados = false;
 let emissorasInicializadas = false;
 let publicacaoInicializada = false;
+let solicitacoesInicializadas = false;
 
 document.addEventListener("DOMContentLoaded", () => {
   texto("app-version", `v${CONFIG.VERSION}`);
   document.body.dataset.appVersion = CONFIG.VERSION;
-  console.info(`${CONFIG.APP_NAME} — Base Oficial v${CONFIG.VERSION}`);
+  console.info(
+    `${CONFIG.APP_NAME} — Base Oficial v${CONFIG.VERSION}`
+  );
 
-  document.getElementById("refresh-button").addEventListener("click", () => {
-    if (rotaAtual() === "dashboard") {
+  document
+    .getElementById("refresh-button")
+    .addEventListener("click", () => {
+      if (rotaAtual() === "dashboard") {
+        carregarDashboard(true);
+      } else if (rotaAtual() === "solicitacoes") {
+        SolicitacoesAdmin.carregar();
+      } else if (rotaAtual() === "radios") {
+        RadiosAdmin.carregar();
+      } else if (rotaAtual() === "estados") {
+        EstadosAdmin.renderizar();
+      } else if (rotaAtual() === "categorias") {
+        CategoriasAdmin.renderizar();
+      } else if (rotaAtual() === "cidades") {
+        CidadesAdmin.carregar(true);
+      } else if (rotaAtual() === "streams") {
+        StreamsAdmin.renderizar();
+      } else if (rotaAtual() === "emissoras") {
+        EmissorasAdmin.renderizar();
+      } else if (rotaAtual() === "publicacao") {
+        atualizarResumoPublicacao();
+      }
+    });
+
+  document
+    .getElementById("retry-button")
+    .addEventListener("click", () => {
       carregarDashboard(true);
-    } else if (rotaAtual() === "radios") {
-      RadiosAdmin.carregar();
-    } else if (rotaAtual() === "estados") {
-      EstadosAdmin.renderizar();
-    } else if (rotaAtual() === "categorias") {
-      CategoriasAdmin.renderizar();
-    } else if (rotaAtual() === "cidades") {
-      CidadesAdmin.carregar(true);
-    } else if (rotaAtual() === "streams") {
-      StreamsAdmin.renderizar();
-    } else if (rotaAtual() === "emissoras") {
-      EmissorasAdmin.renderizar();
-    } else if (rotaAtual() === "publicacao") {
-      atualizarResumoPublicacao();
-    }
-  });
+    });
 
-  document.getElementById("retry-button").addEventListener("click", () => {
-    carregarDashboard(true);
-  });
+  document
+    .getElementById("theme-toggle")
+    .addEventListener("click", () => {
+      const escuro =
+        document.body.classList.toggle("dark-theme");
 
-  document.getElementById("theme-toggle").addEventListener("click", () => {
-    const escuro = document.body.classList.toggle("dark-theme");
+      localStorage.setItem(
+        "crb-theme",
+        escuro ? "dark" : "light"
+      );
 
-    localStorage.setItem(
-      "crb-theme",
-      escuro ? "dark" : "light"
-    );
-
-    atualizarTema();
-  });
+      atualizarTema();
+    });
 
   if (localStorage.getItem("crb-theme") === "dark") {
     document.body.classList.add("dark-theme");
@@ -68,33 +80,31 @@ function atualizarTema() {
 }
 
 function rotaAtual() {
-  return window.location.hash.replace("#/", "") || "dashboard";
+  return (
+    window.location.hash.replace("#/", "") ||
+    "dashboard"
+  );
 }
 
 async function renderizarRota() {
   const rota = rotaAtual();
 
-  const dashboard = document.getElementById("dashboard-page");
-  const radios = document.getElementById("radios-page");
-  const estados = document.getElementById("estados-page");
-  const categorias = document.getElementById("categorias-page");
-  const cidades = document.getElementById("cidades-page");
-  const streams = document.getElementById("streams-page");
-  const emissoras = document.getElementById("emissoras-page");
-  const publicacao = document.getElementById("publicacao-page");
-  const configuracoes = document.getElementById("configuracoes-page");
+  const paginas = {
+    dashboard: document.getElementById("dashboard-page"),
+    solicitacoes:
+      document.getElementById("solicitacoes-page"),
+    radios: document.getElementById("radios-page"),
+    estados: document.getElementById("estados-page"),
+    categorias: document.getElementById("categorias-page"),
+    cidades: document.getElementById("cidades-page"),
+    streams: document.getElementById("streams-page"),
+    emissoras: document.getElementById("emissoras-page"),
+    publicacao: document.getElementById("publicacao-page"),
+    configuracoes:
+      document.getElementById("configuracoes-page")
+  };
 
-  const rotasValidas = [
-    "dashboard",
-    "radios",
-    "estados",
-    "categorias",
-    "cidades",
-    "streams",
-    "emissoras",
-    "publicacao","configuracoes"
-  ];
-
+  const rotasValidas = Object.keys(paginas);
   const rotaValida = rotasValidas.includes(rota);
   const rotaFinal = rotaValida ? rota : "dashboard";
 
@@ -103,49 +113,15 @@ async function renderizarRota() {
     return;
   }
 
-  dashboard.classList.toggle(
-    "hidden",
-    rotaFinal !== "dashboard"
+  Object.entries(paginas).forEach(
+    ([nome, elemento]) => {
+      elemento?.classList.toggle(
+        "hidden",
+        nome !== rotaFinal
+      );
+    }
   );
 
-  radios.classList.toggle(
-    "hidden",
-    rotaFinal !== "radios"
-  );
-
-  estados.classList.toggle(
-    "hidden",
-    rotaFinal !== "estados"
-  );
-
-  categorias.classList.toggle(
-    "hidden",
-    rotaFinal !== "categorias"
-  );
-
-  cidades.classList.toggle(
-    "hidden",
-    rotaFinal !== "cidades"
-  );
-
-  streams.classList.toggle(
-    "hidden",
-    rotaFinal !== "streams"
-  );
-
-  emissoras.classList.toggle(
-    "hidden",
-    rotaFinal !== "emissoras"
-  );
-
-  publicacao.classList.toggle(
-    "hidden",
-    rotaFinal !== "publicacao"
-  );
-configuracoes.classList.toggle(
-  "hidden",
-  rotaFinal !== "configuracoes"
-);
   document
     .querySelectorAll(".nav-link[data-route]")
     .forEach((link) => {
@@ -155,37 +131,47 @@ configuracoes.classList.toggle(
       );
     });
 
-if (rotaFinal === "configuracoes") {
-  texto("page-title", "Configurações");
+  if (rotaFinal === "solicitacoes") {
+    texto("page-title", "Solicitações");
 
-  texto(
-    "page-subtitle",
-    "Preferências e informações técnicas do painel"
-  );
-} else if (rotaFinal === "publicacao") {
-  texto("page-title", "Publicação");
+    texto(
+      "page-subtitle",
+      "Análise dos cadastros enviados pelo Portal da Emissora"
+    );
 
-  texto(
-    "page-subtitle",
-    "Validação e preparação do banco oficial"
-  );
+    if (!solicitacoesInicializadas) {
+      solicitacoesInicializadas = true;
+      await SolicitacoesAdmin.iniciar();
+    } else {
+      await SolicitacoesAdmin.carregar();
+    }
+  } else if (rotaFinal === "configuracoes") {
+    texto("page-title", "Configurações");
 
-  /*
-   * A Publicação usa o banco e os geradores do módulo
-   * de Emissoras. Por isso, ele precisa estar carregado.
-   */
-  if (!emissorasInicializadas) {
-    emissorasInicializadas = true;
-    await EmissorasAdmin.iniciar();
-  }
+    texto(
+      "page-subtitle",
+      "Preferências e informações técnicas do painel"
+    );
+  } else if (rotaFinal === "publicacao") {
+    texto("page-title", "Publicação");
 
-  if (!publicacaoInicializada) {
-    publicacaoInicializada = true;
-    iniciarPublicacao();
-  } else {
-    atualizarResumoPublicacao();
-  }
-} else if (rotaFinal === "emissoras") {
+    texto(
+      "page-subtitle",
+      "Validação e preparação do banco oficial"
+    );
+
+    if (!emissorasInicializadas) {
+      emissorasInicializadas = true;
+      await EmissorasAdmin.iniciar();
+    }
+
+    if (!publicacaoInicializada) {
+      publicacaoInicializada = true;
+      iniciarPublicacao();
+    } else {
+      atualizarResumoPublicacao();
+    }
+  } else if (rotaFinal === "emissoras") {
     texto("page-title", "Emissoras");
 
     texto(
