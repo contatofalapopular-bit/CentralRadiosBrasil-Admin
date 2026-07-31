@@ -1,0 +1,318 @@
+.solicitacoes-toolbar {
+  align-items: flex-start;
+}
+
+.solicitacoes-kpis {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 14px;
+  margin: 20px 0;
+}
+
+.solicitacoes-kpis article {
+  min-width: 0;
+  padding: 18px;
+  border: 1px solid var(--border-color, #dfe6ef);
+  border-radius: 16px;
+  background: var(--card-background, #ffffff);
+  box-shadow: 0 10px 24px rgba(16, 40, 70, 0.06);
+}
+
+.solicitacoes-kpis span {
+  display: block;
+  color: var(--text-muted, #6d7d90);
+  font-size: 0.76rem;
+  font-weight: 750;
+}
+
+.solicitacoes-kpis strong {
+  display: block;
+  margin-top: 8px;
+  font-size: 1.7rem;
+}
+
+.solicitacoes-filters {
+  grid-template-columns: minmax(260px, 2fr) minmax(160px, 1fr)
+    minmax(160px, 1fr);
+}
+
+.solicitacoes-chave-panel {
+  margin: 16px 0;
+  padding: 17px 19px;
+  border: 1px solid rgba(26, 131, 255, 0.26);
+  border-radius: 15px;
+  background: rgba(26, 131, 255, 0.07);
+}
+
+.solicitacoes-chave-panel strong {
+  display: block;
+  margin-bottom: 5px;
+}
+
+.solicitacoes-chave-panel p {
+  margin: 0;
+  color: var(--text-muted, #6d7d90);
+  font-size: 0.82rem;
+  line-height: 1.55;
+}
+
+.solicitacao-logo-mini {
+  width: 52px;
+  height: 52px;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  border: 1px solid var(--border-color, #dfe6ef);
+  border-radius: 14px;
+  background: rgba(26, 131, 255, 0.08);
+}
+
+.solicitacao-logo-mini img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.solicitacao-logo-mini.sem-logo {
+  color: #70849a;
+  font-size: 1.35rem;
+}
+
+.solicitacao-status {
+  display: inline-flex;
+  align-items: center;
+  min-height: 27px;
+  padding: 0 10px;
+  border-radius: 999px;
+  font-size: 0.7rem;
+  font-weight: 850;
+}
+
+.solicitacao-status--pendente {
+  background: rgba(255, 181, 46, 0.15);
+  color: #9b6500;
+}
+
+.solicitacao-status--em_analise {
+  background: rgba(26, 131, 255, 0.14);
+  color: #1265bd;
+}
+
+.solicitacao-status--aprovada {
+  background: rgba(26, 179, 112, 0.14);
+  color: #087743;
+}
+
+.solicitacao-status--rejeitada {
+  background: rgba(230, 63, 88, 0.13);
+  color: #b8233e;
+}
+
+.solicitacao-logo-resumo {
+  display: block;
+  margin-top: 5px;
+  color: var(--text-muted, #6d7d90);
+}
+
+.solicitacao-modal-card {
+  width: min(1040px, calc(100vw - 32px));
+  max-height: calc(100vh - 32px);
+  overflow-y: auto;
+}
+
+.solicitacao-detalhe-layout {
+  display: grid;
+  grid-template-columns: 220px minmax(0, 1fr);
+  gap: 24px;
+  padding: 24px;
+}
+
+.solicitacao-logo-card {
+  min-width: 0;
+}
+
+.solicitacao-logo-preview {
+  aspect-ratio: 1 / 1;
+  display: grid;
+  place-items: center;
+  align-content: center;
+  gap: 8px;
+  overflow: hidden;
+  border: 1px solid var(--border-color, #dfe6ef);
+  border-radius: 22px;
+  background: rgba(26, 131, 255, 0.07);
+  color: #70849a;
+}
+
+.solicitacao-logo-preview span {
+  font-size: 2.8rem;
+}
+
+.solicitacao-logo-preview img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.solicitacao-logo-status {
+  min-height: 34px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 11px;
+  padding: 0 12px;
+  border-radius: 11px;
+  font-size: 0.73rem;
+  font-weight: 850;
+}
+
+.solicitacao-logo-status.com-logo {
+  background: rgba(26, 179, 112, 0.13);
+  color: #087743;
+}
+
+.solicitacao-logo-status.sem-logo {
+  background: rgba(255, 181, 46, 0.14);
+  color: #9b6500;
+}
+
+.solicitacao-protocolo {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 15px;
+  padding: 13px 15px;
+  border: 1px solid rgba(26, 131, 255, 0.22);
+  border-radius: 13px;
+  background: rgba(26, 131, 255, 0.06);
+}
+
+.solicitacao-protocolo span {
+  color: var(--text-muted, #6d7d90);
+  font-size: 0.72rem;
+  font-weight: 750;
+}
+
+.solicitacao-protocolo strong {
+  overflow-wrap: anywhere;
+}
+
+.solicitacao-dados-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 13px;
+  margin: 18px 0;
+}
+
+.solicitacao-dados-grid > div {
+  min-width: 0;
+  padding: 13px 14px;
+  border: 1px solid var(--border-color, #dfe6ef);
+  border-radius: 13px;
+  background: rgba(128, 145, 165, 0.045);
+}
+
+.solicitacao-dados-grid .full {
+  grid-column: 1 / -1;
+}
+
+.solicitacao-dados-grid dt {
+  color: var(--text-muted, #6d7d90);
+  font-size: 0.69rem;
+  font-weight: 800;
+}
+
+.solicitacao-dados-grid dd {
+  margin: 5px 0 0;
+  overflow-wrap: anywhere;
+  line-height: 1.45;
+}
+
+.solicitacao-observacao-campo {
+  display: grid;
+  gap: 8px;
+  font-size: 0.78rem;
+  font-weight: 800;
+}
+
+.solicitacao-observacao-campo textarea {
+  width: 100%;
+  padding: 12px 13px;
+  border: 1px solid var(--border-color, #dfe6ef);
+  border-radius: 13px;
+  background: var(--card-background, #ffffff);
+  color: inherit;
+  font: inherit;
+  font-weight: 500;
+  resize: vertical;
+}
+
+.solicitacao-modal-actions {
+  flex-wrap: wrap;
+}
+
+.solicitacao-danger-button {
+  border-color: rgba(230, 63, 88, 0.32) !important;
+  color: #c02e49 !important;
+}
+
+@media (max-width: 980px) {
+  .solicitacoes-kpis {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 760px) {
+  .solicitacoes-kpis,
+  .solicitacoes-filters,
+  .solicitacao-dados-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .solicitacao-detalhe-layout {
+    grid-template-columns: 1fr;
+    padding: 18px;
+  }
+
+  .solicitacao-logo-card {
+    width: min(100%, 220px);
+    margin: 0 auto;
+  }
+
+  .solicitacao-dados-grid .full {
+    grid-column: auto;
+  }
+
+  .solicitacao-modal-actions {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .solicitacao-modal-actions button {
+    width: 100%;
+  }
+}
+
+.dark-theme .solicitacoes-kpis article,
+.dark-theme .solicitacao-observacao-campo textarea {
+  background: rgba(255, 255, 255, 0.045);
+}
+
+.dark-theme .solicitacao-status--pendente,
+.dark-theme .solicitacao-logo-status.sem-logo {
+  color: #ffd27d;
+}
+
+.dark-theme .solicitacao-status--em_analise {
+  color: #8fc6ff;
+}
+
+.dark-theme .solicitacao-status--aprovada,
+.dark-theme .solicitacao-logo-status.com-logo {
+  color: #7ce6b5;
+}
+
+.dark-theme .solicitacao-status--rejeitada,
+.dark-theme .solicitacao-danger-button {
+  color: #ff9bac !important;
+}
