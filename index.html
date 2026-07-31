@@ -7,15 +7,16 @@
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
   <meta http-equiv="Pragma" content="no-cache">
   <meta http-equiv="Expires" content="0">
-  <title>Central Rádios Brasil — Painel Administrativo v3.1.4</title>
+  <title>Central Rádios Brasil — Painel Administrativo v3.2.0</title>
 
-  <link rel="stylesheet" href="style.css?v=3.1.4">
-  <link rel="stylesheet" href="css/dashboard.css?v=3.1.4">
-  <link rel="stylesheet" href="css/radios.css?v=3.1.4">
-  <link rel="stylesheet" href="css/streams.css?v=3.1.4">
-  <link rel="stylesheet" href="css/emissoras.css?v=3.1.4">
+  <link rel="stylesheet" href="style.css?v=3.2.0">
+  <link rel="stylesheet" href="css/dashboard.css?v=3.2.0">
+  <link rel="stylesheet" href="css/radios.css?v=3.2.0">
+  <link rel="stylesheet" href="css/streams.css?v=3.2.0">
+  <link rel="stylesheet" href="css/emissoras.css?v=3.2.0">
+  <link rel="stylesheet" href="css/solicitacoes.css?v=3.2.0">
 </head>
-<body data-app-version="3.1.4" data-build="base-oficial">
+<body data-app-version="3.2.0" data-build="solicitacoes-d1">
 <div class="app-shell">
   <aside class="sidebar">
     <div class="brand">
@@ -28,6 +29,7 @@
 
     <nav class="main-nav">
       <a class="nav-link active" data-route="dashboard" href="#/dashboard">🏠 Dashboard</a>
+      <a class="nav-link" data-route="solicitacoes" href="#/solicitacoes">📥 Solicitações</a>
       <a class="nav-link" data-route="emissoras" href="#/emissoras">🏢 Emissoras</a>
         <a class="nav-link" data-route="publicacao" href="#/publicacao">📤 Publicação</a>
       <a class="nav-link" data-route="radios" href="#/radios">📻 Rádios</a>
@@ -179,6 +181,119 @@
         </section>
       </section>
 
+
+
+      <section id="solicitacoes-page" class="hidden">
+        <div class="radios-toolbar solicitacoes-toolbar">
+          <div>
+            <span id="solicitacoes-status-badge" class="status-badge loading">
+              Aguardando autenticação
+            </span>
+            <h2>Solicitações de emissoras</h2>
+            <p>
+              <strong id="solicitacoes-visible-count">0</strong> exibidas de
+              <strong id="solicitacoes-total-count">0</strong> recebidas.
+            </p>
+          </div>
+
+          <div class="toolbar-actions">
+            <button id="solicitacoes-chave-button" type="button"
+              class="secondary-button">
+              🔐 Informar chave administrativa
+            </button>
+            <button id="solicitacoes-refresh-button" type="button"
+              class="primary-button">
+              ↻ Atualizar solicitações
+            </button>
+          </div>
+        </div>
+
+        <section class="solicitacoes-kpis" aria-label="Resumo das solicitações">
+          <article>
+            <span>Pendentes</span>
+            <strong id="solicitacoes-pendentes-count">0</strong>
+          </article>
+          <article>
+            <span>Em análise</span>
+            <strong id="solicitacoes-analise-count">0</strong>
+          </article>
+          <article>
+            <span>Aprovadas</span>
+            <strong id="solicitacoes-aprovadas-count">0</strong>
+          </article>
+          <article>
+            <span>Rejeitadas</span>
+            <strong id="solicitacoes-rejeitadas-count">0</strong>
+          </article>
+          <article>
+            <span>Sem logomarca</span>
+            <strong id="solicitacoes-sem-logo-count">0</strong>
+          </article>
+        </section>
+
+        <section class="filters-panel solicitacoes-filters">
+          <label>
+            Buscar
+            <input id="solicitacao-search" type="search"
+              placeholder="Protocolo, rádio, cidade, estado ou e-mail">
+          </label>
+
+          <label>
+            Status
+            <select id="solicitacao-status-filter">
+              <option value="">Todos os status</option>
+              <option value="pendente">Pendentes</option>
+              <option value="em_analise">Em análise</option>
+              <option value="aprovada">Aprovadas</option>
+              <option value="rejeitada">Rejeitadas</option>
+            </select>
+          </label>
+
+          <label>
+            Logomarca
+            <select id="solicitacao-logo-filter">
+              <option value="">Todas</option>
+              <option value="com_logo">Com logomarca</option>
+              <option value="sem_logo">Sem logomarca</option>
+            </select>
+          </label>
+        </section>
+
+        <div id="solicitacoes-aviso-chave"
+          class="solicitacoes-chave-panel">
+          <strong>Área administrativa protegida</strong>
+          <p>
+            Informe a chave administrativa configurada no Worker.
+            Ela ficará somente nesta aba do navegador e não será salva
+            no repositório.
+          </p>
+        </div>
+
+        <section class="table-card">
+          <div class="table-scroll">
+            <table class="radios-table solicitacoes-table">
+              <thead>
+                <tr>
+                  <th>Logomarca</th>
+                  <th>Emissora</th>
+                  <th>Localização</th>
+                  <th>Categoria</th>
+                  <th>Recebida em</th>
+                  <th>Status</th>
+                  <th>Ações</th>
+                </tr>
+              </thead>
+              <tbody id="solicitacoes-table-body">
+                <tr>
+                  <td colspan="7" class="empty-state">
+                    Informe a chave administrativa para carregar as solicitações.
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+      </section>
 
       <section id="radios-page" class="hidden">
         <div class="radios-toolbar">
@@ -754,6 +869,83 @@
     
     </main>
   </div>
+</div>
+
+
+<div id="solicitacao-modal-backdrop" class="modal-backdrop hidden">
+  <section class="modal-card solicitacao-modal-card" role="dialog"
+    aria-modal="true" aria-labelledby="solicitacao-modal-title">
+
+    <div class="modal-header">
+      <div>
+        <span>📥 Portal da Emissora</span>
+        <h2 id="solicitacao-modal-title">Analisar solicitação</h2>
+      </div>
+
+      <button id="close-solicitacao-modal" class="close-button"
+        type="button" aria-label="Fechar">×</button>
+    </div>
+
+    <div class="solicitacao-detalhe-layout">
+      <aside class="solicitacao-logo-card">
+        <div id="solicitacao-logo-preview"
+          class="solicitacao-logo-preview">
+          <span>📻</span>
+          <small>Sem logomarca</small>
+        </div>
+        <span id="solicitacao-logo-status"
+          class="solicitacao-logo-status sem-logo">
+          Logo pendente
+        </span>
+      </aside>
+
+      <div class="solicitacao-detalhes">
+        <div class="solicitacao-protocolo">
+          <span>Protocolo</span>
+          <strong id="solicitacao-detalhe-protocolo">—</strong>
+        </div>
+
+        <dl class="solicitacao-dados-grid">
+          <div><dt>Rádio</dt><dd id="solicitacao-detalhe-nome">—</dd></div>
+          <div><dt>Localização</dt><dd id="solicitacao-detalhe-localizacao">—</dd></div>
+          <div><dt>Categoria</dt><dd id="solicitacao-detalhe-categoria">—</dd></div>
+          <div><dt>Plano solicitado</dt><dd id="solicitacao-detalhe-plano">—</dd></div>
+          <div><dt>E-mail</dt><dd id="solicitacao-detalhe-email">—</dd></div>
+          <div><dt>WhatsApp</dt><dd id="solicitacao-detalhe-whatsapp">—</dd></div>
+          <div class="full"><dt>Site</dt><dd id="solicitacao-detalhe-site">—</dd></div>
+          <div class="full"><dt>Stream</dt><dd id="solicitacao-detalhe-stream">—</dd></div>
+          <div class="full"><dt>Descrição</dt><dd id="solicitacao-detalhe-descricao">—</dd></div>
+          <div class="full"><dt>Observação administrativa</dt><dd id="solicitacao-detalhe-observacao">—</dd></div>
+        </dl>
+
+        <label class="solicitacao-observacao-campo">
+          Observação da análise
+          <textarea id="solicitacao-observacao" rows="3"
+            maxlength="700"
+            placeholder="Registre pendências, motivo da decisão ou informações da análise."></textarea>
+        </label>
+      </div>
+    </div>
+
+    <div class="modal-actions solicitacao-modal-actions">
+      <button id="solicitacao-marcar-analise-button"
+        type="button" class="secondary-button">
+        🔎 Marcar em análise
+      </button>
+      <button id="solicitacao-rejeitar-button"
+        type="button" class="secondary-button solicitacao-danger-button">
+        ⛔ Rejeitar
+      </button>
+      <button id="solicitacao-importar-button"
+        type="button" class="secondary-button">
+        📋 Importar para análise
+      </button>
+      <button id="solicitacao-aprovar-button"
+        type="button" class="primary-button">
+        ✓ Aprovar e importar
+      </button>
+    </div>
+  </section>
 </div>
 
 <div id="radio-modal-backdrop" class="modal-backdrop hidden">
@@ -1517,17 +1709,18 @@
 </div>
 
 
-<script src="config.js?v=3.1.4"></script>
-<script src="js/utils.js?v=3.1.4"></script>
-<script src="js/api.js?v=3.1.4"></script>
-<script src="js/dashboard.js?v=3.1.4"></script>
-<script src="js/radios.js?v=3.1.4"></script>
-<script src="js/estados.js?v=3.1.4"></script>
-<script src="js/categorias.js?v=3.1.4"></script>
-<script src="js/cidades.js?v=3.1.4"></script>
-<script src="js/streams.js?v=3.1.4"></script>
-<script src="js/emissoras.js?v=3.1.4"></script>
-<script src="js/publicacao.js?v=3.1.4"></script>
-<script src="app.js?v=3.1.4"></script>
+<script src="config.js?v=3.2.0"></script>
+<script src="js/utils.js?v=3.2.0"></script>
+<script src="js/api.js?v=3.2.0"></script>
+<script src="js/dashboard.js?v=3.2.0"></script>
+<script src="js/radios.js?v=3.2.0"></script>
+<script src="js/estados.js?v=3.2.0"></script>
+<script src="js/categorias.js?v=3.2.0"></script>
+<script src="js/cidades.js?v=3.2.0"></script>
+<script src="js/streams.js?v=3.2.0"></script>
+<script src="js/emissoras.js?v=3.2.0"></script>
+<script src="js/publicacao.js?v=3.2.0"></script>
+<script src="js/solicitacoes.js?v=3.2.0"></script>
+<script src="app.js?v=3.2.0"></script>
 </body>
 </html>
