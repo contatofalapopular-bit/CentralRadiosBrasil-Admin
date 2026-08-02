@@ -7,16 +7,16 @@
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
   <meta http-equiv="Pragma" content="no-cache">
   <meta http-equiv="Expires" content="0">
-  <title>Central Rádios Brasil — Painel Administrativo v3.2.0</title>
+  <title>Central Rádios Brasil — Painel Administrativo v3.3.0</title>
 
-  <link rel="stylesheet" href="style.css?v=3.2.0">
-  <link rel="stylesheet" href="css/dashboard.css?v=3.2.0">
-  <link rel="stylesheet" href="css/radios.css?v=3.2.0">
-  <link rel="stylesheet" href="css/streams.css?v=3.2.0">
-  <link rel="stylesheet" href="css/emissoras.css?v=3.2.0">
-  <link rel="stylesheet" href="css/solicitacoes.css?v=3.2.0">
+  <link rel="stylesheet" href="style.css?v=3.3.0">
+  <link rel="stylesheet" href="css/dashboard.css?v=3.3.0">
+  <link rel="stylesheet" href="css/radios.css?v=3.3.0">
+  <link rel="stylesheet" href="css/streams.css?v=3.3.0">
+  <link rel="stylesheet" href="css/emissoras.css?v=3.3.0">
+  <link rel="stylesheet" href="css/solicitacoes.css?v=3.3.0">
 </head>
-<body data-app-version="3.2.0" data-build="solicitacoes-d1">
+<body data-app-version="3.3.0" data-build="alteracoes-monitoramento">
 <div class="app-shell">
   <aside class="sidebar">
     <div class="brand">
@@ -292,6 +292,46 @@
               </tbody>
             </table>
           </div>
+        </section>
+
+        <section class="solicitacoes-alteracoes-bloco">
+          <div class="solicitacoes-subcabecalho">
+            <div>
+              <span class="status-badge loading" id="alteracoes-status-badge">
+                Alterações aguardando sincronização
+              </span>
+              <h3>Alterações solicitadas pelas emissoras</h3>
+              <p>
+                <strong id="alteracoes-pendentes-count">0</strong> pendentes ou em análise de
+                <strong id="alteracoes-total-count">0</strong> solicitações.
+              </p>
+            </div>
+          </div>
+
+          <section class="table-card">
+            <div class="table-scroll">
+              <table class="radios-table solicitacoes-table">
+                <thead>
+                  <tr>
+                    <th>Solicitação</th>
+                    <th>Emissora</th>
+                    <th>Localização</th>
+                    <th>Stream proposto</th>
+                    <th>Recebida em</th>
+                    <th>Status</th>
+                    <th>Ações</th>
+                  </tr>
+                </thead>
+                <tbody id="alteracoes-table-body">
+                  <tr>
+                    <td colspan="7" class="empty-state">
+                      Informe a chave administrativa para carregar as alterações.
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </section>
         </section>
       </section>
 
@@ -594,6 +634,9 @@
           </div>
 
           <div class="toolbar-actions">
+            <button id="monitor-streams-button" class="primary-button">
+              🔎 Verificar todos agora
+            </button>
             <button id="reset-streams-button" class="secondary-button">
               ↺ Recarregar de radios.json
             </button>
@@ -605,6 +648,17 @@
             </button>
           </div>
         </div>
+
+        <section class="stream-monitoramento-resumo">
+          <article><span>Online</span><strong id="monitor-online-count">0</strong></article>
+          <article><span>Instáveis</span><strong id="monitor-instavel-count">0</strong></article>
+          <article><span>Fora do portal</span><strong id="monitor-fora-count">0</strong></article>
+          <article><span>Suspensas</span><strong id="monitor-suspensa-count">0</strong></article>
+          <article class="stream-monitoramento-data">
+            <span>Última verificação automática</span>
+            <strong id="monitor-ultima-execucao">Ainda não executada</strong>
+          </article>
+        </section>
 
         <section class="filters-panel stream-filters">
           <label>
@@ -618,7 +672,10 @@
             <select id="stream-status-filter">
               <option value="">Todos os status</option>
               <option value="online">Online</option>
-              <option value="offline">Offline</option>
+              <option value="instavel">Instável</option>
+              <option value="fora_portal">Fora do portal</option>
+              <option value="suspensa">Suspensa</option>
+              <option value="offline">Offline manual</option>
               <option value="nao_testado">Não testado</option>
             </select>
           </label>
@@ -942,6 +999,58 @@
       <button id="solicitacao-aprovar-button"
         type="button" class="primary-button">
         ✓ Aprovar e importar
+      </button>
+    </div>
+  </section>
+</div>
+
+<div id="alteracao-modal-backdrop" class="modal-backdrop hidden">
+  <section class="modal-card solicitacao-modal-card" role="dialog"
+    aria-modal="true" aria-labelledby="alteracao-modal-title">
+
+    <div class="modal-header">
+      <div>
+        <span>✏️ Alteração solicitada</span>
+        <h2 id="alteracao-modal-title">Analisar alteração</h2>
+      </div>
+      <button id="close-alteracao-modal" class="close-button"
+        type="button" aria-label="Fechar">×</button>
+    </div>
+
+    <div class="alteracao-identificacao">
+      <strong id="alteracao-detalhe-id">—</strong>
+      <span>Cadastro original: <b id="alteracao-detalhe-protocolo">—</b></span>
+    </div>
+
+    <div class="alteracao-comparacao">
+      <table class="radios-table">
+        <thead>
+          <tr><th>Campo</th><th>Publicado atualmente</th><th>Alteração solicitada</th></tr>
+        </thead>
+        <tbody id="alteracao-comparacao-body"></tbody>
+      </table>
+    </div>
+
+    <div id="alteracao-logo-proposta" class="alteracao-logo-proposta hidden"></div>
+
+    <label class="solicitacao-observacao-campo">
+      Observação da análise
+      <textarea id="alteracao-observacao" rows="3" maxlength="700"
+        placeholder="Registre a decisão ou alguma orientação para a emissora."></textarea>
+    </label>
+
+    <div class="modal-actions solicitacao-modal-actions">
+      <button id="alteracao-marcar-analise-button"
+        type="button" class="secondary-button">
+        🔎 Marcar em análise
+      </button>
+      <button id="alteracao-rejeitar-button"
+        type="button" class="secondary-button solicitacao-danger-button">
+        ⛔ Rejeitar
+      </button>
+      <button id="alteracao-aplicar-button"
+        type="button" class="primary-button">
+        ✓ Aprovar e aplicar na emissora
       </button>
     </div>
   </section>
@@ -1708,18 +1817,18 @@
 </div>
 
 
-<script src="config.js?v=3.2.0"></script>
-<script src="js/utils.js?v=3.2.0"></script>
-<script src="js/api.js?v=3.2.0"></script>
-<script src="js/dashboard.js?v=3.2.0"></script>
-<script src="js/radios.js?v=3.2.0"></script>
-<script src="js/estados.js?v=3.2.0"></script>
-<script src="js/categorias.js?v=3.2.0"></script>
-<script src="js/cidades.js?v=3.2.0"></script>
-<script src="js/streams.js?v=3.2.0"></script>
-<script src="js/emissoras.js?v=3.2.0"></script>
-<script src="js/publicacao.js?v=3.2.0"></script>
-<script src="js/solicitacoes.js?v=3.2.0"></script>
-<script src="app.js?v=3.2.0"></script>
+<script src="config.js?v=3.3.0"></script>
+<script src="js/utils.js?v=3.3.0"></script>
+<script src="js/api.js?v=3.3.0"></script>
+<script src="js/dashboard.js?v=3.3.0"></script>
+<script src="js/radios.js?v=3.3.0"></script>
+<script src="js/estados.js?v=3.3.0"></script>
+<script src="js/categorias.js?v=3.3.0"></script>
+<script src="js/cidades.js?v=3.3.0"></script>
+<script src="js/streams.js?v=3.3.0"></script>
+<script src="js/emissoras.js?v=3.3.0"></script>
+<script src="js/publicacao.js?v=3.3.0"></script>
+<script src="js/solicitacoes.js?v=3.3.0"></script>
+<script src="app.js?v=3.3.0"></script>
 </body>
 </html>

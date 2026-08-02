@@ -1,3 +1,11 @@
+# 3.3.0 — Alterações da Emissora e Monitoramento Automático
+
+- Nova fila de alterações solicitadas pelo Portal da Emissora.
+- Comparação entre dados atuais e dados propostos.
+- Aprovação aplica a alteração ao rascunho da emissora sem publicação automática.
+- Painel de saúde dos streams com estados Online, Instável, Fora do portal e Suspensa.
+- Verificação manual integrada ao Worker e suporte ao agendamento de 30 minutos.
+
 # Commit 21.2.2 — Correção definitiva da versão do Dashboard
 
 - Dashboard passa a usar exclusivamente `datasetVersion` do `radios.json` oficial.

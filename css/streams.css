@@ -17,3 +17,55 @@
     grid-template-columns: 1fr;
   }
 }
+
+.stream-monitoramento-resumo {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(120px, 1fr)) minmax(220px, 1.6fr);
+  gap: 12px;
+  margin-bottom: 18px;
+}
+
+.stream-monitoramento-resumo article {
+  padding: 15px 16px;
+  border: 1px solid rgba(120, 160, 210, 0.16);
+  border-radius: 14px;
+  background: rgba(15, 35, 65, 0.48);
+}
+
+.stream-monitoramento-resumo span {
+  display: block;
+  color: #9eb0c9;
+  font-size: 0.74rem;
+}
+
+.stream-monitoramento-resumo strong {
+  display: block;
+  margin-top: 6px;
+  font-size: 1.25rem;
+}
+
+.stream-monitoramento-data strong {
+  font-size: 0.82rem;
+  line-height: 1.4;
+}
+
+.stream-status.instavel {
+  color: #ffd66f;
+  background: rgba(255, 214, 111, 0.1);
+}
+
+.stream-status.fora_portal,
+.stream-status.suspensa {
+  color: #ff8f8f;
+  background: rgba(255, 91, 91, 0.1);
+}
+
+@media (max-width: 1050px) {
+  .stream-monitoramento-resumo {
+    grid-template-columns: repeat(2, minmax(140px, 1fr));
+  }
+
+  .stream-monitoramento-data {
+    grid-column: 1 / -1;
+  }
+}

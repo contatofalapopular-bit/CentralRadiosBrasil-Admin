@@ -316,3 +316,73 @@
 .dark-theme .solicitacao-danger-button {
   color: #ff9bac !important;
 }
+
+.solicitacoes-alteracoes-bloco {
+  margin-top: 28px;
+}
+
+.solicitacoes-subcabecalho {
+  display: flex;
+  justify-content: space-between;
+  gap: 18px;
+  margin-bottom: 14px;
+}
+
+.solicitacoes-subcabecalho h3 {
+  margin: 10px 0 5px;
+}
+
+.solicitacoes-subcabecalho p {
+  margin: 0;
+  color: var(--text-muted, #9fb0c9);
+}
+
+.alteracao-identificacao {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 18px;
+  padding: 14px 16px;
+  border: 1px solid rgba(92, 205, 255, 0.18);
+  border-radius: 14px;
+  background: rgba(92, 205, 255, 0.06);
+}
+
+.alteracao-comparacao {
+  overflow-x: auto;
+  margin-bottom: 18px;
+}
+
+.alteracao-comparacao table {
+  min-width: 760px;
+}
+
+.alteracao-comparacao td {
+  vertical-align: top;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.alteracao-valor-alterado {
+  color: #ffd66f;
+  font-weight: 800;
+}
+
+.alteracao-logo-proposta {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 18px;
+  padding: 14px;
+  border: 1px solid rgba(255, 214, 111, 0.22);
+  border-radius: 14px;
+  background: rgba(255, 214, 111, 0.06);
+}
+
+.alteracao-logo-proposta img {
+  width: 72px;
+  height: 72px;
+  object-fit: cover;
+  border-radius: 14px;
+}

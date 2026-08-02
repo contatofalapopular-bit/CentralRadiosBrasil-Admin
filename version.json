@@ -1,8 +1,8 @@
 {
   "app": "Central Rádios Brasil — Painel Administrativo",
-  "version": "2.4.0",
-  "release": "Gerador Definitivo do Banco Oficial — Etapa 13.3",
-  "build": "2026-07-25",
+  "version": "3.3.0",
+  "release": "Alterações da Emissora e Monitoramento Automático de Streams",
+  "build": "2026-08-01",
   "modules": {
     "dashboard": true,
     "radios": true,
@@ -11,7 +11,9 @@
     "settings": false,
     "states": true,
     "cities": true,
-    "emissoras": true
+    "emissoras": true,
+    "solicitacoes_alteracoes": true,
+    "monitoramento_streams": true
   },
   "features": [
     "radio-search",
@@ -72,7 +74,13 @@
     "radios-validation",
     "validation-report",
     "official-radios-export",
-    "esp32-compact-export"
+    "esp32-compact-export",
+    "station-change-requests",
+    "change-request-review",
+    "change-request-apply",
+    "automatic-stream-monitoring",
+    "stream-auto-hide",
+    "stream-auto-reactivate"
   ],
   "fixes": [
     "load-estados-script",

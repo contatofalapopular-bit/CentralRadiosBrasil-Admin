@@ -1,6 +1,8 @@
 const SolicitacoesAdmin = {
   solicitacoes: [],
+  alteracoes: [],
   selecionada: null,
+  alteracaoSelecionada: null,
   eventosRegistrados: false,
 
   async iniciar() {
@@ -104,6 +106,36 @@ const SolicitacoesAdmin = {
         "click",
         () => this.importarParaEmissoras("aprovada")
       );
+
+    document
+      .getElementById("close-alteracao-modal")
+      .addEventListener("click", () => this.fecharAlteracao());
+
+    document
+      .getElementById("alteracao-modal-backdrop")
+      .addEventListener("click", (evento) => {
+        if (evento.target.id === "alteracao-modal-backdrop") {
+          this.fecharAlteracao();
+        }
+      });
+
+    document
+      .getElementById("alteracao-marcar-analise-button")
+      .addEventListener("click", () =>
+        this.atualizarStatusAlteracao("em_analise")
+      );
+
+    document
+      .getElementById("alteracao-rejeitar-button")
+      .addEventListener("click", () =>
+        this.atualizarStatusAlteracao("rejeitada")
+      );
+
+    document
+      .getElementById("alteracao-aplicar-button")
+      .addEventListener("click", () =>
+        this.aprovarEAplicarAlteracao()
+      );
   },
 
   informarChave() {
@@ -126,6 +158,7 @@ const SolicitacoesAdmin = {
       this.carregar();
     } else {
       this.solicitacoes = [];
+      this.alteracoes = [];
       this.renderizar();
     }
   },
@@ -161,16 +194,29 @@ const SolicitacoesAdmin = {
     badge.textContent = "Carregando solicitações";
 
     try {
-      const resposta =
-        await API.listarSolicitacoes();
+      const [resposta, respostaAlteracoes] =
+        await Promise.all([
+          API.listarSolicitacoes(),
+          API.listarAlteracoes()
+        ]);
 
       this.solicitacoes =
         Array.isArray(resposta?.solicitacoes)
           ? resposta.solicitacoes
           : [];
 
+      this.alteracoes =
+        Array.isArray(respostaAlteracoes?.alteracoes)
+          ? respostaAlteracoes.alteracoes
+          : [];
+
       badge.className = "status-badge success";
       badge.textContent = "Solicitações sincronizadas";
+
+      const badgeAlteracoes =
+        document.getElementById("alteracoes-status-badge");
+      badgeAlteracoes.className = "status-badge success";
+      badgeAlteracoes.textContent = "Alterações sincronizadas";
 
       this.atualizarEstadoChave();
       this.renderizar();
@@ -315,6 +361,8 @@ const SolicitacoesAdmin = {
         (item) => !item.logo_chave_r2
       ).length
     );
+
+    this.renderizarAlteracoes();
 
     if (!API.chaveAdmin()) {
       tbody.innerHTML = `
@@ -731,6 +779,366 @@ const SolicitacoesAdmin = {
         "Não foi possível importar a solicitação."
       );
     }
+  },
+
+
+  renderizarAlteracoes() {
+    const tbody = document.getElementById(
+      "alteracoes-table-body"
+    );
+    const alteracoes = Array.isArray(this.alteracoes)
+      ? this.alteracoes
+      : [];
+    const pendentes = alteracoes.filter((item) =>
+      ["pendente", "em_analise"].includes(item.status)
+    ).length;
+
+    texto("alteracoes-total-count", alteracoes.length);
+    texto("alteracoes-pendentes-count", pendentes);
+
+    if (!API.chaveAdmin()) {
+      tbody.innerHTML = `
+        <tr>
+          <td colspan="7" class="empty-state">
+            Informe a chave administrativa para carregar as alterações.
+          </td>
+        </tr>
+      `;
+      return;
+    }
+
+    if (!alteracoes.length) {
+      tbody.innerHTML = `
+        <tr>
+          <td colspan="7" class="empty-state">
+            Nenhuma alteração solicitada pelas emissoras.
+          </td>
+        </tr>
+      `;
+      return;
+    }
+
+    tbody.innerHTML = alteracoes.map((item) => `
+      <tr>
+        <td>
+          <strong>${escaparHtml(item.id)}</strong>
+          <small>${escaparHtml(item.protocolo_original)}</small>
+        </td>
+        <td>
+          <strong>${escaparHtml(item.nome_radio)}</strong>
+          <small>${escaparHtml(item.email)}</small>
+        </td>
+        <td>${escaparHtml(item.cidade)}/${escaparHtml(item.estado)}</td>
+        <td class="stream-url-cell">
+          <small title="${escaparHtml(item.stream_url)}">
+            ${escaparHtml(item.stream_url)}
+          </small>
+        </td>
+        <td>${escaparHtml(this.formatarData(item.criado_em))}</td>
+        <td>
+          <span class="solicitacao-status solicitacao-status--${escaparHtml(item.status)}">
+            ${escaparHtml(this.rotuloStatus(item.status))}
+          </span>
+        </td>
+        <td class="actions-cell">
+          <button type="button" class="table-button"
+            onclick="SolicitacoesAdmin.abrirAlteracao('${escaparHtml(item.id)}')">
+            Analisar
+          </button>
+        </td>
+      </tr>
+    `).join("");
+  },
+
+  async abrirAlteracao(id) {
+    let alteracao = this.alteracoes.find(
+      (item) => item.id === id
+    );
+
+    try {
+      const resposta = await API.detalharAlteracao(id);
+      if (resposta?.alteracao) {
+        alteracao = resposta.alteracao;
+      }
+    } catch (erro) {
+      console.warn("Detalhamento da alteração indisponível:", erro);
+    }
+
+    if (!alteracao) {
+      alert("A solicitação de alteração não foi encontrada.");
+      return;
+    }
+
+    this.alteracaoSelecionada = alteracao;
+    this.preencherAlteracao();
+    document
+      .getElementById("alteracao-modal-backdrop")
+      .classList.remove("hidden");
+  },
+
+  preencherAlteracao() {
+    const item = this.alteracaoSelecionada;
+    const anteriores = item.dados_anteriores || {};
+
+    texto("alteracao-modal-title", `Analisar alteração de ${item.nome_radio}`);
+    texto("alteracao-detalhe-id", item.id);
+    texto("alteracao-detalhe-protocolo", item.protocolo_original);
+
+    const campos = [
+      ["Nome da rádio", "nome_radio", item.nome_radio],
+      ["Cidade", "cidade", item.cidade],
+      ["Estado", "estado", item.estado],
+      ["Categoria", "categoria_principal", item.categoria_principal],
+      ["Site", "site", item.site || ""],
+      ["E-mail", "email", item.email],
+      ["WhatsApp", "whatsapp", item.whatsapp],
+      ["Descrição", "descricao", item.descricao || ""],
+      ["Stream", "stream_url", item.stream_url]
+    ];
+
+    document.getElementById("alteracao-comparacao-body").innerHTML =
+      campos.map(([rotulo, chave, novoValor]) => {
+        const antigoValor = anteriores[chave] || "—";
+        const novo = novoValor || "—";
+        const alterado = String(antigoValor) !== String(novo);
+
+        return `
+          <tr>
+            <td><strong>${escaparHtml(rotulo)}</strong></td>
+            <td>${escaparHtml(antigoValor)}</td>
+            <td class="${alterado ? "alteracao-valor-alterado" : ""}">
+              ${escaparHtml(novo)}
+            </td>
+          </tr>
+        `;
+      }).join("");
+
+    const logo = document.getElementById("alteracao-logo-proposta");
+
+    if (item.logo_url) {
+      logo.innerHTML = `
+        <img src="${escaparHtml(item.logo_url)}"
+          alt="Nova logomarca proposta">
+        <div>
+          <strong>Nova logomarca enviada</strong>
+          <p>${escaparHtml(item.logo_largura || "?")} × ${escaparHtml(item.logo_altura || "?")} pixels</p>
+        </div>
+      `;
+      logo.classList.remove("hidden");
+    } else {
+      logo.innerHTML = "";
+      logo.classList.add("hidden");
+    }
+
+    document.getElementById("alteracao-observacao").value =
+      item.observacao_analise || "";
+
+    const finalizada = ["aprovada", "rejeitada"].includes(item.status);
+    document.getElementById("alteracao-marcar-analise-button").disabled = finalizada;
+    document.getElementById("alteracao-rejeitar-button").disabled = finalizada;
+    document.getElementById("alteracao-aplicar-button").disabled = finalizada;
+  },
+
+  fecharAlteracao() {
+    this.alteracaoSelecionada = null;
+    document
+      .getElementById("alteracao-modal-backdrop")
+      .classList.add("hidden");
+  },
+
+  async atualizarStatusAlteracao(status) {
+    const item = this.alteracaoSelecionada;
+    if (!item) return;
+
+    const observacao = document
+      .getElementById("alteracao-observacao")
+      .value
+      .trim();
+
+    if (status === "rejeitada" && !observacao) {
+      alert("Informe o motivo da rejeição.");
+      return;
+    }
+
+    if (!confirm(`Alterar para “${this.rotuloStatus(status)}”?`)) {
+      return;
+    }
+
+    try {
+      await API.atualizarAlteracao(item.id, {
+        status,
+        observacaoAnalise: observacao
+      });
+      this.fecharAlteracao();
+      await this.carregar();
+    } catch (erro) {
+      alert(
+        erro.message ||
+        "Não foi possível atualizar a solicitação de alteração."
+      );
+    }
+  },
+
+  async garantirEmissorasCarregadas() {
+    if (
+      !EmissorasAdmin.eventosRegistrados ||
+      !Array.isArray(EmissorasAdmin.emissoras)
+    ) {
+      await EmissorasAdmin.iniciar();
+      return;
+    }
+
+    if (
+      EmissorasAdmin.emissoras.length === 0 &&
+      !localStorage.getItem(CONFIG.EMISSORAS_STORAGE_KEY)
+    ) {
+      await EmissorasAdmin.carregar();
+    }
+  },
+
+  async aprovarEAplicarAlteracao() {
+    const item = this.alteracaoSelecionada;
+    if (!item) return;
+
+    const observacao = document
+      .getElementById("alteracao-observacao")
+      .value
+      .trim();
+
+    if (!confirm(
+      "Aprovar esta alteração e aplicá-la à emissora? A versão pública só mudará após uma nova publicação."
+    )) {
+      return;
+    }
+
+    try {
+      await this.garantirEmissorasCarregadas();
+
+      const emissora = EmissorasAdmin.emissoras.find(
+        (radio) =>
+          radio.origemSolicitacao?.protocolo ===
+          item.protocolo_original
+      );
+
+      if (!emissora) {
+        alert(
+          "A emissora vinculada a este protocolo não foi encontrada. Importe ou localize a emissora antes de aprovar a alteração."
+        );
+        return;
+      }
+
+      const copiaAnterior = structuredClone(emissora);
+
+      try {
+        this.aplicarDadosAlteracao(emissora, item);
+        EmissorasAdmin.salvarLocal();
+
+        await API.atualizarAlteracao(item.id, {
+          status: "aprovada",
+          observacaoAnalise:
+            observacao ||
+            "Alteração aprovada e aplicada. Aguardando nova publicação oficial."
+        });
+      } catch (erro) {
+        const indice = EmissorasAdmin.emissoras.findIndex(
+          (radio) => radio.id === emissora.id
+        );
+        if (indice >= 0) {
+          EmissorasAdmin.emissoras[indice] = copiaAnterior;
+          EmissorasAdmin.salvarLocal();
+        }
+        throw erro;
+      }
+
+      this.fecharAlteracao();
+      await this.carregar();
+      window.location.hash = "#/emissoras";
+
+      window.setTimeout(() => {
+        EmissorasAdmin.abrirFormulario(emissora);
+      }, 250);
+    } catch (erro) {
+      console.error("Falha ao aplicar alteração:", erro);
+      alert(
+        erro.message ||
+        "Não foi possível aplicar a alteração na emissora."
+      );
+    }
+  },
+
+  aplicarDadosAlteracao(emissora, item) {
+    emissora.nome = item.nome_radio;
+    emissora.nomeFantasia = item.nome_radio;
+    emissora.descricao = item.descricao || "";
+    emissora.site = item.site || "";
+    emissora.categoriaPrincipal = item.categoria_principal;
+    emissora.categorias = [item.categoria_principal];
+
+    emissora.localizacao = {
+      ...(emissora.localizacao || {}),
+      pais: emissora.localizacao?.pais || "Brasil",
+      cidade: item.cidade,
+      uf: item.estado
+    };
+
+    emissora.contato = {
+      ...(emissora.contato || {}),
+      email: item.email,
+      whatsapp: item.whatsapp
+    };
+
+    if (item.logo_url) {
+      if (
+        emissora.logo &&
+        typeof emissora.logo === "object"
+      ) {
+        emissora.logo = {
+          ...emissora.logo,
+          original: item.logo_url,
+          quadrada: item.logo_url,
+          miniatura: item.logo_url
+        };
+      } else {
+        emissora.logo = item.logo_url;
+      }
+    }
+
+    if (!Array.isArray(emissora.streams)) {
+      emissora.streams = [];
+    }
+
+    let principal = emissora.streams.find(
+      (stream) => stream.principal === true
+    );
+
+    if (!principal) {
+      principal = emissora.streams[0];
+    }
+
+    if (!principal) {
+      principal = {
+        id: `stream-${Date.now()}`,
+        nome: "Principal",
+        principal: true,
+        codec: "Não informado",
+        bitrate: null
+      };
+      emissora.streams.push(principal);
+    }
+
+    principal.url = item.stream_url;
+    principal.principal = true;
+    principal.monitoramento = {
+      status: "nao_testado",
+      ultimaVerificacao: null,
+      tempoRespostaMs: null
+    };
+
+    emissora.observacoes = [
+      emissora.observacoes,
+      `Alteração ${item.id} aprovada e aplicada.`
+    ].filter(Boolean).join(" ");
+    emissora.atualizadoEm = new Date().toISOString();
   },
 
   converterParaEmissora(

@@ -1,29 +1,17 @@
-# Central Rádios Brasil — Painel Administrativo
+# Central Rádios Brasil — Painel Administrativo v3.3.0
 
-## Versão 2.4.0 — Commit 13.3
+## Alterações implantadas
 
-Gerador definitivo do banco oficial de rádios.
+- Nova fila **Alterações solicitadas pelas emissoras** dentro do módulo Solicitações.
+- Comparação dos dados publicados com os dados propostos.
+- A aprovação aplica as mudanças ao rascunho da emissora, mas não publica automaticamente.
+- O administrador ainda revisa e usa o fluxo normal de Publicação Oficial.
+- O módulo Streams mostra os estados: Online, Instável, Fora do portal e Suspensa.
+- Botão **Verificar todos agora** para executar uma checagem manual.
+- Exibição da última execução automática do monitoramento.
 
-### Funcionalidades
+## Publicação
 
-- validação completa antes da exportação;
-- detecção de IDs e slugs duplicados;
-- verificação de nome, estado, cidade e categoria;
-- validação de streams e stream principal;
-- avisos sobre HTTP, codec, frequência e logotipo;
-- relatório detalhado de erros e avisos;
-- geração do `radios.json` oficial;
-- geração do `radios-esp32.json` compacto;
-- totais automáticos de emissoras, streams, estados, cidades e categorias;
-- exportação bloqueada enquanto existirem erros.
+Substitua os arquivos do repositório `CentralRadiosBrasil-Admin` pelos arquivos deste pacote.
 
-### Arquivos gerados
-
-- `radios.json`: banco completo para o ecossistema;
-- `radios-esp32.json`: banco compacto para o firmware;
-- `relatorio-validacao-radios.json`: relatório técnico.
-
-### Próxima etapa
-
-Commit 13.4: validação final e publicação no repositório
-`CentralRadiosBrasil-Dados`.
+Publique primeiro o Worker v1.5.0 e depois o Site v22.5.2.

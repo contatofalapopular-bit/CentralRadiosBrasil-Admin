@@ -1,5 +1,7 @@
 const StreamsAdmin = {
   streams: [],
+  monitoramento: [],
+  ultimaExecucaoMonitoramento: null,
   editandoId: null,
   audioTeste: null,
   timeoutTeste: null,
@@ -12,6 +14,7 @@ const StreamsAdmin = {
     }
 
     await this.carregar();
+    await this.carregarMonitoramento();
   },
 
   registrarEventos() {
@@ -32,6 +35,9 @@ const StreamsAdmin = {
 
     document.getElementById("reset-streams-button")
       .addEventListener("click", () => this.restaurarDoBanco());
+
+    document.getElementById("monitor-streams-button")
+      .addEventListener("click", () => this.executarMonitoramento());
 
     document.getElementById("stream-form")
       .addEventListener("submit", (evento) => this.salvar(evento));
@@ -136,6 +142,89 @@ const StreamsAdmin = {
     }
   },
 
+  async carregarMonitoramento() {
+    if (!API.chaveAdmin()) {
+      this.monitoramento = [];
+      this.ultimaExecucaoMonitoramento = null;
+      this.renderizar();
+      return;
+    }
+
+    try {
+      const resposta = await API.listarMonitoramentoStreams();
+      this.monitoramento = Array.isArray(resposta?.streams)
+        ? resposta.streams
+        : [];
+      this.ultimaExecucaoMonitoramento =
+        resposta?.ultimaExecucao || null;
+      this.aplicarMonitoramentoNaLista();
+      this.renderizar();
+    } catch (erro) {
+      console.warn("Monitoramento automático indisponível:", erro);
+    }
+  },
+
+  aplicarMonitoramentoNaLista() {
+    const porRadio = new Map(
+      this.monitoramento.map((item) => [
+        item.radio_id,
+        item
+      ])
+    );
+
+    this.streams.forEach((stream) => {
+      const monitor = porRadio.get(stream.radioId);
+      if (!monitor) return;
+
+      stream.status = monitor.estado || stream.status;
+      stream.ultimaVerificacao =
+        monitor.ultima_verificacao ||
+        stream.ultimaVerificacao;
+      stream.tempoRespostaMs =
+        monitor.tempo_resposta_ms ||
+        stream.tempoRespostaMs;
+      stream.falhasConsecutivas = Number(
+        monitor.falhas_consecutivas || 0
+      );
+      stream.indisponivelDesde =
+        monitor.indisponivel_desde || null;
+      stream.ultimoErro = monitor.ultimo_erro || null;
+    });
+  },
+
+  async executarMonitoramento() {
+    if (!API.chaveAdmin()) {
+      SolicitacoesAdmin.informarChave();
+      if (!API.chaveAdmin()) return;
+    }
+
+    const botao = document.getElementById(
+      "monitor-streams-button"
+    );
+    botao.disabled = true;
+    botao.textContent = "Verificando...";
+    this.estado("loading", "Verificando todos os streams");
+
+    try {
+      const resposta = await API.executarMonitoramentoStreams();
+      this.estado(
+        "success",
+        `${resposta.totalVerificado || 0} streams verificados`
+      );
+      await this.carregarMonitoramento();
+    } catch (erro) {
+      console.error("Falha no monitoramento:", erro);
+      this.estado("error", "Falha ao verificar os streams");
+      alert(
+        erro.message ||
+        "Não foi possível executar o monitoramento agora."
+      );
+    } finally {
+      botao.disabled = false;
+      botao.textContent = "🔎 Verificar todos agora";
+    }
+  },
+
   estado(tipo, mensagem) {
     const badge = document.getElementById("streams-status-badge");
     badge.className = `status-badge ${tipo}`;
@@ -174,7 +263,32 @@ const StreamsAdmin = {
     );
     texto(
       "streams-offline-count",
-      this.streams.filter((s) => s.status === "offline").length
+      this.streams.filter((s) =>
+        ["offline", "fora_portal", "suspensa"].includes(s.status)
+      ).length
+    );
+
+    texto(
+      "monitor-online-count",
+      this.monitoramento.filter((s) => s.estado === "online").length
+    );
+    texto(
+      "monitor-instavel-count",
+      this.monitoramento.filter((s) => s.estado === "instavel").length
+    );
+    texto(
+      "monitor-fora-count",
+      this.monitoramento.filter((s) => s.estado === "fora_portal").length
+    );
+    texto(
+      "monitor-suspensa-count",
+      this.monitoramento.filter((s) => s.estado === "suspensa").length
+    );
+    texto(
+      "monitor-ultima-execucao",
+      this.ultimaExecucaoMonitoramento
+        ? formatarData(this.ultimaExecucaoMonitoramento)
+        : "Ainda não executada"
     );
 
     if (!lista.length) {
@@ -230,6 +344,9 @@ const StreamsAdmin = {
   rotuloStatus(status) {
     return {
       online: "Online",
+      instavel: "Instável",
+      fora_portal: "Fora do portal",
+      suspensa: "Suspensa",
       offline: "Offline",
       testando: "Testando",
       nao_testado: "Não testado"

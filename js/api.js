@@ -147,5 +147,40 @@ const API = {
         body: JSON.stringify(dados)
       }
     );
+  },
+
+  listarAlteracoes() {
+    return this.worker(
+      "/api/admin/alteracoes?limit=200"
+    );
+  },
+
+  detalharAlteracao(id) {
+    return this.worker(
+      `/api/admin/alteracoes/${encodeURIComponent(id)}`
+    );
+  },
+
+  atualizarAlteracao(id, dados) {
+    return this.worker(
+      `/api/admin/alteracoes/${encodeURIComponent(id)}`,
+      {
+        method: "PATCH",
+        body: JSON.stringify(dados)
+      }
+    );
+  },
+
+  listarMonitoramentoStreams() {
+    return this.worker(
+      "/api/admin/streams/status"
+    );
+  },
+
+  executarMonitoramentoStreams() {
+    return this.worker(
+      "/api/admin/streams/monitorar",
+      { method: "POST" }
+    );
   }
 };
