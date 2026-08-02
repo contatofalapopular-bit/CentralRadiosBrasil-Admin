@@ -194,8 +194,8 @@ const StreamsAdmin = {
 
   async executarMonitoramento() {
     if (!API.chaveAdmin()) {
-      SolicitacoesAdmin.informarChave();
-      if (!API.chaveAdmin()) return;
+      const entrou = await SolicitacoesAdmin.informarChave();
+      if (!entrou || !API.chaveAdmin()) return;
     }
 
     const botao = document.getElementById(

@@ -14,7 +14,14 @@ const SolicitacoesAdmin = {
     this.atualizarEstadoChave();
 
     if (API.chaveAdmin()) {
-      await this.carregar();
+      try {
+        await API.validarSessaoAdmin();
+        await this.carregar();
+      } catch {
+        API.definirChaveAdmin("");
+        this.atualizarEstadoChave();
+        this.renderizar();
+      }
     } else {
       this.renderizar();
     }
@@ -138,28 +145,52 @@ const SolicitacoesAdmin = {
       );
   },
 
-  informarChave() {
-    const atual = API.chaveAdmin();
-
-    const chave = prompt(
-      atual
-        ? "Digite uma nova chave administrativa. Deixe vazio para remover a chave desta aba."
-        : "Digite a chave administrativa configurada no Worker:"
-    );
-
-    if (chave === null) {
-      return;
-    }
-
-    API.definirChaveAdmin(chave);
-    this.atualizarEstadoChave();
-
+  async informarChave() {
     if (API.chaveAdmin()) {
-      this.carregar();
-    } else {
+      const sair = confirm(
+        "Encerrar a sessão administrativa desta aba?"
+      );
+
+      if (!sair) return false;
+
+      await API.logoutAdmin();
       this.solicitacoes = [];
       this.alteracoes = [];
+      this.atualizarEstadoChave();
       this.renderizar();
+      return false;
+    }
+
+    const chave = prompt(
+      "Digite a chave administrativa configurada no Worker. Ela será usada apenas para criar uma sessão temporária e não será armazenada no navegador:"
+    );
+
+    if (chave === null || !String(chave).trim()) {
+      return false;
+    }
+
+    const botao = document.getElementById(
+      "solicitacoes-chave-button"
+    );
+    botao.disabled = true;
+    botao.textContent = "Entrando...";
+
+    try {
+      await API.loginAdmin(String(chave).trim());
+      this.atualizarEstadoChave();
+      await this.carregar();
+      return true;
+    } catch (erro) {
+      API.definirChaveAdmin("");
+      this.atualizarEstadoChave();
+      alert(
+        erro.message ||
+        "Não foi possível iniciar a sessão administrativa."
+      );
+      return false;
+    } finally {
+      botao.disabled = false;
+      this.atualizarEstadoChave();
     }
   },
 
@@ -171,8 +202,8 @@ const SolicitacoesAdmin = {
       );
 
     botao.textContent = possuiChave
-      ? "🔐 Alterar chave administrativa"
-      : "🔐 Informar chave administrativa";
+      ? "🔓 Encerrar sessão"
+      : "🔐 Entrar no painel";
 
     document
       .getElementById("solicitacoes-aviso-chave")
@@ -181,8 +212,8 @@ const SolicitacoesAdmin = {
 
   async carregar() {
     if (!API.chaveAdmin()) {
-      this.informarChave();
-      return;
+      const entrou = await this.informarChave();
+      if (!entrou) return;
     }
 
     const badge =
@@ -230,15 +261,15 @@ const SolicitacoesAdmin = {
         API.definirChaveAdmin("");
         this.atualizarEstadoChave();
         badge.className = "status-badge error";
-        badge.textContent = "Chave administrativa inválida";
+        badge.textContent = "Sessão administrativa expirada";
 
         alert(
-          "A chave administrativa não foi aceita. Informe a chave correta."
+          "A sessão administrativa terminou. Entre novamente."
         );
       } else if (erro.status === 503) {
         badge.className = "status-badge error";
         badge.textContent =
-          "Chave ainda não configurada no Worker";
+          "Acesso administrativo ainda não configurado";
 
         alert(
           "Configure o segredo ADMIN_KEY no Worker antes de usar esta área."
@@ -368,7 +399,7 @@ const SolicitacoesAdmin = {
       tbody.innerHTML = `
         <tr>
           <td colspan="7" class="empty-state">
-            Informe a chave administrativa para carregar as solicitações.
+            Entre no painel para carregar as solicitações.
           </td>
         </tr>
       `;
@@ -800,7 +831,7 @@ const SolicitacoesAdmin = {
       tbody.innerHTML = `
         <tr>
           <td colspan="7" class="empty-state">
-            Informe a chave administrativa para carregar as alterações.
+            Entre no painel para carregar as alterações.
           </td>
         </tr>
       `;

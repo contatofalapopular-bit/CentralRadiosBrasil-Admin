@@ -14,17 +14,55 @@ const API = {
   },
 
   definirChaveAdmin(valor) {
-    const chave = String(valor || "").trim();
+    const token = String(valor || "").trim();
 
-    if (chave) {
+    if (token) {
       sessionStorage.setItem(
         CONFIG.ADMIN_KEY_SESSION_STORAGE,
-        chave
+        token
       );
     } else {
       sessionStorage.removeItem(
         CONFIG.ADMIN_KEY_SESSION_STORAGE
       );
+    }
+  },
+
+  async loginAdmin(chave) {
+    const resposta = await this.workerSemSessao(
+      "/api/admin/login",
+      {
+        method: "POST",
+        body: JSON.stringify({ chave })
+      }
+    );
+
+    if (!resposta?.token) {
+      throw new Error(
+        "A API não retornou o token da sessão administrativa."
+      );
+    }
+
+    this.definirChaveAdmin(resposta.token);
+    return resposta;
+  },
+
+  validarSessaoAdmin() {
+    return this.worker(
+      "/api/admin/session"
+    );
+  },
+
+  async logoutAdmin() {
+    try {
+      if (this.chaveAdmin()) {
+        await this.worker(
+          "/api/admin/logout",
+          { method: "POST" }
+        );
+      }
+    } finally {
+      this.definirChaveAdmin("");
     }
   },
 
@@ -61,6 +99,64 @@ const API = {
     }
   },
 
+  async workerSemSessao(caminho, opcoes = {}) {
+    const controller = new AbortController();
+    const timer = setTimeout(
+      () => controller.abort(),
+      CONFIG.REQUEST_TIMEOUT_MS
+    );
+
+    const headers = new Headers(opcoes.headers || {});
+
+    if (
+      opcoes.body &&
+      !(opcoes.body instanceof FormData) &&
+      !headers.has("Content-Type")
+    ) {
+      headers.set("Content-Type", "application/json");
+    }
+
+    try {
+      const resposta = await fetch(
+        `${this.workerUrl()}${caminho}`,
+        {
+          ...opcoes,
+          headers,
+          cache: "no-store",
+          signal: controller.signal
+        }
+      );
+
+      let dados = null;
+      try {
+        dados = await resposta.json();
+      } catch {
+        dados = null;
+      }
+
+      if (!resposta.ok || dados?.ok === false) {
+        const erro = new Error(
+          dados?.erro ||
+          `A API respondeu com HTTP ${resposta.status}.`
+        );
+        erro.status = resposta.status;
+        erro.dados = dados;
+        throw erro;
+      }
+
+      return dados;
+    } catch (erro) {
+      if (erro.name === "AbortError") {
+        throw new Error(
+          "A API administrativa demorou mais que o permitido."
+        );
+      }
+      throw erro;
+    } finally {
+      clearTimeout(timer);
+    }
+  },
+
   async worker(caminho, opcoes = {}) {
     const controller = new AbortController();
     const timer = setTimeout(
@@ -72,7 +168,7 @@ const API = {
     const chave = this.chaveAdmin();
 
     if (chave) {
-      headers.set("X-Admin-Key", chave);
+      headers.set("Authorization", `Bearer ${chave}`);
     }
 
     if (
