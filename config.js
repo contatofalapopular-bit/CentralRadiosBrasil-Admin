@@ -1,6 +1,6 @@
 const CONFIG = Object.freeze({
   APP_NAME: "Central Rádios Brasil",
-  VERSION: "3.9.3",
+  VERSION: "3.10.0",
   GITHUB_OWNER: "contatofalapopular-bit",
   DADOS_REPO: "CentralRadiosBrasil-Dados",
   DADOS_BRANCH: "main",
@@ -8,6 +8,8 @@ const CONFIG = Object.freeze({
     "https://broken-bar-45e2.contatofalapopular.workers.dev",
   EMAIL_WORKER_URL:
     "https://crb-email.contatofalapopular.workers.dev",
+  CLIENT_PORTAL_URL:
+    "https://cliente.centralradiosbrasil.com.br",
   ADMIN_KEY_SESSION_STORAGE:
     "crb-admin-token-sessao-v2",
   REQUEST_TIMEOUT_MS: 15000,

@@ -1,5 +1,14 @@
 # Changelog
 
+## 3.10.0 — Início do Portal do Cliente
+
+- instala o primeiro modelo oficial “Rádio Essencial”;
+- cria e redefine o acesso individual de cada cliente;
+- exibe a senha temporária somente no momento da criação;
+- adiciona rascunho, histórico de versões e solicitação de publicação;
+- permite revisar e publicar o site pelo Painel Administrativo;
+- preserva contratos, faturas, pagamentos e regras validadas do Commit 22.17.1.
+
 ## 3.9.3 — Regra correta de faturas
 
 - adiciona tipo de cobrança às faturas;

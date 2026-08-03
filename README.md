@@ -1,8 +1,17 @@
-# Central Rádios Brasil — Admin 3.9.3
+# Central Rádios Brasil — Admin 3.10.0
 
 Gestão comercial com regra de faturas por contrato, competência e serviço.
 
 # Central Rádios Brasil — Painel Administrativo v3.9.0
+
+
+## Commit 22.18 — Portal do Cliente e Rádio Essencial
+
+- acesso individual por cliente com senha temporária;
+- rascunho, histórico de versões e solicitação de publicação;
+- publicação administrativa;
+- primeiro modelo oficial Rádio Essencial;
+- stream técnico controlado somente pelo Admin.
 
 ## Commit 22.17 — Gestão Comercial, Streaming e Sites dos Clientes
 

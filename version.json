@@ -1,7 +1,7 @@
 {
   "app": "Central Rádios Brasil — Painel Administrativo",
-  "version": "3.9.3",
-  "release": "Regra correta de faturas por contrato, competência e serviço",
+  "version": "3.10.0",
+  "release": "Início do Portal do Cliente e Modelo Rádio Essencial",
   "build": "2026-08-03",
   "modules": {
     "dashboard_operacional": true,
@@ -19,7 +19,8 @@
     "streaming_interesses": true,
     "ocorrencias": true,
     "gestao_comercial": true,
-    "sites_clientes": true
+    "sites_clientes": true,
+    "portal_cliente": true
   },
   "features": [
     "commercial-client-management",
@@ -49,9 +50,15 @@
     "stream-monitoring",
     "invoice-charge-types",
     "invoice-service-aware-duplicate-control",
-    "clear-duplicate-invoice-errors"
+    "clear-duplicate-invoice-errors",
+    "client-portal-access",
+    "radio-essencial-template",
+    "site-drafts",
+    "site-version-history",
+    "publication-request",
+    "admin-site-publication"
   ],
-  "name": "Gestão Comercial, Streaming e Sites",
-  "updatedAt": "2026-08-03T18:45:00Z",
-  "descricao": "Corrige duplicidade de faturas sem bloquear serviços legítimos com mesmo valor ou vencimento"
+  "name": "Commit 22.18 — Portal do Cliente",
+  "updatedAt": "2026-08-03T19:20:00Z",
+  "descricao": "Adiciona acesso individual, modelo Rádio Essencial, rascunhos, versões e publicação administrativa."
 }

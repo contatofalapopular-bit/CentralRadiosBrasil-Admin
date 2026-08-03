@@ -10,6 +10,7 @@ const ComercialAdmin = (() => {
     planejamento:"Planejamento", inativo:"Inativo", descontinuado:"Descontinuado",
     rascunho:"Rascunho", proposta_enviada:"Proposta enviada", aguardando_pagamento:"Aguardando pagamento",
     em_atraso:"Em atraso", configurando:"Configurando", nao_incluido:"Não incluído", publicado:"Publicado",
+    sem_rascunho:"Sem rascunho", aguardando_publicacao:"Aguardando publicação",
     aberta:"Aberta", parcial:"Parcial", paga:"Paga", vencida:"Vencida", cancelada:"Cancelada", estornada:"Estornada",
     mensalidade:"Mensalidade", implantacao:"Implantação", servico_adicional:"Serviço adicional", ajuste:"Ajuste", outro:"Outro",
     desenvolvimento:"Em desenvolvimento", disponivel:"Disponível", ativa:"Ativa", suspensa:"Suspensa", confirmado:"Confirmado"
@@ -29,6 +30,7 @@ const ComercialAdmin = (() => {
 
   function conectarEventos() {
     document.getElementById("comercial-refresh-button")?.addEventListener("click", carregarTudo);
+    document.getElementById("comercial-seed-model-button")?.addEventListener("click", instalarModeloRadioEssencial);
     document.querySelectorAll("[data-comercial-tab]").forEach(botao => botao.addEventListener("click", () => trocarAba(botao.dataset.comercialTab)));
     document.addEventListener("click", tratarClique);
     document.getElementById("comercial-modal-backdrop")?.addEventListener("click", e => { if (e.target.id === "comercial-modal-backdrop") fecharModal(); });
@@ -48,6 +50,9 @@ const ComercialAdmin = (() => {
     const tipo = acao.dataset.comercialAction;
     const id = acao.dataset.id;
     if (tipo.endsWith("-edit")) return abrirFormulario(tipo.replace("-edit", ""), id);
+    if (tipo === "client-access") return criarOuRedefinirAcessoCliente(id);
+    if (tipo === "site-content") return abrirConteudoSite(id);
+    if (tipo === "site-publish") return publicarSite(id);
     if (tipo === "contract-invoice") return gerarFaturaContrato(id);
     if (tipo === "invoice-pay") return abrirFormulario("pagamento", id);
     if (tipo === "invoice-detail") return abrirDetalheFatura(id);
@@ -127,7 +132,7 @@ const ComercialAdmin = (() => {
       <td>${escaparHtml([item.cidade,item.estado].filter(Boolean).join(" — ") || "—")}</td>
       <td><span class="comercial-badge ${item.status}">${rotuloStatus(item.status)}</span></td>
       <td>${numero(item.contratos_ativos)} contrato(s) • ${numero(item.sites)} site(s)</td>
-      <td><div class="comercial-row-actions"><button data-comercial-action="client-edit" data-id="${item.id}">Abrir</button></div></td>
+      <td><div class="comercial-row-actions"><button data-comercial-action="client-edit" data-id="${item.id}">Abrir</button><button data-comercial-action="client-access" data-id="${item.id}">Acesso</button></div></td>
     </tr>`, "Nenhum cliente cadastrado.");
   }
 
@@ -186,9 +191,9 @@ const ComercialAdmin = (() => {
       <td><strong>${escaparHtml(item.cliente_nome)}</strong><small>${escaparHtml(item.nome_radio || "")}</small></td>
       <td><strong>${escaparHtml(item.nome_site)}</strong><small>${escaparHtml(item.modelo_nome || "Modelo ainda não escolhido")}</small></td>
       <td>${escaparHtml(item.dominio_personalizado || item.subdominio || "Domínio não configurado")}</td>
-      <td>${numero((item.camposPermitidos || []).length)} campos permitidos</td>
+      <td>${numero((item.camposPermitidos || []).length)} campos<small>Publicação: ${rotuloStatus(item.status_publicacao || "sem_rascunho")}</small></td>
       <td><span class="comercial-badge ${item.status}">${rotuloStatus(item.status)}</span></td>
-      <td><div class="comercial-row-actions"><button data-comercial-action="site-edit" data-id="${item.id}">Editar</button></div></td>
+      <td><div class="comercial-row-actions"><button data-comercial-action="site-edit" data-id="${item.id}">Editar</button><button data-comercial-action="site-content" data-id="${item.id}">Conteúdo</button><button data-comercial-action="site-publish" data-id="${item.id}" ${item.status_publicacao === "publicado" ? "disabled" : ""}>Publicar</button></div></td>
     </tr>`, "Nenhum site de cliente preparado.");
   }
 
@@ -225,6 +230,10 @@ const ComercialAdmin = (() => {
     const form = document.getElementById("comercial-modal-form-fields");
     if (!form) return;
     form.innerHTML = formularioHtml(tipo, item);
+    const salvar = document.getElementById("comercial-modal-save");
+    const cancelar = document.getElementById("comercial-modal-cancel");
+    if (salvar) { salvar.hidden = false; salvar.textContent = "Salvar"; }
+    if (cancelar) cancelar.textContent = "Cancelar";
     document.getElementById("comercial-modal-backdrop")?.classList.remove("hidden");
     document.body.classList.add("modal-open");
     document.getElementById("close-comercial-modal")?.focus();
@@ -234,6 +243,10 @@ const ComercialAdmin = (() => {
     document.getElementById("comercial-modal-backdrop")?.classList.add("hidden");
     document.body.classList.remove("modal-open");
     estado.modalTipo = null; estado.modalId = null;
+    const salvar = document.getElementById("comercial-modal-save");
+    const cancelar = document.getElementById("comercial-modal-cancel");
+    if (salvar) { salvar.hidden = false; salvar.textContent = "Salvar"; }
+    if (cancelar) cancelar.textContent = "Cancelar";
   }
 
   function localizar(tipo, id) {
@@ -282,7 +295,7 @@ const ComercialAdmin = (() => {
     if (tipo === "invoice") return `<div class="comercial-form-grid"><label>Contrato<select name="contratoId" required ${i.id?"disabled":""}>${selectEntidades(estado.contratos,i.contrato_id,x=>`${x.numero} — ${x.cliente_nome}`)}</select></label><label>Competência<input name="competencia" type="month" value="${v(i.competencia)}" ${i.id?"disabled":""}></label><label>Tipo de cobrança<select name="tipoCobranca">${opcoes(["mensalidade","implantacao","servico_adicional","ajuste","outro"],i.tipo_cobranca||"mensalidade")}</select></label><label>Vencimento<input name="vencimento" type="date" value="${v(i.vencimento)}"></label><label>Valor (R$)<input name="valor" inputmode="decimal" value="${reais(i.valor_total_centavos)}"></label><label>Status<select name="status">${opcoes(["aberta","parcial","paga","vencida","cancelada","estornada"],i.status||"aberta")}</select></label><label>Forma prevista<input name="formaPrevista" value="${v(i.forma_prevista)}"></label><label class="full">Descrição do serviço<textarea name="descricao" placeholder="Ex.: Mensalidade do streaming, criação de arte, manutenção do site...">${v(i.descricao)}</textarea></label><p class="full comercial-modal-note">A duplicidade é verificada pelo contrato, competência e serviço. Vencimento e valor iguais são permitidos quando as cobranças representam serviços diferentes.</p></div>`;
     if (tipo === "pagamento") { const f=estado.faturas.find(x=>String(x.id)===String(estado.modalId))||{}; return `<p class="comercial-modal-note">Fatura ${escaparHtml(f.numero||"")} • saldo ${moeda(Math.max((f.valor_total_centavos||0)-(f.valor_pago_centavos||0),0))}</p><div class="comercial-form-grid"><label>Valor pago (R$)<input name="valor" required inputmode="decimal" value="${reais(Math.max((f.valor_total_centavos||0)-(f.valor_pago_centavos||0),0))}"></label><label>Forma<select name="forma">${opcoes(["pix","boleto","cartao","transferencia","dinheiro","outro"],"pix")}</select></label><label>Data<input name="pagoEm" type="datetime-local"></label><label>Referência / comprovante<input name="referencia"></label><label class="full">Observações<textarea name="observacoes"></textarea></label></div>`; }
     if (tipo === "model") return `<div class="comercial-form-grid"><label>Nome do modelo<input name="nome" required value="${v(i.nome)}"></label><label>Código interno<input name="codigo" value="${v(i.codigo)}"></label><label>Categoria<input name="categoria" value="${v(i.categoria)}" placeholder="Essencial, Notícias, Gospel..."></label><label>Status<select name="status">${opcoes(["planejamento","desenvolvimento","disponivel","descontinuado"],i.status||"planejamento")}</select></label><label class="full">URL de prévia<input name="previewUrl" type="url" value="${v(i.preview_url)}"></label><label class="full">Descrição<textarea name="descricao">${v(i.descricao)}</textarea></label><div class="full comercial-checks">${checkboxesCampos(i.recursosEditaveis||[])}</div></div>`;
-    if (tipo === "site") return `<div class="comercial-form-grid"><label>Cliente<select name="clienteId" required>${selectEntidades(estado.clientes,i.cliente_id,x=>`${x.nome}${x.nome_radio?` — ${x.nome_radio}`:""}`)}</select></label><label>Contrato<select name="contratoId"><option value="">Sem contrato vinculado</option>${selectEntidades(estado.contratos,i.contrato_id,x=>`${x.numero} — ${x.cliente_nome}`,false)}</select></label><label>Modelo<select name="modeloId"><option value="">Modelo ainda não escolhido</option>${selectEntidades(estado.modelos,i.modelo_id,x=>`${x.nome} (${rotuloStatus(x.status)})`,false)}</select></label><label>Status<select name="status">${opcoes(["planejamento","configurando","rascunho","publicado","suspenso","cancelado"],i.status||"planejamento")}</select></label><label>Nome do site<input name="nomeSite" required value="${v(i.nome_site)}"></label><label>Slug<input name="slug" ${i.id?"disabled":""} value="${v(i.slug)}" placeholder="radio-cidade"></label><label>Subdomínio<input name="subdominio" value="${v(i.subdominio)}" placeholder="radio.centralradiosbrasil.com.br"></label><label>Domínio próprio<input name="dominioPersonalizado" value="${v(i.dominio_personalizado)}"></label><div class="full comercial-checks">${checkboxesCampos(i.camposPermitidos||[])}</div><label class="full">Observações<textarea name="observacoes">${v(i.observacoes)}</textarea></label></div>`;
+    if (tipo === "site") return `<div class="comercial-form-grid"><label>Cliente<select name="clienteId" required>${selectEntidades(estado.clientes,i.cliente_id,x=>`${x.nome}${x.nome_radio?` — ${x.nome_radio}`:""}`)}</select></label><label>Contrato<select name="contratoId"><option value="">Sem contrato vinculado</option>${selectEntidades(estado.contratos,i.contrato_id,x=>`${x.numero} — ${x.cliente_nome}`,false)}</select></label><label>Modelo<select name="modeloId"><option value="">Modelo ainda não escolhido</option>${selectEntidades(estado.modelos,i.modelo_id,x=>`${x.nome} (${rotuloStatus(x.status)})`,false)}</select></label><label>Status<select name="status">${opcoes(["planejamento","configurando","rascunho","publicado","suspenso","cancelado"],i.status||"planejamento")}</select></label><label>Nome do site<input name="nomeSite" required value="${v(i.nome_site)}"></label><label>Slug<input name="slug" ${i.id?"disabled":""} value="${v(i.slug)}" placeholder="radio-cidade"></label><label>Subdomínio<input name="subdominio" value="${v(i.subdominio)}" placeholder="radio.centralradiosbrasil.com.br"></label><label>Domínio próprio<input name="dominioPersonalizado" value="${v(i.dominio_personalizado)}"></label><label class="full">URL técnica do stream<input name="streamUrl" type="url" value="${v(i.stream_url)}" placeholder="https://servidor:porta/stream"></label><div class="full comercial-checks">${checkboxesCampos(i.camposPermitidos||[])}</div><label class="full">Observações<textarea name="observacoes">${v(i.observacoes)}</textarea></label></div>`;
     if (tipo === "revenda") return `<div class="comercial-form-grid"><label>Fornecedor<input name="fornecedor" required value="${v(i.fornecedor)}" placeholder="SamHost"></label><label>Plano do fornecedor<input name="nomePlano" value="${v(i.nome_plano)}"></label><label>Limite de contas<input name="limiteContas" type="number" min="0" value="${v(i.limite_contas)}"></label><label>Custo mensal (R$)<input name="custoMensal" inputmode="decimal" value="${reais(i.custo_mensal_centavos)}"></label><label>Dia de vencimento<input name="diaVencimento" type="number" min="1" max="28" value="${v(i.dia_vencimento)}"></label><label>Status<select name="status">${opcoes(["planejamento","ativa","suspensa","cancelada"],i.status||"planejamento")}</select></label><label class="full">URL do painel<input name="painelUrl" type="url" value="${v(i.painel_url)}"></label><label class="full">Observações<textarea name="observacoes">${v(i.observacoes)}</textarea></label></div>`;
     return "";
   }
@@ -330,13 +343,71 @@ const ComercialAdmin = (() => {
     catch(e){ alert(e.message||"Não foi possível estornar."); }
   }
 
+  async function instalarModeloRadioEssencial() {
+    if (!confirm("Instalar o primeiro modelo oficial Rádio Essencial?")) return;
+    try {
+      const retorno = await API.criarModeloRadioEssencial();
+      alert(retorno.criado ? "Modelo Rádio Essencial instalado com sucesso." : "O modelo Rádio Essencial já estava instalado.");
+      await carregarTudo(); trocarAba("sites");
+    } catch (erro) { alert(erro.message || "Não foi possível instalar o modelo."); }
+  }
+
+  async function criarOuRedefinirAcessoCliente(id) {
+    const cliente = localizar("client", id);
+    if (!cliente) return;
+    const acessoAtual = await API.obterAcessoClienteComercial(id).catch(() => null);
+    const verbo = acessoAtual?.acesso ? "redefinir" : "criar";
+    if (!confirm(`${verbo === "criar" ? "Criar" : "Redefinir"} o acesso ao Portal do Cliente para ${cliente.nome}?`)) return;
+    try {
+      const retorno = await API.gerenciarAcessoClienteComercial(id,{acao:"criar_redefinir",email:cliente.email});
+      alert(`ACESSO DO CLIENTE\n\nPortal: ${retorno.portalUrl || CONFIG.CLIENT_PORTAL_URL}\nE-mail: ${retorno.email}\nSenha temporária: ${retorno.senhaTemporaria}\n\nCopie estes dados agora. A senha não será exibida novamente.`);
+      await carregarTudo();
+    } catch (erro) { alert(erro.message || "Não foi possível preparar o acesso."); }
+  }
+
+  async function abrirConteudoSite(id) {
+    try {
+      const retorno = await API.detalharConteudoSiteComercial(id);
+      const site = retorno.site || {};
+      const rascunho = site.conteudoRascunho || {};
+      const publicado = site.conteudoPublicado || null;
+      estado.modalTipo = "site-content"; estado.modalId = id;
+      texto("comercial-modal-title", `Conteúdo — ${site.nome_site || "site"}`);
+      texto("comercial-modal-subtitle", `${site.cliente_nome || "Cliente"} • ${rotuloStatus(site.status_publicacao || "sem_rascunho")}`);
+      const campos = Object.entries(rascunho).map(([chave,valor]) => `<div class="comercial-content-item"><strong>${escaparHtml(camposSite[chave] || chave)}</strong><span>${escaparHtml(resumirConteudo(valor))}</span></div>`).join("");
+      const versoes = (retorno.versoes || []).map(v => `<li>Versão ${v.numero} — ${rotuloStatus(v.status)} — ${formatarData(v.criado_em)}</li>`).join("");
+      document.getElementById("comercial-modal-form-fields").innerHTML = `<section class="comercial-content-summary"><div class="comercial-modal-note"><strong>Rascunho:</strong> ${Object.keys(rascunho).length} campo(s) • <strong>Publicado:</strong> ${publicado ? "sim" : "não"}</div>${campos || '<p class="comercial-empty">Nenhum conteúdo salvo.</p>'}<h3>Histórico de versões</h3><ul class="comercial-version-list">${versoes || '<li>Nenhuma versão registrada.</li>'}</ul></section>`;
+      const salvar = document.getElementById("comercial-modal-save");
+      const cancelar = document.getElementById("comercial-modal-cancel");
+      if (salvar) salvar.hidden = true;
+      if (cancelar) cancelar.textContent = "Fechar";
+      document.getElementById("comercial-modal-backdrop")?.classList.remove("hidden"); document.body.classList.add("modal-open");
+    } catch (erro) { alert(erro.message || "Não foi possível abrir o conteúdo."); }
+  }
+
+  async function publicarSite(id) {
+    const site = localizar("site", id);
+    if (!site) return;
+    if (!confirm(`Publicar agora o rascunho de ${site.nome_site}?`)) return;
+    try { const retorno = await API.publicarSiteComercial(id); alert(retorno.mensagem || "Site publicado."); await carregarTudo(); trocarAba("sites"); }
+    catch (erro) { alert(erro.message || "Não foi possível publicar o site."); }
+  }
+
+  function resumirConteudo(valor) {
+    if (valor == null) return "—";
+    if (typeof valor === "string") return valor.length > 120 ? `${valor.slice(0,120)}…` : valor;
+    if (Array.isArray(valor)) return `${valor.length} item(ns)`;
+    if (typeof valor === "object") return Object.values(valor).filter(Boolean).slice(0,4).join(" • ") || "Configurado";
+    return String(valor);
+  }
+
   function payloadCliente(d){ return {nome:d.get("nome"),nomeRadio:d.get("nomeRadio"),email:d.get("email"),whatsapp:d.get("whatsapp"),cpfCnpj:d.get("cpfCnpj"),cidade:d.get("cidade"),estado:d.get("estado"),status:d.get("status"),observacoes:d.get("observacoes")}; }
   function payloadPlano(d){ return {nome:d.get("nome"),codigo:d.get("codigo"),status:d.get("status"),periodicidade:d.get("periodicidade"),valorCentavos:centavos(d.get("valor")),taxaImplantacaoCentavos:centavos(d.get("taxaImplantacao")),limiteOuvintes:d.get("limiteOuvintes"),bitrateKbps:d.get("bitrateKbps"),autodjGb:d.get("autodjGb"),siteIncluido:d.has("siteIncluido"),pwaIncluido:d.has("pwaIncluido"),alexaIncluida:d.has("alexaIncluida"),recursos:String(d.get("recursos")||"").split(",").map(x=>x.trim()).filter(Boolean),descricao:d.get("descricao")}; }
   function payloadContrato(d){ return {clienteId:d.get("clienteId"),planoId:d.get("planoId"),status:d.get("status"),periodicidade:d.get("periodicidade"),valorCentavos:centavos(d.get("valor")),taxaImplantacaoCentavos:centavos(d.get("taxaImplantacao")),dataInicio:d.get("dataInicio"),diaVencimento:d.get("diaVencimento"),streamingStatus:d.get("streamingStatus"),siteStatus:d.get("siteStatus"),renovacaoAutomatica:d.has("renovacaoAutomatica"),gerarPrimeiraFatura:d.has("gerarPrimeiraFatura"),observacoes:d.get("observacoes")}; }
   function payloadFatura(d){ return {contratoId:d.get("contratoId"),competencia:d.get("competencia"),tipoCobranca:d.get("tipoCobranca"),vencimento:d.get("vencimento"),valorCentavos:centavos(d.get("valor")),status:d.get("status"),formaPrevista:d.get("formaPrevista"),descricao:d.get("descricao")}; }
   function payloadPagamento(d){ return {valorCentavos:centavos(d.get("valor")),forma:d.get("forma"),pagoEm:d.get("pagoEm"),referencia:d.get("referencia"),observacoes:d.get("observacoes")}; }
   function payloadModelo(d){ return {nome:d.get("nome"),codigo:d.get("codigo"),categoria:d.get("categoria"),status:d.get("status"),previewUrl:d.get("previewUrl"),descricao:d.get("descricao"),recursosEditaveis:d.getAll("camposSite")}; }
-  function payloadSite(d){ return {clienteId:d.get("clienteId"),contratoId:d.get("contratoId"),modeloId:d.get("modeloId"),status:d.get("status"),nomeSite:d.get("nomeSite"),slug:d.get("slug"),subdominio:d.get("subdominio"),dominioPersonalizado:d.get("dominioPersonalizado"),camposPermitidos:d.getAll("camposSite"),observacoes:d.get("observacoes")}; }
+  function payloadSite(d){ return {clienteId:d.get("clienteId"),contratoId:d.get("contratoId"),modeloId:d.get("modeloId"),status:d.get("status"),nomeSite:d.get("nomeSite"),slug:d.get("slug"),subdominio:d.get("subdominio"),dominioPersonalizado:d.get("dominioPersonalizado"),streamUrl:d.get("streamUrl"),camposPermitidos:d.getAll("camposSite"),observacoes:d.get("observacoes")}; }
   function payloadRevenda(d){ return {fornecedor:d.get("fornecedor"),nomePlano:d.get("nomePlano"),limiteContas:d.get("limiteContas"),custoMensalCentavos:centavos(d.get("custoMensal")),diaVencimento:d.get("diaVencimento"),status:d.get("status"),painelUrl:d.get("painelUrl"),observacoes:d.get("observacoes")}; }
 
   async function converterInteresse(interesse) {
@@ -349,7 +420,7 @@ const ComercialAdmin = (() => {
   function checkboxesCampos(selecionados){ const set=new Set(selecionados||[]); return Object.entries(camposSite).map(([id,label])=>`<label><input type="checkbox" name="camposSite" value="${id}" ${set.has(id)?"checked":""}> ${label}</label>`).join(""); }
   function v(x){ return escaparHtml(x??""); }
   function rotuloStatus(s){ return statusRotulos[s]||String(s||"—").replaceAll("_"," "); }
-  function rotuloAcao(a){ return ({cliente_criado:"Cliente criado",cliente_atualizado:"Cliente atualizado",plano_criado:"Plano criado",plano_atualizado:"Plano atualizado",contrato_criado:"Contrato criado",contrato_atualizado:"Contrato atualizado",fatura_gerada:"Fatura gerada",fatura_atualizada:"Fatura atualizada",pagamento_registrado:"Pagamento registrado",pagamento_estornado:"Pagamento estornado",modelo_criado:"Modelo cadastrado",modelo_atualizado:"Modelo atualizado",site_criado:"Site de cliente criado",site_atualizado:"Site de cliente atualizado",revenda_criada:"Infraestrutura cadastrada",revenda_atualizada:"Infraestrutura atualizada"})[a]||String(a||"Atualização").replaceAll("_"," "); }
+  function rotuloAcao(a){ return ({cliente_criado:"Cliente criado",cliente_atualizado:"Cliente atualizado",plano_criado:"Plano criado",plano_atualizado:"Plano atualizado",contrato_criado:"Contrato criado",contrato_atualizado:"Contrato atualizado",fatura_gerada:"Fatura gerada",fatura_atualizada:"Fatura atualizada",pagamento_registrado:"Pagamento registrado",pagamento_estornado:"Pagamento estornado",modelo_criado:"Modelo cadastrado",modelo_atualizado:"Modelo atualizado",site_criado:"Site de cliente criado",site_atualizado:"Site de cliente atualizado",acesso_cliente_criado:"Acesso do cliente criado",acesso_cliente_redefinido:"Acesso do cliente redefinido",acesso_cliente_desativado:"Acesso do cliente desativado",login_cliente:"Login do cliente",senha_cliente_alterada:"Senha do cliente alterada",rascunho_cliente_salvo:"Rascunho salvo pelo cliente",publicacao_solicitada:"Publicação solicitada",site_publicado:"Site publicado",revenda_criada:"Infraestrutura cadastrada",revenda_atualizada:"Infraestrutura atualizada"})[a]||String(a||"Atualização").replaceAll("_"," "); }
   function numero(n){ return Number(n||0); }
   function moeda(c){ return new Intl.NumberFormat("pt-BR",{style:"currency",currency:"BRL"}).format(Number(c||0)/100); }
   function reais(c){ return c==null||c===""?"":(Number(c)/100).toFixed(2).replace(".",","); }
