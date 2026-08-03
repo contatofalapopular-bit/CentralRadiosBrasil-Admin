@@ -216,7 +216,9 @@ const ComercialAdmin = (() => {
 
   function abrirFormulario(tipo, id = null) {
     estado.modalTipo = tipo; estado.modalId = id;
-    const item = localizar(tipo, id);
+    // Em novos registros não existe item ainda. Usar um objeto vazio evita
+    // erros ao montar os formulários (ex.: tentar ler fornecedor de null).
+    const item = id ? (localizar(tipo, id) || {}) : {};
     texto("comercial-modal-title", tituloModal(tipo, Boolean(id)));
     texto("comercial-modal-subtitle", subtituloModal(tipo));
     const form = document.getElementById("comercial-modal-form-fields");
@@ -240,7 +242,9 @@ const ComercialAdmin = (() => {
 
   function tituloModal(tipo, editando) {
     const nomes = { client:"cliente", plan:"plano", contract:"contrato", invoice:"fatura", pagamento:"pagamento", model:"modelo de site", site:"site do cliente", revenda:"infraestrutura de revenda" };
-    return `${editando ? "Editar" : "Novo"} ${nomes[tipo] || "registro"}`;
+    if (editando) return `Editar ${nomes[tipo] || "registro"}`;
+    const femininos = new Set(["invoice", "revenda"]);
+    return `${femininos.has(tipo) ? "Nova" : "Novo"} ${nomes[tipo] || "registro"}`;
   }
   function subtituloModal(tipo) {
     const textos = {

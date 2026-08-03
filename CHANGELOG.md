@@ -1,3 +1,12 @@
+# Changelog
+
+## 3.9.1 — Correção dos botões da Gestão Comercial
+
+- Corrige a abertura dos formulários de novos registros.
+- Valida os botões Novo cliente, Novo plano, Novo contrato, Nova fatura, Novo modelo, Preparar site e Nova infraestrutura.
+- Evita erro JavaScript ao montar formulários sem registro existente.
+- Preserva Worker 1.13.0, dados, rotas e demais módulos do Painel.
+
 ## 3.8.0 — Dashboard Operacional e Alertas
 
 - Nova visão operacional logo após o login.
