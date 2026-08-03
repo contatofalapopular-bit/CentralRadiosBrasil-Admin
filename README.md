@@ -1,4 +1,4 @@
-# Central Rádios Brasil — Painel Administrativo v3.6.0
+# Central Rádios Brasil — Painel Administrativo v3.6.1
 
 ## Etapa 2.1 — Sessão administrativa segura
 
@@ -12,7 +12,7 @@
 ## Publicação
 
 1. Confirme que o Worker principal está na versão 1.10.0 ou superior.
-2. Publique este Painel v3.6.0.
+2. Publique este Painel v3.6.1.
 3. Entre no módulo Solicitações e teste a sessão.
 4. No Worker, crie a variável de texto `ADMIN_SESSION_REQUIRED` com valor `true`.
 
@@ -28,7 +28,7 @@ Não revele nem salve a chave administrativa em arquivos do repositório.
 - Depende do Worker separado `crb-email` e do bucket R2 privado.
 
 
-## Gestão de interessados do Streaming CRB v3.6.0
+## Gestão de interessados do Streaming CRB v3.6.1
 
 - Nova aba **Streaming CRB** no menu administrativo.
 - Lista os pré-cadastros gravados no D1 pela página `/streaming/`.

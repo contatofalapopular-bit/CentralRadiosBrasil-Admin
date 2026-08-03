@@ -285,3 +285,29 @@
     grid-column: auto;
   }
 }
+
+/* v3.6.1 — Correção de contraste dos campos do modal Streaming CRB */
+.streaming-modal-form select,
+.streaming-modal-form textarea {
+  background: #ffffff;
+  color: #0f172a;
+  caret-color: #0f172a;
+  -webkit-text-fill-color: #0f172a;
+}
+
+.streaming-modal-form select option {
+  background: #ffffff;
+  color: #0f172a;
+}
+
+.streaming-modal-form textarea::placeholder {
+  color: #64748b;
+  opacity: 1;
+}
+
+.streaming-modal-form select:focus-visible,
+.streaming-modal-form textarea:focus-visible {
+  background: #ffffff;
+  color: #0f172a;
+  -webkit-text-fill-color: #0f172a;
+}

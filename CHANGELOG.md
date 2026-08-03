@@ -1,5 +1,12 @@
 # Changelog
 
+## v3.6.1 — Correção visual do modal Streaming CRB
+
+- Corrigido o contraste do campo Status comercial.
+- Corrigida a visibilidade do texto em Observações administrativas.
+- Campos agora usam fundo claro e texto escuro em todos os estados, inclusive foco e opções do seletor.
+- Nenhuma alteração no Worker, no D1 ou no fluxo de atualização dos interessados.
+
 ## v3.6.0 — Gestão de Interessados do Streaming CRB
 
 - Criada a aba Streaming CRB no Painel Administrativo.
