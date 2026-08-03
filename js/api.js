@@ -267,6 +267,26 @@ const API = {
     );
   },
 
+  listarInteressesStreaming({ status = "", busca = "", limit = 500 } = {}) {
+    const parametros = new URLSearchParams({ limit: String(limit) });
+    if (status) parametros.set("status", status);
+    if (busca) parametros.set("busca", busca);
+
+    return this.worker(
+      `/api/admin/streaming/interesses?${parametros.toString()}`
+    );
+  },
+
+  atualizarInteresseStreaming(id, dados) {
+    return this.worker(
+      `/api/admin/streaming/interesses/${encodeURIComponent(id)}`,
+      {
+        method: "PATCH",
+        body: JSON.stringify(dados)
+      }
+    );
+  },
+
   listarMonitoramentoStreams() {
     return this.worker(
       "/api/admin/streams/status"
@@ -278,5 +298,104 @@ const API = {
       "/api/admin/streams/monitorar",
       { method: "POST" }
     );
+  },
+
+  emailWorkerUrl() {
+    return String(CONFIG.EMAIL_WORKER_URL || "").replace(/\/+$/, "");
+  },
+
+  async emailWorker(caminho, opcoes = {}) {
+    if (!this.emailWorkerUrl()) {
+      throw new Error("A URL do Worker de e-mail ainda não foi configurada.");
+    }
+
+    const controller = new AbortController();
+    const timer = setTimeout(() => controller.abort(), CONFIG.REQUEST_TIMEOUT_MS);
+    const headers = new Headers(opcoes.headers || {});
+    const token = this.chaveAdmin();
+
+    if (!token) {
+      throw new Error("Entre no Painel Administrativo antes de acessar os e-mails.");
+    }
+
+    headers.set("Authorization", `Bearer ${token}`);
+
+    if (opcoes.body && !(opcoes.body instanceof FormData) && !headers.has("Content-Type")) {
+      headers.set("Content-Type", "application/json");
+    }
+
+    try {
+      const resposta = await fetch(`${this.emailWorkerUrl()}${caminho}`, {
+        ...opcoes,
+        headers,
+        cache: "no-store",
+        signal: controller.signal
+      });
+
+      const tipo = resposta.headers.get("Content-Type") || "";
+      if (!tipo.includes("application/json")) {
+        if (!resposta.ok) throw new Error(`O módulo de e-mail respondeu com HTTP ${resposta.status}.`);
+        return resposta;
+      }
+
+      const dados = await resposta.json();
+      if (!resposta.ok || dados?.ok === false) {
+        const erro = new Error(dados?.erro || `O módulo de e-mail respondeu com HTTP ${resposta.status}.`);
+        erro.status = resposta.status;
+        erro.dados = dados;
+        throw erro;
+      }
+      return dados;
+    } catch (erro) {
+      if (erro.name === "AbortError") {
+        throw new Error("O módulo de e-mail demorou mais que o permitido.");
+      }
+      throw erro;
+    } finally {
+      clearTimeout(timer);
+    }
+  },
+
+  resumoEmails() {
+    return this.emailWorker("/api/admin/emails/resumo");
+  },
+
+  listarEmails({ caixa = "entrada", busca = "" } = {}) {
+    const params = new URLSearchParams({ caixa, limit: "150" });
+    if (busca) params.set("busca", busca);
+    return this.emailWorker(`/api/admin/emails?${params.toString()}`);
+  },
+
+  detalharEmail(id) {
+    return this.emailWorker(`/api/admin/emails/${encodeURIComponent(id)}`);
+  },
+
+  atualizarEmail(id, dados) {
+    return this.emailWorker(`/api/admin/emails/${encodeURIComponent(id)}`, {
+      method: "PATCH",
+      body: JSON.stringify(dados)
+    });
+  },
+
+  enviarEmail(formData) {
+    return this.emailWorker("/api/admin/emails/enviar", {
+      method: "POST",
+      body: formData
+    });
+  },
+
+  async baixarAnexo(mensagemId, anexoId) {
+    const resposta = await this.emailWorker(
+      `/api/admin/emails/${encodeURIComponent(mensagemId)}/anexos/${encodeURIComponent(anexoId)}`
+    );
+    const blob = await resposta.blob();
+    const disposition = resposta.headers.get("Content-Disposition") || "";
+    const nome = disposition.match(/filename="?([^";]+)"?/i)?.[1] || "anexo";
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = nome;
+    link.click();
+    setTimeout(() => URL.revokeObjectURL(url), 1000);
   }
 };

@@ -6,6 +6,8 @@ let streamsInicializados = false;
 let emissorasInicializadas = false;
 let publicacaoInicializada = false;
 let solicitacoesInicializadas = false;
+let emailsInicializados = false;
+let streamingInteressesInicializados = false;
 
 document.addEventListener("DOMContentLoaded", () => {
   texto("app-version", `v${CONFIG.VERSION}`);
@@ -21,6 +23,10 @@ document.addEventListener("DOMContentLoaded", () => {
         carregarDashboard(true);
       } else if (rotaAtual() === "solicitacoes") {
         SolicitacoesAdmin.carregar();
+      } else if (rotaAtual() === "emails") {
+        EmailsAdmin.carregar();
+      } else if (rotaAtual() === "streaming-interesses") {
+        StreamingInteressesAdmin.carregar();
       } else if (rotaAtual() === "radios") {
         RadiosAdmin.carregar();
       } else if (rotaAtual() === "estados") {
@@ -93,6 +99,8 @@ async function renderizarRota() {
     dashboard: document.getElementById("dashboard-page"),
     solicitacoes:
       document.getElementById("solicitacoes-page"),
+    emails: document.getElementById("emails-page"),
+    "streaming-interesses": document.getElementById("streaming-interesses-page"),
     radios: document.getElementById("radios-page"),
     estados: document.getElementById("estados-page"),
     categorias: document.getElementById("categorias-page"),
@@ -131,7 +139,35 @@ async function renderizarRota() {
       );
     });
 
-  if (rotaFinal === "solicitacoes") {
+  if (rotaFinal === "streaming-interesses") {
+    texto("page-title", "Streaming CRB");
+
+    texto(
+      "page-subtitle",
+      "Pré-cadastros e oportunidades comerciais do serviço de streaming"
+    );
+
+    if (!streamingInteressesInicializados) {
+      streamingInteressesInicializados = true;
+      await StreamingInteressesAdmin.iniciar();
+    } else {
+      await StreamingInteressesAdmin.carregar();
+    }
+  } else if (rotaFinal === "emails") {
+    texto("page-title", "E-mails");
+
+    texto(
+      "page-subtitle",
+      "Atendimento por suporte@centralradiosbrasil.com.br"
+    );
+
+    if (!emailsInicializados) {
+      emailsInicializados = true;
+      await EmailsAdmin.iniciar();
+    } else {
+      await EmailsAdmin.carregar();
+    }
+  } else if (rotaFinal === "solicitacoes") {
     texto("page-title", "Solicitações");
 
     texto(

@@ -7,16 +7,18 @@
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
   <meta http-equiv="Pragma" content="no-cache">
   <meta http-equiv="Expires" content="0">
-  <title>Central Rádios Brasil — Painel Administrativo v3.3.0</title>
+  <title>Central Rádios Brasil — Painel Administrativo v3.6.0</title>
 
-  <link rel="stylesheet" href="style.css?v=3.3.0">
-  <link rel="stylesheet" href="css/dashboard.css?v=3.3.0">
-  <link rel="stylesheet" href="css/radios.css?v=3.3.0">
-  <link rel="stylesheet" href="css/streams.css?v=3.3.0">
-  <link rel="stylesheet" href="css/emissoras.css?v=3.3.0">
-  <link rel="stylesheet" href="css/solicitacoes.css?v=3.3.0">
+  <link rel="stylesheet" href="style.css?v=3.6.0">
+  <link rel="stylesheet" href="css/dashboard.css?v=3.6.0">
+  <link rel="stylesheet" href="css/radios.css?v=3.6.0">
+  <link rel="stylesheet" href="css/streams.css?v=3.6.0">
+  <link rel="stylesheet" href="css/emissoras.css?v=3.6.0">
+  <link rel="stylesheet" href="css/solicitacoes.css?v=3.6.0">
+  <link rel="stylesheet" href="css/emails.css?v=3.6.0">
+  <link rel="stylesheet" href="css/streaming-interesses.css?v=3.6.0">
 </head>
-<body data-app-version="3.3.0" data-build="alteracoes-monitoramento">
+<body data-app-version="3.6.0" data-build="streaming-interesses-email">
 <div class="app-shell">
   <aside class="sidebar">
     <div class="brand">
@@ -30,6 +32,8 @@
     <nav class="main-nav">
       <a class="nav-link active" data-route="dashboard" href="#/dashboard">🏠 Dashboard</a>
       <a class="nav-link" data-route="solicitacoes" href="#/solicitacoes">📥 Solicitações</a>
+      <a class="nav-link" data-route="streaming-interesses" href="#/streaming-interesses">🚀 Streaming CRB</a>
+      <a class="nav-link" data-route="emails" href="#/emails">✉️ E-mails <span id="emails-nav-count" class="emails-nav-count hidden"></span></a>
       <a class="nav-link" data-route="emissoras" href="#/emissoras">🏢 Emissoras</a>
         <a class="nav-link" data-route="publicacao" href="#/publicacao">📤 Publicação</a>
       <a class="nav-link" data-route="radios" href="#/radios">📻 Rádios</a>
@@ -858,6 +862,134 @@
           </div>
         </section>
       </section>
+      <section id="streaming-interesses-page" class="hidden">
+        <div class="radios-toolbar streaming-toolbar">
+          <div>
+            <span id="streaming-status-badge" class="status-badge loading">Aguardando autenticação</span>
+            <h2>Interessados no Streaming CRB</h2>
+            <p>
+              Acompanhe os pré-cadastros enviados pela página comercial e conduza cada oportunidade até a contratação.
+              <strong id="streaming-visible-count">0</strong> registros exibidos.
+            </p>
+          </div>
+          <div class="toolbar-actions">
+            <a class="secondary-button" href="https://centralradiosbrasil.com.br/streaming/" target="_blank" rel="noopener">↗ Abrir página pública</a>
+            <button id="streaming-refresh-button" type="button" class="primary-button">↻ Atualizar interessados</button>
+          </div>
+        </div>
+
+        <section class="streaming-kpis" aria-label="Resumo dos interessados no Streaming CRB">
+          <article><span>Total</span><strong id="streaming-total-count">0</strong></article>
+          <article><span>Novos</span><strong id="streaming-new-count">0</strong></article>
+          <article><span>Contatados</span><strong id="streaming-contacted-count">0</strong></article>
+          <article><span>Qualificados</span><strong id="streaming-qualified-count">0</strong></article>
+          <article><span>Convertidos</span><strong id="streaming-converted-count">0</strong></article>
+        </section>
+
+        <section class="streaming-filters" aria-label="Filtros dos pré-cadastros">
+          <label>
+            Buscar interessado
+            <input id="streaming-search" type="search" placeholder="Nome, e-mail, projeto ou protocolo" autocomplete="off">
+          </label>
+          <label>
+            Status comercial
+            <select id="streaming-status-filter">
+              <option value="">Todos os status</option>
+              <option value="novo">Novos</option>
+              <option value="contatado">Contatados</option>
+              <option value="qualificado">Qualificados</option>
+              <option value="convertido">Convertidos</option>
+              <option value="arquivado">Arquivados</option>
+            </select>
+          </label>
+        </section>
+
+        <section class="table-card">
+          <div class="table-scroll">
+            <table class="radios-table streaming-table">
+              <thead>
+                <tr>
+                  <th>Protocolo</th>
+                  <th>Interessado</th>
+                  <th>Projeto</th>
+                  <th>Localização</th>
+                  <th>Recursos</th>
+                  <th>Status</th>
+                  <th>Recebido em</th>
+                  <th>Ações</th>
+                </tr>
+              </thead>
+              <tbody id="streaming-table-body">
+                <tr><td colspan="8" class="streaming-empty">Carregando interessados…</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+      </section>
+
+<section id="emails-page" class="hidden">
+        <div class="radios-toolbar emails-toolbar">
+          <div>
+            <span id="emails-status-badge" class="status-badge loading">Aguardando conexão</span>
+            <h2>Central de e-mails</h2>
+            <p><strong id="emails-visible-count">0</strong> mensagens exibidas.</p>
+          </div>
+          <div class="toolbar-actions">
+            <button id="emails-compose-button" type="button" class="primary-button">✉️ Escrever e-mail</button>
+            <button id="emails-refresh-button" type="button" class="secondary-button">↻ Atualizar</button>
+          </div>
+        </div>
+
+        <p id="emails-mode-note" class="emails-mode-note testing">
+          Modo de testes: respostas limitadas ao destinatário verificado.
+        </p>
+
+        <section class="emails-layout" aria-label="Gerenciador de e-mails">
+          <nav class="emails-folders" aria-label="Pastas de e-mail">
+            <button class="emails-folder active" type="button" data-email-box="entrada"><span>📥 Entrada</span><strong id="emails-count-inbox">0</strong></button>
+            <button class="emails-folder" type="button" data-email-box="enviados"><span>📤 Enviados</span><strong id="emails-count-sent">0</strong></button>
+            <button class="emails-folder" type="button" data-email-box="arquivados"><span>🗃️ Arquivados</span><strong id="emails-count-archived">0</strong></button>
+            <button class="emails-folder" type="button" data-email-box="lixeira"><span>🗑️ Lixeira</span><strong id="emails-count-trash">0</strong></button>
+            <div class="emails-folder" aria-label="Mensagens não lidas"><span>🔵 Não lidas</span><strong id="emails-count-unread">0</strong></div>
+          </nav>
+
+          <div class="emails-list-panel">
+            <label class="emails-search-wrap">
+              <span class="sr-only">Pesquisar e-mails</span>
+              <input id="emails-search" type="search" placeholder="Pesquisar por remetente, assunto ou conteúdo">
+            </label>
+            <div id="emails-list" class="emails-list" role="list"></div>
+          </div>
+
+          <article id="email-reader" class="email-reader">
+            <div id="email-reader-empty" class="email-reader-empty">
+              <div><strong>Selecione uma mensagem</strong><p>O conteúdo aparecerá nesta área.</p></div>
+            </div>
+            <div id="email-reader-content" class="hidden">
+              <header class="email-reader-header">
+                <span class="status-badge success">Mensagem</span>
+                <h2 id="email-reader-subject">Assunto</h2>
+                <p id="email-reader-from"></p>
+                <time id="email-reader-date"></time>
+              </header>
+              <div class="email-reader-actions">
+                <button id="email-reply-button" type="button" class="primary-button">↩ Responder</button>
+                <button id="email-unread-button" type="button" class="secondary-button">Marcar como não lida</button>
+                <button id="email-archive-button" type="button" class="secondary-button">Arquivar</button>
+                <button id="email-trash-button" type="button" class="danger-button">Lixeira</button>
+                <button id="email-restore-button" type="button" class="secondary-button hidden">Restaurar</button>
+              </div>
+              <pre id="email-reader-body" class="email-reader-body"></pre>
+              <div id="email-attachments" class="email-attachments"></div>
+              <section>
+                <h3>Conversa</h3>
+                <div id="email-thread" class="email-thread"></div>
+              </section>
+            </div>
+          </article>
+        </section>
+      </section>
+
 <section id="configuracoes-page" class="hidden">
   <div class="radios-toolbar">
     <div>
@@ -924,6 +1056,61 @@
     
     </main>
   </div>
+</div>
+
+
+<div id="streaming-modal-backdrop" class="modal-backdrop hidden">
+  <section class="modal-card streaming-modal-card" role="dialog" aria-modal="true" aria-labelledby="streaming-modal-title">
+    <div class="modal-header">
+      <div>
+        <span id="streaming-modal-protocol">CRB-STR</span>
+        <h2 id="streaming-modal-title">Interessado no Streaming CRB</h2>
+      </div>
+      <button id="close-streaming-modal" type="button" class="close-button" aria-label="Fechar">×</button>
+    </div>
+
+    <dl class="streaming-modal-summary">
+      <div><dt>E-mail</dt><dd id="streaming-detail-email">—</dd></div>
+      <div><dt>WhatsApp</dt><dd id="streaming-detail-whatsapp">—</dd></div>
+      <div><dt>Localização</dt><dd id="streaming-detail-location">—</dd></div>
+      <div><dt>Nome do projeto</dt><dd id="streaming-detail-project">—</dd></div>
+      <div><dt>Situação atual</dt><dd id="streaming-detail-situation">—</dd></div>
+      <div><dt>Previsão de início</dt><dd id="streaming-detail-start">—</dd></div>
+      <div><dt>Recebido em</dt><dd id="streaming-detail-date">—</dd></div>
+      <div><dt>Origem</dt><dd id="streaming-detail-origin">—</dd></div>
+      <div class="full"><dt>Recursos de interesse</dt><dd id="streaming-detail-resources" class="streaming-resources"></dd></div>
+      <div class="full"><dt>Mensagem do interessado</dt><dd id="streaming-detail-message">—</dd></div>
+    </dl>
+
+    <div class="streaming-contact-actions">
+      <a id="streaming-email-link" href="#">✉ Enviar e-mail</a>
+      <a id="streaming-whatsapp-link" href="#" target="_blank" rel="noopener">💬 Abrir WhatsApp</a>
+      <button id="streaming-copy-protocol" type="button">⧉ Copiar protocolo</button>
+    </div>
+
+    <form id="streaming-interest-form" class="streaming-modal-form">
+      <label>
+        Status comercial
+        <select id="streaming-interest-status" required>
+          <option value="novo">Novo</option>
+          <option value="contatado">Contatado</option>
+          <option value="qualificado">Qualificado</option>
+          <option value="convertido">Convertido</option>
+          <option value="arquivado">Arquivado</option>
+        </select>
+      </label>
+
+      <label>
+        Observações administrativas
+        <textarea id="streaming-interest-notes" maxlength="1200" placeholder="Registre contato, necessidade, proposta enviada ou próximo passo."></textarea>
+      </label>
+
+      <div class="modal-actions">
+        <button id="streaming-modal-cancel" type="button" class="secondary-button">Cancelar</button>
+        <button id="streaming-modal-save" type="submit" class="primary-button">Salvar atualização</button>
+      </div>
+    </form>
+  </section>
 </div>
 
 
@@ -1744,6 +1931,27 @@
 
 
 
+<div id="emails-compose-backdrop" class="modal-backdrop hidden">
+  <section class="modal-card emails-compose-card" role="dialog" aria-modal="true" aria-labelledby="emails-compose-title">
+    <div class="modal-header">
+      <div><span class="status-badge success">Suporte</span><h2 id="emails-compose-title">Escrever e-mail</h2></div>
+      <button id="emails-compose-close" class="close-button" type="button" aria-label="Fechar">×</button>
+    </div>
+    <form id="emails-compose-form" class="emails-compose-form">
+      <input id="email-compose-reply-id" name="replyToId" type="hidden">
+      <label>Para<input id="email-compose-to" name="to" type="email" required autocomplete="email"></label>
+      <label>Assunto<input id="email-compose-subject" name="subject" maxlength="500" required></label>
+      <label>Mensagem<textarea id="email-compose-text" name="text" maxlength="250000" required></textarea></label>
+      <label>Anexos<input id="email-compose-attachments" name="attachments" type="file" multiple></label>
+      <p class="form-hint">A assinatura oficial da Central Rádios Brasil será adicionada automaticamente. Limite total: 5 MiB.</p>
+      <div class="modal-actions">
+        <button id="emails-compose-cancel" type="button" class="secondary-button">Cancelar</button>
+        <button id="email-compose-send" type="submit" class="primary-button">Enviar e-mail</button>
+      </div>
+    </form>
+  </section>
+</div>
+
 <div id="validation-modal-backdrop" class="modal-backdrop hidden">
   <section class="modal-card validation-modal-card" role="dialog"
     aria-modal="true" aria-labelledby="validation-status-title">
@@ -1816,18 +2024,20 @@
 </div>
 
 
-<script src="config.js?v=3.3.0"></script>
-<script src="js/utils.js?v=3.3.0"></script>
-<script src="js/api.js?v=3.3.0"></script>
-<script src="js/dashboard.js?v=3.3.0"></script>
-<script src="js/radios.js?v=3.3.0"></script>
-<script src="js/estados.js?v=3.3.0"></script>
-<script src="js/categorias.js?v=3.3.0"></script>
-<script src="js/cidades.js?v=3.3.0"></script>
-<script src="js/streams.js?v=3.3.0"></script>
-<script src="js/emissoras.js?v=3.3.0"></script>
-<script src="js/publicacao.js?v=3.3.0"></script>
-<script src="js/solicitacoes.js?v=3.3.0"></script>
-<script src="app.js?v=3.3.0"></script>
+<script src="config.js?v=3.6.0"></script>
+<script src="js/utils.js?v=3.6.0"></script>
+<script src="js/api.js?v=3.6.0"></script>
+<script src="js/dashboard.js?v=3.6.0"></script>
+<script src="js/radios.js?v=3.6.0"></script>
+<script src="js/estados.js?v=3.6.0"></script>
+<script src="js/categorias.js?v=3.6.0"></script>
+<script src="js/cidades.js?v=3.6.0"></script>
+<script src="js/streams.js?v=3.6.0"></script>
+<script src="js/emissoras.js?v=3.6.0"></script>
+<script src="js/publicacao.js?v=3.6.0"></script>
+<script src="js/solicitacoes.js?v=3.6.0"></script>
+<script src="js/emails.js?v=3.6.0"></script>
+<script src="js/streaming-interesses.js?v=3.6.0"></script>
+<script src="app.js?v=3.6.0"></script>
 </body>
 </html>

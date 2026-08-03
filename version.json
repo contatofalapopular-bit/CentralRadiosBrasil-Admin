@@ -1,8 +1,8 @@
 {
   "app": "Central Rádios Brasil — Painel Administrativo",
-  "version": "3.3.0",
-  "release": "Alterações da Emissora e Monitoramento Automático de Streams",
-  "build": "2026-08-01",
+  "version": "3.6.0",
+  "release": "Gestão de Interessados — Streaming CRB",
+  "build": "2026-08-02",
   "modules": {
     "dashboard": true,
     "radios": true,
@@ -13,7 +13,9 @@
     "cities": true,
     "emissoras": true,
     "solicitacoes_alteracoes": true,
-    "monitoramento_streams": true
+    "monitoramento_streams": true,
+    "emails": true,
+    "streaming_interesses": true
   },
   "features": [
     "radio-search",
@@ -80,7 +82,23 @@
     "change-request-apply",
     "automatic-stream-monitoring",
     "stream-auto-hide",
-    "stream-auto-reactivate"
+    "stream-auto-reactivate",
+    "email-inbox",
+    "email-sent",
+    "email-archive",
+    "email-trash",
+    "email-search",
+    "email-threading",
+    "email-reply",
+    "email-compose",
+    "email-attachments",
+    "email-admin-session",
+    "streaming-leads-list",
+    "streaming-leads-search",
+    "streaming-leads-filters",
+    "streaming-lead-status",
+    "streaming-lead-notes",
+    "streaming-lead-contact-actions"
   ],
   "fixes": [
     "load-estados-script",
