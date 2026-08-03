@@ -8,6 +8,7 @@ let publicacaoInicializada = false;
 let solicitacoesInicializadas = false;
 let emailsInicializados = false;
 let streamingInteressesInicializados = false;
+let ocorrenciasInicializadas = false;
 
 document.addEventListener("DOMContentLoaded", () => {
   texto("app-version", `v${CONFIG.VERSION}`);
@@ -27,6 +28,8 @@ document.addEventListener("DOMContentLoaded", () => {
         EmailsAdmin.carregar();
       } else if (rotaAtual() === "streaming-interesses") {
         StreamingInteressesAdmin.carregar();
+      } else if (rotaAtual() === "ocorrencias") {
+        OcorrenciasAdmin.carregar();
       } else if (rotaAtual() === "radios") {
         RadiosAdmin.carregar();
       } else if (rotaAtual() === "estados") {
@@ -99,6 +102,7 @@ async function renderizarRota() {
     dashboard: document.getElementById("dashboard-page"),
     solicitacoes:
       document.getElementById("solicitacoes-page"),
+    ocorrencias: document.getElementById("ocorrencias-page"),
     emails: document.getElementById("emails-page"),
     "streaming-interesses": document.getElementById("streaming-interesses-page"),
     radios: document.getElementById("radios-page"),
@@ -139,7 +143,16 @@ async function renderizarRota() {
       );
     });
 
-  if (rotaFinal === "streaming-interesses") {
+  if (rotaFinal === "ocorrencias") {
+    texto("page-title", "Ocorrências");
+    texto("page-subtitle", "Relatos públicos, suporte e confiabilidade do catálogo");
+    if (!ocorrenciasInicializadas) {
+      ocorrenciasInicializadas = true;
+      await OcorrenciasAdmin.iniciar();
+    } else {
+      await OcorrenciasAdmin.carregar();
+    }
+  } else if (rotaFinal === "streaming-interesses") {
     texto("page-title", "Streaming CRB");
 
     texto(

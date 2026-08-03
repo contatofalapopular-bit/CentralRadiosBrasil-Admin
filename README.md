@@ -1,4 +1,4 @@
-# Central Rádios Brasil — Painel Administrativo v3.6.3
+# Central Rádios Brasil — Painel Administrativo v3.7.0
 
 ## Etapa 2.1 — Sessão administrativa segura
 
@@ -12,7 +12,7 @@
 ## Publicação
 
 1. Confirme que o Worker principal está na versão 1.10.0 ou superior.
-2. Publique este Painel v3.6.3.
+2. Publique este Painel v3.7.0.
 3. Entre no módulo Solicitações e teste a sessão.
 4. No Worker, crie a variável de texto `ADMIN_SESSION_REQUIRED` com valor `true`.
 
@@ -45,8 +45,13 @@ Não revele nem salve a chave administrativa em arquivos do repositório.
 - Encaminha a mensagem completa e anexos ao Gmail de segurança.
 - Exibe metadados dos anexos no Painel, sem download nesta fase.
 
-## Correção v3.6.3 — contraste da Central de E-mails
+## Correção v3.7.0 — contraste da Central de E-mails
 
 - Corrige textos brancos sobre o fundo branco na caixa de entrada, lista e área de leitura.
 - Corrige contraste do campo de pesquisa, remetente, assunto, conteúdo, conversa e metadados.
 - Preserva o armazenamento D1 sem R2, o Streaming CRB e os demais módulos do Painel.
+
+
+## Admin 3.7.0
+
+Inclui a gestão de ocorrências públicas enviadas pelo Portal, com análise, prioridade, histórico e resolução.

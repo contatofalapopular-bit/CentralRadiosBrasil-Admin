@@ -97,7 +97,7 @@
 .email-attachment-metadata small { color: #91a8be; }
 
 
-/* v3.6.3 — correção de contraste da Central de E-mails */
+/* v3.7.0 — correção de contraste da Central de E-mails */
 #emails-page .emails-layout {
   --email-surface: #ffffff;
   --email-surface-soft: #f4f8fc;

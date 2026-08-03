@@ -1,6 +1,6 @@
 {
   "app": "Central Rádios Brasil — Painel Administrativo",
-  "version": "3.6.3",
+  "version": "3.7.0",
   "release": "Correção de contraste da Central de E-mails + E-mail D1 sem R2 + Streaming CRB",
   "build": "2026-08-03",
   "modules": {
@@ -113,5 +113,6 @@
     "email-list-contrast",
     "email-search-contrast"
   ],
-  "name": "Central Rádios Brasil Admin — Contraste da Central de E-mails"
+  "name": "Ocorrências, Suporte e Confiabilidade",
+  "updatedAt": "2026-08-03T14:30:00Z"
 }

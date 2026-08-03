@@ -287,6 +287,26 @@ const API = {
     );
   },
 
+  listarOcorrencias({ status = "", tipo = "", prioridade = "", busca = "", limit = 500 } = {}) {
+    const parametros = new URLSearchParams({ limit: String(limit) });
+    if (status) parametros.set("status", status);
+    if (tipo) parametros.set("tipo", tipo);
+    if (prioridade) parametros.set("prioridade", prioridade);
+    if (busca) parametros.set("busca", busca);
+    return this.worker(`/api/admin/ocorrencias?${parametros.toString()}`);
+  },
+
+  detalharOcorrencia(id) {
+    return this.worker(`/api/admin/ocorrencias/${encodeURIComponent(id)}`);
+  },
+
+  atualizarOcorrencia(id, dados) {
+    return this.worker(`/api/admin/ocorrencias/${encodeURIComponent(id)}`, {
+      method: "PATCH",
+      body: JSON.stringify(dados)
+    });
+  },
+
   listarMonitoramentoStreams() {
     return this.worker(
       "/api/admin/streams/status"

@@ -7,18 +7,19 @@
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
   <meta http-equiv="Pragma" content="no-cache">
   <meta http-equiv="Expires" content="0">
-  <title>Central Rádios Brasil — Painel Administrativo v3.6.3</title>
+  <title>Central Rádios Brasil — Painel Administrativo v3.7.0</title>
 
-  <link rel="stylesheet" href="style.css?v=3.6.3">
-  <link rel="stylesheet" href="css/dashboard.css?v=3.6.3">
-  <link rel="stylesheet" href="css/radios.css?v=3.6.3">
-  <link rel="stylesheet" href="css/streams.css?v=3.6.3">
-  <link rel="stylesheet" href="css/emissoras.css?v=3.6.3">
-  <link rel="stylesheet" href="css/solicitacoes.css?v=3.6.3">
-  <link rel="stylesheet" href="css/emails.css?v=3.6.3">
-  <link rel="stylesheet" href="css/streaming-interesses.css?v=3.6.3">
+  <link rel="stylesheet" href="style.css?v=3.7.0">
+  <link rel="stylesheet" href="css/dashboard.css?v=3.7.0">
+  <link rel="stylesheet" href="css/radios.css?v=3.7.0">
+  <link rel="stylesheet" href="css/streams.css?v=3.7.0">
+  <link rel="stylesheet" href="css/emissoras.css?v=3.7.0">
+  <link rel="stylesheet" href="css/solicitacoes.css?v=3.7.0">
+  <link rel="stylesheet" href="css/emails.css?v=3.7.0">
+  <link rel="stylesheet" href="css/streaming-interesses.css?v=3.7.0">
+  <link rel="stylesheet" href="css/ocorrencias.css?v=3.7.0">
 </head>
-<body data-app-version="3.6.3" data-build="streaming-interesses-email">
+<body data-app-version="3.7.0" data-build="streaming-interesses-email">
 <div class="app-shell">
   <aside class="sidebar">
     <div class="brand">
@@ -32,6 +33,7 @@
     <nav class="main-nav">
       <a class="nav-link active" data-route="dashboard" href="#/dashboard">🏠 Dashboard</a>
       <a class="nav-link" data-route="solicitacoes" href="#/solicitacoes">📥 Solicitações</a>
+      <a class="nav-link" data-route="ocorrencias" href="#/ocorrencias">⚠️ Ocorrências</a>
       <a class="nav-link" data-route="streaming-interesses" href="#/streaming-interesses">🚀 Streaming CRB</a>
       <a class="nav-link" data-route="emails" href="#/emails">✉️ E-mails <span id="emails-nav-count" class="emails-nav-count hidden"></span></a>
       <a class="nav-link" data-route="emissoras" href="#/emissoras">🏢 Emissoras</a>
@@ -862,6 +864,130 @@
           </div>
         </section>
       </section>
+      <section id="ocorrencias-page" class="hidden">
+        <div class="radios-toolbar ocorrencias-toolbar">
+          <div>
+            <span id="ocorrencias-status-badge" class="status-badge loading">Aguardando autenticação</span>
+            <h2>Ocorrências e confiabilidade</h2>
+            <p>Analise relatos enviados pelo Portal sem alterar automaticamente o catálogo. <strong id="ocorrencias-visible-count">0</strong> registros exibidos.</p>
+          </div>
+          <div class="toolbar-actions">
+            <a class="secondary-button" href="https://centralradiosbrasil.com.br/ocorrencias/" target="_blank" rel="noopener">↗ Abrir página pública</a>
+            <button id="ocorrencias-refresh-button" type="button" class="primary-button">↻ Atualizar ocorrências</button>
+          </div>
+        </div>
+
+        <section class="ocorrencias-kpis" aria-label="Resumo das ocorrências">
+          <article><span>Total</span><strong id="ocorrencias-total-count">0</strong></article>
+          <article><span>Novas</span><strong id="ocorrencias-new-count">0</strong></article>
+          <article><span>Em análise</span><strong id="ocorrencias-analysis-count">0</strong></article>
+          <article><span>Resolvidas</span><strong id="ocorrencias-resolved-count">0</strong></article>
+          <article><span>Prioritárias</span><strong id="ocorrencias-priority-count">0</strong></article>
+        </section>
+
+        <section class="ocorrencias-filters" aria-label="Filtros das ocorrências">
+          <label>Buscar
+            <input id="ocorrencias-search" type="search" placeholder="Protocolo, rádio, contato ou mensagem" autocomplete="off">
+          </label>
+          <label>Status
+            <select id="ocorrencias-status-filter">
+              <option value="">Todos os status</option>
+              <option value="nova">Novas</option>
+              <option value="em_analise">Em análise</option>
+              <option value="resolvida">Resolvidas</option>
+              <option value="arquivada">Arquivadas</option>
+            </select>
+          </label>
+          <label>Tipo
+            <select id="ocorrencias-type-filter">
+              <option value="">Todos os tipos</option>
+              <option value="radio_fora_do_ar">Rádio fora do ar</option>
+              <option value="dados_incorretos">Dados incorretos</option>
+              <option value="conteudo_inadequado">Conteúdo inadequado</option>
+              <option value="problema_no_portal">Problema no Portal</option>
+              <option value="suporte_geral">Suporte geral</option>
+              <option value="seguranca_abuso">Segurança ou abuso</option>
+            </select>
+          </label>
+          <label>Prioridade
+            <select id="ocorrencias-priority-filter">
+              <option value="">Todas</option>
+              <option value="normal">Normal</option>
+              <option value="alta">Alta</option>
+              <option value="critica">Crítica</option>
+            </select>
+          </label>
+        </section>
+
+        <section class="table-card">
+          <div class="table-scroll">
+            <table class="radios-table ocorrencias-table">
+              <thead><tr><th>Protocolo</th><th>Tipo</th><th>Emissora</th><th>Contato</th><th>Prioridade</th><th>Status</th><th>Recebida em</th><th>Ações</th></tr></thead>
+              <tbody id="ocorrencias-table-body"><tr><td colspan="8" class="ocorrencias-empty">Carregando ocorrências…</td></tr></tbody>
+            </table>
+          </div>
+        </section>
+      </section>
+
+      <div id="ocorrencias-modal-backdrop" class="ocorrencias-modal-backdrop hidden" role="presentation">
+        <section class="ocorrencias-modal" role="dialog" aria-modal="true" aria-labelledby="ocorrencias-modal-title">
+          <header class="ocorrencias-modal-header">
+            <div><small id="ocorrencias-modal-protocol">—</small><h2 id="ocorrencias-modal-title">Ocorrência</h2></div>
+            <button id="close-ocorrencias-modal" class="ocorrencias-modal-close" type="button" aria-label="Fechar detalhes">×</button>
+          </header>
+          <div class="ocorrencias-modal-body">
+            <div class="ocorrencias-detalhes-grid">
+              <div class="ocorrencias-detalhe"><span>Emissora</span><strong id="ocorrencias-detail-radio">—</strong></div>
+              <div class="ocorrencias-detalhe"><span>Localização</span><strong id="ocorrencias-detail-location">—</strong></div>
+              <div class="ocorrencias-detalhe"><span>Contato</span><strong id="ocorrencias-detail-contact">—</strong></div>
+              <div class="ocorrencias-detalhe"><span>E-mail</span><strong id="ocorrencias-detail-email">—</strong></div>
+              <div class="ocorrencias-detalhe"><span>Recebida em</span><strong id="ocorrencias-detail-date">—</strong></div>
+              <div class="ocorrencias-detalhe"><span>Página de origem</span><strong id="ocorrencias-detail-page">—</strong></div>
+            </div>
+            <div id="ocorrencias-detail-message" class="ocorrencias-mensagem-admin">—</div>
+            <div class="ocorrencias-links">
+              <a id="ocorrencias-email-link" href="#">✉️ Enviar e-mail</a>
+              <a id="ocorrencias-radio-link" href="#" target="_blank" rel="noopener">📻 Abrir emissora</a>
+              <button id="ocorrencias-copy-protocol" type="button">⧉ Copiar protocolo</button>
+            </div>
+
+            <form id="ocorrencias-form-admin">
+              <div class="ocorrencias-form-grid">
+                <label>Status
+                  <select id="ocorrencias-admin-status">
+                    <option value="nova">Nova</option>
+                    <option value="em_analise">Em análise</option>
+                    <option value="resolvida">Resolvida</option>
+                    <option value="arquivada">Arquivada</option>
+                  </select>
+                </label>
+                <label>Prioridade
+                  <select id="ocorrencias-admin-priority">
+                    <option value="normal">Normal</option>
+                    <option value="alta">Alta</option>
+                    <option value="critica">Crítica</option>
+                  </select>
+                </label>
+              </div>
+              <label class="ocorrencias-form-full">Observações administrativas
+                <textarea id="ocorrencias-admin-notes" maxlength="1600" placeholder="Registre verificações e contatos realizados."></textarea>
+              </label>
+              <label class="ocorrencias-form-full">Resolução
+                <textarea id="ocorrencias-admin-resolution" maxlength="1600" placeholder="Descreva a solução ou conclusão da análise."></textarea>
+              </label>
+              <section class="ocorrencias-historico">
+                <h3>Histórico</h3>
+                <div id="ocorrencias-history-list" class="ocorrencias-historico-lista"></div>
+              </section>
+              <div class="ocorrencias-modal-actions">
+                <button id="ocorrencias-modal-cancel" type="button" class="secondary-button">Cancelar</button>
+                <button id="ocorrencias-modal-save" type="submit" class="primary-button">Salvar atualização</button>
+              </div>
+            </form>
+          </div>
+        </section>
+      </div>
+
       <section id="streaming-interesses-page" class="hidden">
         <div class="radios-toolbar streaming-toolbar">
           <div>
@@ -2026,20 +2152,21 @@
 </div>
 
 
-<script src="config.js?v=3.6.3"></script>
-<script src="js/utils.js?v=3.6.3"></script>
-<script src="js/api.js?v=3.6.3"></script>
-<script src="js/dashboard.js?v=3.6.3"></script>
-<script src="js/radios.js?v=3.6.3"></script>
-<script src="js/estados.js?v=3.6.3"></script>
-<script src="js/categorias.js?v=3.6.3"></script>
-<script src="js/cidades.js?v=3.6.3"></script>
-<script src="js/streams.js?v=3.6.3"></script>
-<script src="js/emissoras.js?v=3.6.3"></script>
-<script src="js/publicacao.js?v=3.6.3"></script>
-<script src="js/solicitacoes.js?v=3.6.3"></script>
-<script src="js/emails.js?v=3.6.3"></script>
-<script src="js/streaming-interesses.js?v=3.6.3"></script>
-<script src="app.js?v=3.6.3"></script>
+<script src="config.js?v=3.7.0"></script>
+<script src="js/utils.js?v=3.7.0"></script>
+<script src="js/api.js?v=3.7.0"></script>
+<script src="js/dashboard.js?v=3.7.0"></script>
+<script src="js/radios.js?v=3.7.0"></script>
+<script src="js/estados.js?v=3.7.0"></script>
+<script src="js/categorias.js?v=3.7.0"></script>
+<script src="js/cidades.js?v=3.7.0"></script>
+<script src="js/streams.js?v=3.7.0"></script>
+<script src="js/emissoras.js?v=3.7.0"></script>
+<script src="js/publicacao.js?v=3.7.0"></script>
+<script src="js/solicitacoes.js?v=3.7.0"></script>
+<script src="js/emails.js?v=3.7.0"></script>
+<script src="js/streaming-interesses.js?v=3.7.0"></script>
+<script src="js/ocorrencias.js?v=3.7.0"></script>
+<script src="app.js?v=3.7.0"></script>
 </body>
 </html>

@@ -1,4 +1,12 @@
-## v3.6.3 — Correção de contraste da Central de E-mails
+## 3.7.0 — Ocorrências, Suporte e Confiabilidade
+
+- Nova aba Ocorrências com indicadores, filtros, prioridades e histórico.
+- Detalhes completos do relato, emissora relacionada e contato.
+- Estados nova, em análise, resolvida e arquivada.
+- Prioridades normal, alta e crítica.
+- Observações administrativas e resolução armazenadas no D1.
+
+## v3.7.0 — Correção de contraste da Central de E-mails
 
 - Corrigido texto branco sobre fundo branco na lista e no leitor de mensagens.
 - Corrigidos remetente, assunto, conteúdo, conversa, metadados e estado vazio.
