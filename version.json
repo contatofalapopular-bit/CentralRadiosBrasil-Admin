@@ -1,8 +1,8 @@
 {
   "app": "Central Rádios Brasil — Painel Administrativo",
-  "version": "3.6.1",
-  "release": "Gestão de Interessados — Streaming CRB",
-  "build": "2026-08-02",
+  "version": "3.6.2",
+  "release": "E-mail D1 sem R2 + Gestão de Interessados Streaming CRB",
+  "build": "2026-08-03",
   "modules": {
     "dashboard": true,
     "radios": true,
@@ -91,7 +91,7 @@
     "email-threading",
     "email-reply",
     "email-compose",
-    "email-attachments",
+    "email-attachment-metadata",
     "email-admin-session",
     "streaming-leads-list",
     "streaming-leads-search",
@@ -108,5 +108,6 @@
     "emissora-cities-by-state",
     "emissora-edit-location",
     "cities-cache-fallback"
-  ]
+  ],
+  "name": "Central Rádios Brasil Admin — E-mail D1 sem R2"
 }

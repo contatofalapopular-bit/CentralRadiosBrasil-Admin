@@ -1,27 +1,15 @@
-# Módulo de E-mail — Admin v3.5.0
+# Módulo de E-mail — Admin v3.6.2
 
-A nova aba **E-mails** usa o endereço:
+O módulo usa o Worker `crb-email` v1.1.0, sem R2.
 
-`suporte@centralradiosbrasil.com.br`
+## Armazenado no D1
+- remetente e nome;
+- destinatários;
+- assunto;
+- texto e HTML sanitizado;
+- datas, leitura, arquivamento e lixeira;
+- agrupamento por conversa e auditoria;
+- metadados dos anexos.
 
-## Dependência
-
-A aba só funciona depois que o Worker `crb-email` for publicado e configurado na Cloudflare.
-
-A URL esperada em `config.js` é:
-
-`https://crb-email.contatofalapopular.workers.dev`
-
-Caso a Cloudflare gere outra URL, altere apenas `CONFIG.EMAIL_WORKER_URL`.
-
-## Login
-
-O módulo reutiliza o mesmo token temporário do Painel Administrativo. Portanto, entre primeiro pela aba **Solicitações** ou por qualquer fluxo que abra a sessão administrativa.
-
-## Modo inicial
-
-O Worker vem em modo de testes e só permite enviar para:
-
-`centralradiosbrasil@gmail.com`
-
-O recebimento em `suporte@centralradiosbrasil.com.br`, a leitura, o arquivamento e a organização funcionam normalmente.
+## Anexos
+O conteúdo dos anexos permanece na cópia de segurança encaminhada para `centralradiosbrasil@gmail.com`. O Painel exibe nome, formato e tamanho, mas não oferece download nesta fase.

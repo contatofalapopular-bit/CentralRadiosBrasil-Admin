@@ -7,18 +7,18 @@
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
   <meta http-equiv="Pragma" content="no-cache">
   <meta http-equiv="Expires" content="0">
-  <title>Central Rádios Brasil — Painel Administrativo v3.6.1</title>
+  <title>Central Rádios Brasil — Painel Administrativo v3.6.2</title>
 
-  <link rel="stylesheet" href="style.css?v=3.6.1">
-  <link rel="stylesheet" href="css/dashboard.css?v=3.6.1">
-  <link rel="stylesheet" href="css/radios.css?v=3.6.1">
-  <link rel="stylesheet" href="css/streams.css?v=3.6.1">
-  <link rel="stylesheet" href="css/emissoras.css?v=3.6.1">
-  <link rel="stylesheet" href="css/solicitacoes.css?v=3.6.1">
-  <link rel="stylesheet" href="css/emails.css?v=3.6.1">
-  <link rel="stylesheet" href="css/streaming-interesses.css?v=3.6.1">
+  <link rel="stylesheet" href="style.css?v=3.6.2">
+  <link rel="stylesheet" href="css/dashboard.css?v=3.6.2">
+  <link rel="stylesheet" href="css/radios.css?v=3.6.2">
+  <link rel="stylesheet" href="css/streams.css?v=3.6.2">
+  <link rel="stylesheet" href="css/emissoras.css?v=3.6.2">
+  <link rel="stylesheet" href="css/solicitacoes.css?v=3.6.2">
+  <link rel="stylesheet" href="css/emails.css?v=3.6.2">
+  <link rel="stylesheet" href="css/streaming-interesses.css?v=3.6.2">
 </head>
-<body data-app-version="3.6.1" data-build="streaming-interesses-email">
+<body data-app-version="3.6.2" data-build="streaming-interesses-email">
 <div class="app-shell">
   <aside class="sidebar">
     <div class="brand">
@@ -942,6 +942,9 @@
 
         <p id="emails-mode-note" class="emails-mode-note testing">
           Modo de testes: respostas limitadas ao destinatário verificado.
+        </p>
+        <p class="emails-storage-note">
+          Armazenamento atual: remetente, assunto, texto e histórico no D1. Anexos recebidos ficam disponíveis na cópia de segurança enviada ao Gmail.
         </p>
 
         <section class="emails-layout" aria-label="Gerenciador de e-mails">
@@ -1942,8 +1945,7 @@
       <label>Para<input id="email-compose-to" name="to" type="email" required autocomplete="email"></label>
       <label>Assunto<input id="email-compose-subject" name="subject" maxlength="500" required></label>
       <label>Mensagem<textarea id="email-compose-text" name="text" maxlength="250000" required></textarea></label>
-      <label>Anexos<input id="email-compose-attachments" name="attachments" type="file" multiple></label>
-      <p class="form-hint">A assinatura oficial da Central Rádios Brasil será adicionada automaticamente. Limite total: 5 MiB.</p>
+      <p class="form-hint email-attachments-disabled">Anexos ainda não são enviados pelo Painel. Para anexar arquivos, use temporariamente o Gmail de segurança. A assinatura oficial da Central Rádios Brasil será adicionada automaticamente.</p>
       <div class="modal-actions">
         <button id="emails-compose-cancel" type="button" class="secondary-button">Cancelar</button>
         <button id="email-compose-send" type="submit" class="primary-button">Enviar e-mail</button>
@@ -2024,20 +2026,20 @@
 </div>
 
 
-<script src="config.js?v=3.6.1"></script>
-<script src="js/utils.js?v=3.6.1"></script>
-<script src="js/api.js?v=3.6.1"></script>
-<script src="js/dashboard.js?v=3.6.1"></script>
-<script src="js/radios.js?v=3.6.1"></script>
-<script src="js/estados.js?v=3.6.1"></script>
-<script src="js/categorias.js?v=3.6.1"></script>
-<script src="js/cidades.js?v=3.6.1"></script>
-<script src="js/streams.js?v=3.6.1"></script>
-<script src="js/emissoras.js?v=3.6.1"></script>
-<script src="js/publicacao.js?v=3.6.1"></script>
-<script src="js/solicitacoes.js?v=3.6.1"></script>
-<script src="js/emails.js?v=3.6.1"></script>
-<script src="js/streaming-interesses.js?v=3.6.1"></script>
-<script src="app.js?v=3.6.1"></script>
+<script src="config.js?v=3.6.2"></script>
+<script src="js/utils.js?v=3.6.2"></script>
+<script src="js/api.js?v=3.6.2"></script>
+<script src="js/dashboard.js?v=3.6.2"></script>
+<script src="js/radios.js?v=3.6.2"></script>
+<script src="js/estados.js?v=3.6.2"></script>
+<script src="js/categorias.js?v=3.6.2"></script>
+<script src="js/cidades.js?v=3.6.2"></script>
+<script src="js/streams.js?v=3.6.2"></script>
+<script src="js/emissoras.js?v=3.6.2"></script>
+<script src="js/publicacao.js?v=3.6.2"></script>
+<script src="js/solicitacoes.js?v=3.6.2"></script>
+<script src="js/emails.js?v=3.6.2"></script>
+<script src="js/streaming-interesses.js?v=3.6.2"></script>
+<script src="app.js?v=3.6.2"></script>
 </body>
 </html>

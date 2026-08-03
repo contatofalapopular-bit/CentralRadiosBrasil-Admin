@@ -12,7 +12,7 @@
 2. Publique todo o conteúdo da pasta `CentralRadiosBrasil-Admin-main` na raiz do repositório do Painel Administrativo.
 3. Use a mensagem de commit:
 
-   `3.6.1 — Gestão de interessados do Streaming CRB`
+   `3.6.2 — Gestão de interessados do Streaming CRB`
 
 4. Abra o Painel e faça login administrativo.
 5. Entre na aba **Streaming CRB**.

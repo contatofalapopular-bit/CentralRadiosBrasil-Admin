@@ -286,7 +286,7 @@
   }
 }
 
-/* v3.6.1 — Correção de contraste dos campos do modal Streaming CRB */
+/* v3.6.2 — Correção de contraste dos campos do modal Streaming CRB */
 .streaming-modal-form select,
 .streaming-modal-form textarea {
   background: #ffffff;

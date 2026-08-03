@@ -60,3 +60,38 @@
 }
 
 .sr-only { position:absolute !important; width:1px !important; height:1px !important; padding:0 !important; margin:-1px !important; overflow:hidden !important; clip:rect(0,0,0,0) !important; white-space:nowrap !important; border:0 !important; }
+
+
+/* v3.6.2 — armazenamento D1 sem R2 */
+.emails-storage-note {
+  margin: 10px 0 18px;
+  padding: 12px 14px;
+  border: 1px solid rgba(55, 230, 255, .2);
+  border-radius: 12px;
+  background: rgba(55, 230, 255, .07);
+  color: #c8eefa;
+  line-height: 1.55;
+}
+.email-attachments-disabled {
+  padding: 12px 14px;
+  border: 1px solid rgba(255, 201, 74, .28);
+  border-radius: 12px;
+  background: rgba(255, 201, 74, .08);
+  color: #f7df9a;
+}
+.email-attachment-note {
+  margin: 4px 0 10px;
+  color: #a9bfd5;
+  font-size: .82rem;
+}
+.email-attachment-metadata {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  margin: 7px 0;
+  padding: 10px 12px;
+  border: 1px solid rgba(255,255,255,.1);
+  border-radius: 10px;
+  background: rgba(255,255,255,.04);
+}
+.email-attachment-metadata small { color: #91a8be; }

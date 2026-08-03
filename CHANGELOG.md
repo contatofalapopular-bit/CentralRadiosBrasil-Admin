@@ -1,6 +1,13 @@
+## v3.6.2 — E-mail armazenado no D1 sem R2
+
+- Remetente, assunto, texto, estados e histórico são armazenados no D1.
+- Anexos recebidos continuam na cópia de segurança enviada ao Gmail.
+- O Painel mostra os metadados dos anexos e informa sua localização.
+- Envio de anexos pelo Painel fica desabilitado nesta fase.
+
 # Changelog
 
-## v3.6.1 — Correção visual do modal Streaming CRB
+## v3.6.2 — Correção visual do modal Streaming CRB
 
 - Corrigido o contraste do campo Status comercial.
 - Corrigida a visibilidade do texto em Observações administrativas.

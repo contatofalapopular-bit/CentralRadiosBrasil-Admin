@@ -174,11 +174,8 @@ const EmailsAdmin = (() => {
     const anexos = document.getElementById("email-attachments");
     if (anexos) {
       anexos.innerHTML = item.anexos.length
-        ? `<h4>Anexos</h4>${item.anexos.map((anexo) => `<button type="button" data-attachment-id="${escaparHtml(anexo.id)}">📎 ${escaparHtml(anexo.nome)} <small>${formatarBytes(anexo.tamanhoBytes)}</small></button>`).join("")}`
+        ? `<h4>Anexos recebidos</h4><p class="email-attachment-note">Os arquivos estão disponíveis na cópia de segurança enviada ao Gmail.</p>${item.anexos.map((anexo) => `<div class="email-attachment-metadata">📎 <strong>${escaparHtml(anexo.nome)}</strong> <small>${formatarBytes(anexo.tamanhoBytes)} · ${escaparHtml(anexo.mime || "arquivo")}</small></div>`).join("")}`
         : "";
-      anexos.querySelectorAll("[data-attachment-id]").forEach((botao) => {
-        botao.addEventListener("click", () => API.baixarAnexo(item.id, botao.dataset.attachmentId));
-      });
     }
 
     document.getElementById("email-reply-button")?.classList.toggle("hidden", item.direcao !== "entrada" || Boolean(item.lixeiraEm));
