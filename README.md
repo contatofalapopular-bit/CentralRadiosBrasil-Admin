@@ -1,3 +1,22 @@
+# Central Rádios Brasil — Painel Administrativo v3.8.0
+
+## Dashboard Operacional
+
+O Dashboard reúne em uma única tela os itens que exigem atenção diária:
+
+- solicitações e alterações pendentes;
+- ocorrências novas e prioritárias;
+- novos interessados no Streaming CRB;
+- e-mails não lidos;
+- streams com falha ou indisponibilidade;
+- atividades recentes da plataforma.
+
+Os cartões e alertas do menu levam diretamente ao módulo correspondente. Sem sessão administrativa, o Dashboard continua exibindo os dados públicos do catálogo.
+
+## Dependência
+
+Publique primeiro o Worker principal v1.12.0, que disponibiliza `GET /api/admin/dashboard`. Depois publique este Admin v3.8.0.
+
 # Central Rádios Brasil — Painel Administrativo v3.7.0
 
 ## Etapa 2.1 — Sessão administrativa segura

@@ -7,19 +7,19 @@
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
   <meta http-equiv="Pragma" content="no-cache">
   <meta http-equiv="Expires" content="0">
-  <title>Central Rádios Brasil — Painel Administrativo v3.7.0</title>
+  <title>Central Rádios Brasil — Painel Administrativo v3.8.0</title>
 
-  <link rel="stylesheet" href="style.css?v=3.7.0">
-  <link rel="stylesheet" href="css/dashboard.css?v=3.7.0">
-  <link rel="stylesheet" href="css/radios.css?v=3.7.0">
-  <link rel="stylesheet" href="css/streams.css?v=3.7.0">
-  <link rel="stylesheet" href="css/emissoras.css?v=3.7.0">
-  <link rel="stylesheet" href="css/solicitacoes.css?v=3.7.0">
-  <link rel="stylesheet" href="css/emails.css?v=3.7.0">
-  <link rel="stylesheet" href="css/streaming-interesses.css?v=3.7.0">
-  <link rel="stylesheet" href="css/ocorrencias.css?v=3.7.0">
+  <link rel="stylesheet" href="style.css?v=3.8.0">
+  <link rel="stylesheet" href="css/dashboard.css?v=3.8.0">
+  <link rel="stylesheet" href="css/radios.css?v=3.8.0">
+  <link rel="stylesheet" href="css/streams.css?v=3.8.0">
+  <link rel="stylesheet" href="css/emissoras.css?v=3.8.0">
+  <link rel="stylesheet" href="css/solicitacoes.css?v=3.8.0">
+  <link rel="stylesheet" href="css/emails.css?v=3.8.0">
+  <link rel="stylesheet" href="css/streaming-interesses.css?v=3.8.0">
+  <link rel="stylesheet" href="css/ocorrencias.css?v=3.8.0">
 </head>
-<body data-app-version="3.7.0" data-build="streaming-interesses-email">
+<body data-app-version="3.8.0" data-build="dashboard-operacional">
 <div class="app-shell">
   <aside class="sidebar">
     <div class="brand">
@@ -32,17 +32,17 @@
 
     <nav class="main-nav">
       <a class="nav-link active" data-route="dashboard" href="#/dashboard">🏠 Dashboard</a>
-      <a class="nav-link" data-route="solicitacoes" href="#/solicitacoes">📥 Solicitações</a>
-      <a class="nav-link" data-route="ocorrencias" href="#/ocorrencias">⚠️ Ocorrências</a>
-      <a class="nav-link" data-route="streaming-interesses" href="#/streaming-interesses">🚀 Streaming CRB</a>
-      <a class="nav-link" data-route="emails" href="#/emails">✉️ E-mails <span id="emails-nav-count" class="emails-nav-count hidden"></span></a>
+      <a class="nav-link" data-route="solicitacoes" href="#/solicitacoes">📥 Solicitações <span id="solicitacoes-nav-count" class="nav-alert-count hidden"></span></a>
+      <a class="nav-link" data-route="ocorrencias" href="#/ocorrencias">⚠️ Ocorrências <span id="ocorrencias-nav-count" class="nav-alert-count hidden"></span></a>
+      <a class="nav-link" data-route="streaming-interesses" href="#/streaming-interesses">🚀 Streaming CRB <span id="streaming-nav-count" class="nav-alert-count hidden"></span></a>
+      <a class="nav-link" data-route="emails" href="#/emails">✉️ E-mails <span id="emails-nav-count" class="emails-nav-count nav-alert-count hidden"></span></a>
       <a class="nav-link" data-route="emissoras" href="#/emissoras">🏢 Emissoras</a>
         <a class="nav-link" data-route="publicacao" href="#/publicacao">📤 Publicação</a>
       <a class="nav-link" data-route="radios" href="#/radios">📻 Rádios</a>
       <a class="nav-link" data-route="estados" href="#/estados">🗺️ Estados</a>
       <a class="nav-link" data-route="cidades" href="#/cidades">🏙️ Cidades</a>
       <a class="nav-link" data-route="categorias" href="#/categorias">🎵 Categorias</a>
-      <a class="nav-link" data-route="streams" href="#/streams">📡 Streams</a>
+      <a class="nav-link" data-route="streams" href="#/streams">📡 Streams <span id="streams-nav-count" class="nav-alert-count hidden"></span></a>
       <a class="nav-link" data-route="configuracoes" href="#/configuracoes">
   ⚙️ Configurações
 </a>
@@ -67,13 +67,19 @@
         <section class="welcome-panel executive-welcome">
           <div>
             <span id="connection-badge" class="status-badge loading">
-              Conectando ao banco de dados
+              Conectando à operação
             </span>
-            <h2>Centro de comando nacional</h2>
+            <h2>Centro de comando operacional</h2>
             <p>
-              Acompanhe cadastro, publicação, cobertura, streams e Selo Oficial
-              em uma única visão executiva.
+              Veja o que precisa de atenção agora, acompanhe as atividades recentes
+              e acesse rapidamente cada módulo da Central Rádios Brasil.
             </p>
+            <div class="dashboard-session-actions">
+              <button id="dashboard-login-button" type="button" class="dashboard-session-button">
+                🔐 Entrar para ver alertas
+              </button>
+              <span id="dashboard-session-note">Os dados do catálogo permanecem públicos; alertas exigem sessão administrativa.</span>
+            </div>
           </div>
 
           <div class="dataset-info">
@@ -82,6 +88,63 @@
             <small id="dashboard-data-source">Fonte: carregando…</small>
             <small id="last-update">Última atualização: carregando…</small>
           </div>
+        </section>
+
+        <section class="operations-heading" aria-labelledby="operations-title">
+          <div>
+            <span>Atenção agora</span>
+            <h2 id="operations-title">Fila operacional</h2>
+            <p id="dashboard-operational-status">Entre no Painel para carregar os alertas.</p>
+          </div>
+          <strong id="dashboard-alert-total" class="operations-total">—</strong>
+        </section>
+
+        <section class="operations-kpis" aria-label="Alertas operacionais">
+          <button type="button" class="operation-card" data-dashboard-route="solicitacoes">
+            <span class="operation-icon">📥</span><small>Solicitações</small>
+            <strong id="dashboard-alert-solicitacoes">—</strong><em>Pendentes e em análise</em>
+          </button>
+          <button type="button" class="operation-card" data-dashboard-route="ocorrencias">
+            <span class="operation-icon">⚠️</span><small>Ocorrências</small>
+            <strong id="dashboard-alert-ocorrencias">—</strong><em>Novas ou prioritárias</em>
+          </button>
+          <button type="button" class="operation-card" data-dashboard-route="streaming-interesses">
+            <span class="operation-icon">🚀</span><small>Streaming CRB</small>
+            <strong id="dashboard-alert-streaming">—</strong><em>Novos interessados</em>
+          </button>
+          <button type="button" class="operation-card" data-dashboard-route="emails">
+            <span class="operation-icon">✉️</span><small>E-mails</small>
+            <strong id="dashboard-alert-emails">—</strong><em>Mensagens não lidas</em>
+          </button>
+          <button type="button" class="operation-card" data-dashboard-route="streams">
+            <span class="operation-icon">📡</span><small>Streams</small>
+            <strong id="dashboard-alert-streams">—</strong><em>Exigem atenção</em>
+          </button>
+        </section>
+
+        <section class="executive-grid executive-grid-main dashboard-operational-grid">
+          <article class="executive-panel activity-panel">
+            <header class="panel-heading">
+              <div><span>Movimentação da plataforma</span><h3>Atividade recente</h3></div>
+              <strong id="dashboard-activity-updated">—</strong>
+            </header>
+            <div id="dashboard-activity-list" class="activity-list">
+              <p class="dashboard-empty">Entre no Painel para carregar as atividades.</p>
+            </div>
+          </article>
+
+          <article class="executive-panel">
+            <header class="panel-heading">
+              <div><span>Resumo operacional</span><h3>Situação das filas</h3></div>
+            </header>
+            <div id="dashboard-queue-summary" class="queue-summary">
+              <p class="dashboard-empty">Aguardando sessão administrativa.</p>
+            </div>
+          </article>
+        </section>
+
+        <section class="dashboard-section-divider">
+          <div><span>Catálogo oficial</span><h2>Visão da rede</h2></div>
         </section>
 
         <section class="dashboard-kpis" aria-label="Indicadores principais">
@@ -95,11 +158,11 @@
           </article>
           <article class="executive-kpi kpi-warning">
             <span class="kpi-icon">🔎</span>
-            <div><small>Em análise</small><strong id="total-em-analise">—</strong><span>Aguardando decisão</span></div>
+            <div><small>Solicitações em análise</small><strong id="total-em-analise">—</strong><span>Aguardando decisão</span></div>
           </article>
           <article class="executive-kpi kpi-danger">
             <span class="kpi-icon">⛔</span>
-            <div><small>Suspensas ou rejeitadas</small><strong id="total-bloqueadas">—</strong><span>Exigem atenção</span></div>
+            <div><small>Streams em atenção</small><strong id="total-bloqueadas">—</strong><span>Monitoramento técnico</span></div>
           </article>
           <article class="executive-kpi">
             <span class="kpi-icon">🏅</span>
@@ -114,8 +177,8 @@
         <section class="executive-grid executive-grid-main">
           <article class="executive-panel">
             <header class="panel-heading">
-              <div><span>Fluxo administrativo</span><h3>Status dos cadastros</h3></div>
-              <button type="button" class="dashboard-link-button" data-dashboard-route="emissoras">Ver emissoras</button>
+              <div><span>Fluxo administrativo</span><h3>Status das solicitações</h3></div>
+              <button type="button" class="dashboard-link-button" data-dashboard-route="solicitacoes">Abrir solicitações</button>
             </header>
             <div id="dashboard-status-list" class="metric-list"></div>
           </article>
@@ -186,7 +249,6 @@
           <button id="retry-button">Tentar novamente</button>
         </section>
       </section>
-
 
 
       <section id="solicitacoes-page" class="hidden">
@@ -2152,21 +2214,21 @@
 </div>
 
 
-<script src="config.js?v=3.7.0"></script>
-<script src="js/utils.js?v=3.7.0"></script>
-<script src="js/api.js?v=3.7.0"></script>
-<script src="js/dashboard.js?v=3.7.0"></script>
-<script src="js/radios.js?v=3.7.0"></script>
-<script src="js/estados.js?v=3.7.0"></script>
-<script src="js/categorias.js?v=3.7.0"></script>
-<script src="js/cidades.js?v=3.7.0"></script>
-<script src="js/streams.js?v=3.7.0"></script>
-<script src="js/emissoras.js?v=3.7.0"></script>
-<script src="js/publicacao.js?v=3.7.0"></script>
-<script src="js/solicitacoes.js?v=3.7.0"></script>
-<script src="js/emails.js?v=3.7.0"></script>
-<script src="js/streaming-interesses.js?v=3.7.0"></script>
-<script src="js/ocorrencias.js?v=3.7.0"></script>
-<script src="app.js?v=3.7.0"></script>
+<script src="config.js?v=3.8.0"></script>
+<script src="js/utils.js?v=3.8.0"></script>
+<script src="js/api.js?v=3.8.0"></script>
+<script src="js/dashboard.js?v=3.8.0"></script>
+<script src="js/radios.js?v=3.8.0"></script>
+<script src="js/estados.js?v=3.8.0"></script>
+<script src="js/categorias.js?v=3.8.0"></script>
+<script src="js/cidades.js?v=3.8.0"></script>
+<script src="js/streams.js?v=3.8.0"></script>
+<script src="js/emissoras.js?v=3.8.0"></script>
+<script src="js/publicacao.js?v=3.8.0"></script>
+<script src="js/solicitacoes.js?v=3.8.0"></script>
+<script src="js/emails.js?v=3.8.0"></script>
+<script src="js/streaming-interesses.js?v=3.8.0"></script>
+<script src="js/ocorrencias.js?v=3.8.0"></script>
+<script src="app.js?v=3.8.0"></script>
 </body>
 </html>

@@ -223,6 +223,12 @@ const API = {
     }
   },
 
+  resumoDashboard() {
+    return this.worker(
+      "/api/admin/dashboard"
+    );
+  },
+
   listarSolicitacoes() {
     return this.worker(
       "/api/admin/solicitacoes?limit=200"

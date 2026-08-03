@@ -1,3 +1,13 @@
+## 3.8.0 — Dashboard Operacional e Alertas
+
+- Nova visão operacional logo após o login.
+- Contadores clicáveis para solicitações, ocorrências, Streaming CRB, e-mails e streams.
+- Alertas numéricos no menu lateral.
+- Atividade recente consolidada em ordem cronológica.
+- Resumo das filas e atalhos para cada módulo.
+- Mantida a visão do catálogo oficial, cobertura, categorias e saúde técnica.
+- Dashboard funciona em modo público com dados do catálogo e libera os alertas após a sessão administrativa.
+
 ## 3.7.0 — Ocorrências, Suporte e Confiabilidade
 
 - Nova aba Ocorrências com indicadores, filtros, prioridades e histórico.

@@ -309,7 +309,7 @@ async function renderizarRota() {
 
     texto(
       "page-subtitle",
-      "Dados oficiais do ecossistema Central Rádios Brasil"
+      "Alertas, atividades e dados oficiais da operação"
     );
 
     carregarDashboard();
