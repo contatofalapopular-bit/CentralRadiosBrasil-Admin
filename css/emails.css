@@ -95,3 +95,143 @@
   background: rgba(255,255,255,.04);
 }
 .email-attachment-metadata small { color: #91a8be; }
+
+
+/* v3.6.3 — correção de contraste da Central de E-mails */
+#emails-page .emails-layout {
+  --email-surface: #ffffff;
+  --email-surface-soft: #f4f8fc;
+  --email-text: #10233d;
+  --email-muted: #5e7189;
+  --email-border: #d7e0e9;
+  background: var(--email-surface);
+  color: var(--email-text);
+  border-color: var(--email-border);
+}
+
+#emails-page .emails-folders,
+#emails-page .emails-list-panel,
+#emails-page .email-reader {
+  color: var(--email-text);
+}
+
+#emails-page .emails-folders {
+  background: var(--email-surface-soft);
+  border-color: var(--email-border);
+}
+
+#emails-page .emails-folder {
+  color: var(--email-text);
+}
+
+#emails-page .emails-folder span,
+#emails-page .emails-folder strong {
+  color: inherit;
+}
+
+#emails-page .emails-folder:hover,
+#emails-page .emails-folder.active {
+  background: #dcecf8;
+  color: #075f99;
+}
+
+#emails-page .emails-list-panel,
+#emails-page .email-reader,
+#emails-page .emails-search-wrap {
+  background: var(--email-surface);
+  border-color: var(--email-border);
+}
+
+#emails-page .emails-search-wrap input,
+#emails-page .emails-compose-form input,
+#emails-page .emails-compose-form textarea {
+  background: #ffffff;
+  color: var(--email-text);
+  caret-color: var(--email-text);
+  border: 1px solid #9fb0c1;
+}
+
+#emails-page .emails-search-wrap input::placeholder,
+#emails-page .emails-compose-form input::placeholder,
+#emails-page .emails-compose-form textarea::placeholder {
+  color: #66798f;
+  opacity: 1;
+}
+
+#emails-page .email-list-item {
+  background: #ffffff;
+  color: var(--email-text);
+  border-color: var(--email-border);
+}
+
+#emails-page .email-list-item:hover,
+#emails-page .email-list-item.selected {
+  background: #eef7ff;
+}
+
+#emails-page .email-list-item.unread {
+  background: #f3f9ff;
+}
+
+#emails-page .email-list-top strong,
+#emails-page .email-list-subject,
+#emails-page .email-reader-header h2,
+#emails-page .email-reader-body,
+#emails-page .email-reader-content h3,
+#emails-page .email-thread-item strong,
+#emails-page .email-thread-item p,
+#emails-page .email-attachments h4,
+#emails-page .email-attachment-metadata strong {
+  color: var(--email-text);
+}
+
+#emails-page .email-list-top time,
+#emails-page .email-list-preview,
+#emails-page .email-list-meta,
+#emails-page .email-reader-header p,
+#emails-page .email-reader-header time,
+#emails-page .email-reader-empty,
+#emails-page .email-empty,
+#emails-page .email-thread-item time,
+#emails-page .email-attachment-note,
+#emails-page .email-attachment-metadata small {
+  color: var(--email-muted);
+}
+
+#emails-page .email-reader-header,
+#emails-page .email-thread,
+#emails-page .email-thread-item {
+  border-color: var(--email-border);
+}
+
+#emails-page .email-thread-item {
+  background: #f8fafc;
+}
+
+#emails-page .email-attachment-metadata {
+  background: #f5f8fb;
+  border-color: var(--email-border);
+  color: var(--email-text);
+}
+
+#emails-page .email-reader-body {
+  background: transparent;
+}
+
+#emails-page .email-reader-actions .secondary-button,
+#emails-page .email-reader-actions .danger-button {
+  color: #ffffff;
+}
+
+@media (forced-colors: active) {
+  #emails-page .emails-layout,
+  #emails-page .emails-folders,
+  #emails-page .emails-list-panel,
+  #emails-page .email-reader,
+  #emails-page .email-list-item,
+  #emails-page .emails-search-wrap input,
+  #emails-page .emails-compose-form input,
+  #emails-page .emails-compose-form textarea {
+    forced-color-adjust: auto;
+  }
+}

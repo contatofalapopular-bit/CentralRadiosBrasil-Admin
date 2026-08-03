@@ -1,7 +1,7 @@
 {
   "app": "Central Rádios Brasil — Painel Administrativo",
-  "version": "3.6.2",
-  "release": "E-mail D1 sem R2 + Gestão de Interessados Streaming CRB",
+  "version": "3.6.3",
+  "release": "Correção de contraste da Central de E-mails + E-mail D1 sem R2 + Streaming CRB",
   "build": "2026-08-03",
   "modules": {
     "dashboard": true,
@@ -107,7 +107,11 @@
     "emissora-states-select",
     "emissora-cities-by-state",
     "emissora-edit-location",
-    "cities-cache-fallback"
+    "cities-cache-fallback",
+    "email-white-text-on-white-background",
+    "email-reader-contrast",
+    "email-list-contrast",
+    "email-search-contrast"
   ],
-  "name": "Central Rádios Brasil Admin — E-mail D1 sem R2"
+  "name": "Central Rádios Brasil Admin — Contraste da Central de E-mails"
 }

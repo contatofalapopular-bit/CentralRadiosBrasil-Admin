@@ -1,4 +1,4 @@
-# Módulo de E-mail — Admin v3.6.2
+# Módulo de E-mail — Admin v3.6.3
 
 O módulo usa o Worker `crb-email` v1.1.0, sem R2.
 
@@ -13,3 +13,7 @@ O módulo usa o Worker `crb-email` v1.1.0, sem R2.
 
 ## Anexos
 O conteúdo dos anexos permanece na cópia de segurança encaminhada para `centralradiosbrasil@gmail.com`. O Painel exibe nome, formato e tamanho, mas não oferece download nesta fase.
+
+## Correção visual v3.6.3
+
+A caixa de entrada e o leitor de mensagens usam fundo claro com texto escuro para garantir leitura adequada.

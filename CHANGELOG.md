@@ -1,3 +1,10 @@
+## v3.6.3 — Correção de contraste da Central de E-mails
+
+- Corrigido texto branco sobre fundo branco na lista e no leitor de mensagens.
+- Corrigidos remetente, assunto, conteúdo, conversa, metadados e estado vazio.
+- Corrigido contraste do campo de pesquisa e dos formulários de composição.
+- Preservados D1 sem R2, encaminhamento ao Gmail, Streaming CRB e demais módulos.
+
 ## v3.6.2 — E-mail armazenado no D1 sem R2
 
 - Remetente, assunto, texto, estados e histórico são armazenados no D1.

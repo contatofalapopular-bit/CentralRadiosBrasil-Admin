@@ -1,10 +1,12 @@
 {
-  "commit":"12.3",
-  "version":"2.1.0",
-  "features":[
+  "commit": "12.3",
+  "version": "3.6.3",
+  "features": [
     "logo_upload",
     "logo_preview",
     "logo_replace",
     "logo_export"
-  ]
+  ],
+  "title": "Correção de contraste da Central de E-mails",
+  "date": "2026-08-03"
 }
