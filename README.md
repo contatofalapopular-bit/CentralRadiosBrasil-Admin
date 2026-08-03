@@ -1,3 +1,7 @@
+# Central Rádios Brasil — Admin 3.9.3
+
+Gestão comercial com regra de faturas por contrato, competência e serviço.
+
 # Central Rádios Brasil — Painel Administrativo v3.9.0
 
 ## Commit 22.17 — Gestão Comercial, Streaming e Sites dos Clientes

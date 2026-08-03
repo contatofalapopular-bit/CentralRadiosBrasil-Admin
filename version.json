@@ -1,7 +1,7 @@
 {
   "app": "Central Rádios Brasil — Painel Administrativo",
-  "version": "3.9.1",
-  "release": "Gestão Comercial, Streaming e Sites dos Clientes",
+  "version": "3.9.3",
+  "release": "Regra correta de faturas por contrato, competência e serviço",
   "build": "2026-08-03",
   "modules": {
     "dashboard_operacional": true,
@@ -46,9 +46,12 @@
     "ocorrencias",
     "streaming-leads",
     "email-inbox",
-    "stream-monitoring"
+    "stream-monitoring",
+    "invoice-charge-types",
+    "invoice-service-aware-duplicate-control",
+    "clear-duplicate-invoice-errors"
   ],
   "name": "Gestão Comercial, Streaming e Sites",
-  "updatedAt": "2026-08-03T16:49:00Z",
-  "descricao": "Correção dos botões e formulários da Gestão Comercial"
+  "updatedAt": "2026-08-03T18:45:00Z",
+  "descricao": "Corrige duplicidade de faturas sem bloquear serviços legítimos com mesmo valor ou vencimento"
 }

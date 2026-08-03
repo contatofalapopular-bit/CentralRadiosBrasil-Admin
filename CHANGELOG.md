@@ -1,5 +1,14 @@
 # Changelog
 
+## 3.9.3 — Regra correta de faturas
+
+- adiciona tipo de cobrança às faturas;
+- permite vencimentos e valores iguais quando os serviços são diferentes;
+- bloqueia a mesma mensalidade para o mesmo contrato e competência;
+- diferencia cobranças manuais por tipo e descrição;
+- exibe mensagens claras quando uma cobrança duplicada é detectada;
+- preserva pagamentos, contratos, clientes, sites e infraestrutura.
+
 ## 3.9.1 — Correção dos botões da Gestão Comercial
 
 - Corrige a abertura dos formulários de novos registros.
