@@ -73,3 +73,14 @@
 
 - Solicitações de alteração das emissoras.
 - Monitoramento automático de streams.
+
+## 3.9.0 — Gestão Comercial, Streaming e Sites dos Clientes
+
+- Nova aba Gestão Comercial.
+- Clientes, planos, contratos, faturas e pagamentos manuais.
+- Pagamentos parciais e estornos.
+- Controle de capacidade e custo da revenda.
+- Catálogo de modelos de site em planejamento/desenvolvimento.
+- Instâncias de site por cliente, domínio e campos editáveis permitidos.
+- Conversão de interessados do Streaming CRB em clientes.
+- Alertas comerciais integrados ao Dashboard Operacional.

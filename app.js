@@ -9,6 +9,7 @@ let solicitacoesInicializadas = false;
 let emailsInicializados = false;
 let streamingInteressesInicializados = false;
 let ocorrenciasInicializadas = false;
+let comercialInicializado = false;
 
 document.addEventListener("DOMContentLoaded", () => {
   texto("app-version", `v${CONFIG.VERSION}`);
@@ -30,6 +31,8 @@ document.addEventListener("DOMContentLoaded", () => {
         StreamingInteressesAdmin.carregar();
       } else if (rotaAtual() === "ocorrencias") {
         OcorrenciasAdmin.carregar();
+      } else if (rotaAtual() === "comercial") {
+        ComercialAdmin.carregar();
       } else if (rotaAtual() === "radios") {
         RadiosAdmin.carregar();
       } else if (rotaAtual() === "estados") {
@@ -103,6 +106,7 @@ async function renderizarRota() {
     solicitacoes:
       document.getElementById("solicitacoes-page"),
     ocorrencias: document.getElementById("ocorrencias-page"),
+    comercial: document.getElementById("comercial-page"),
     emails: document.getElementById("emails-page"),
     "streaming-interesses": document.getElementById("streaming-interesses-page"),
     radios: document.getElementById("radios-page"),
@@ -143,7 +147,16 @@ async function renderizarRota() {
       );
     });
 
-  if (rotaFinal === "ocorrencias") {
+  if (rotaFinal === "comercial") {
+    texto("page-title", "Gestão Comercial");
+    texto("page-subtitle", "Clientes, planos, contratos, faturas, streaming e sites editáveis");
+    if (!comercialInicializado) {
+      comercialInicializado = true;
+      await ComercialAdmin.iniciar();
+    } else {
+      await ComercialAdmin.carregar();
+    }
+  } else if (rotaFinal === "ocorrencias") {
     texto("page-title", "Ocorrências");
     texto("page-subtitle", "Relatos públicos, suporte e confiabilidade do catálogo");
     if (!ocorrenciasInicializadas) {

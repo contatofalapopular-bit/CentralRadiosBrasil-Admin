@@ -1,7 +1,7 @@
 {
   "app": "Central Rádios Brasil — Painel Administrativo",
-  "version": "3.8.0",
-  "release": "Dashboard Operacional e Alertas",
+  "version": "3.9.0",
+  "release": "Gestão Comercial, Streaming e Sites dos Clientes",
   "build": "2026-08-03",
   "modules": {
     "dashboard_operacional": true,
@@ -17,9 +17,23 @@
     "monitoramento_streams": true,
     "emails": true,
     "streaming_interesses": true,
-    "ocorrencias": true
+    "ocorrencias": true,
+    "gestao_comercial": true,
+    "sites_clientes": true
   },
   "features": [
+    "commercial-client-management",
+    "commercial-plans",
+    "contracts-and-services",
+    "manual-invoicing",
+    "manual-payment-settlement",
+    "payment-refunds",
+    "reseller-capacity",
+    "site-template-catalog",
+    "client-site-instances",
+    "editable-field-permissions",
+    "streaming-lead-conversion",
+    "commercial-dashboard-alerts",
     "operational-dashboard",
     "consolidated-admin-summary",
     "navigation-alert-badges",
@@ -34,6 +48,6 @@
     "email-inbox",
     "stream-monitoring"
   ],
-  "name": "Dashboard Operacional e Alertas",
-  "updatedAt": "2026-08-03T16:30:00Z"
+  "name": "Gestão Comercial, Streaming e Sites",
+  "updatedAt": "2026-08-03T16:49:00Z"
 }

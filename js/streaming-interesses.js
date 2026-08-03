@@ -87,6 +87,12 @@ const StreamingInteressesAdmin = (() => {
       .getElementById("streaming-copy-protocol")
       ?.addEventListener("click", copiarProtocolo);
 
+    document
+      .getElementById("streaming-convert-client")
+      ?.addEventListener("click", () => {
+        if (estado.selecionado) ComercialAdmin.converterInteresse(estado.selecionado);
+      });
+
     document.addEventListener("keydown", (evento) => {
       if (
         evento.key === "Escape" &&

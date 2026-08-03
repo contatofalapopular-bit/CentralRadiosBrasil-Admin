@@ -1,4 +1,14 @@
-# Central Rádios Brasil — Painel Administrativo v3.8.0
+# Central Rádios Brasil — Painel Administrativo v3.9.0
+
+## Commit 22.17 — Gestão Comercial, Streaming e Sites dos Clientes
+
+Esta versão adiciona clientes, planos, contratos, faturas, pagamentos manuais, capacidade de revenda, modelos de site e instâncias de site dos clientes. O Dashboard 3.8.0 e todos os módulos anteriores foram preservados.
+
+Publique primeiro o Worker principal v1.13.0 e depois este Admin. Consulte `GUIA-GESTAO-COMERCIAL.md`.
+
+---
+
+## Histórico — Painel v3.8.0
 
 ## Dashboard Operacional
 
@@ -74,3 +84,7 @@ Não revele nem salve a chave administrativa em arquivos do repositório.
 ## Admin 3.7.0
 
 Inclui a gestão de ocorrências públicas enviadas pelo Portal, com análise, prioridade, histórico e resolução.
+
+## Versão 3.9.0 — Commit 22.17
+
+Inclui Gestão Comercial do Streaming CRB e preparação dos sites editáveis dos clientes. Consulte `GUIA-GESTAO-COMERCIAL.md`.

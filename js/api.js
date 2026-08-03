@@ -326,6 +326,39 @@ const API = {
     );
   },
 
+  resumoComercial() { return this.worker("/api/admin/comercial/resumo"); },
+  listarClientesComerciais() { return this.worker("/api/admin/comercial/clientes?limit=500"); },
+  criarClienteComercial(dados) { return this.worker("/api/admin/comercial/clientes", { method: "POST", body: JSON.stringify(dados) }); },
+  detalharClienteComercial(id) { return this.worker(`/api/admin/comercial/clientes/${encodeURIComponent(id)}`); },
+  atualizarClienteComercial(id, dados) { return this.worker(`/api/admin/comercial/clientes/${encodeURIComponent(id)}`, { method: "PATCH", body: JSON.stringify(dados) }); },
+
+  listarPlanosComerciais() { return this.worker("/api/admin/comercial/planos?limit=500"); },
+  criarPlanoComercial(dados) { return this.worker("/api/admin/comercial/planos", { method: "POST", body: JSON.stringify(dados) }); },
+  atualizarPlanoComercial(id, dados) { return this.worker(`/api/admin/comercial/planos/${encodeURIComponent(id)}`, { method: "PATCH", body: JSON.stringify(dados) }); },
+
+  listarContratosComerciais() { return this.worker("/api/admin/comercial/contratos?limit=500"); },
+  criarContratoComercial(dados) { return this.worker("/api/admin/comercial/contratos", { method: "POST", body: JSON.stringify(dados) }); },
+  detalharContratoComercial(id) { return this.worker(`/api/admin/comercial/contratos/${encodeURIComponent(id)}`); },
+  atualizarContratoComercial(id, dados) { return this.worker(`/api/admin/comercial/contratos/${encodeURIComponent(id)}`, { method: "PATCH", body: JSON.stringify(dados) }); },
+  gerarFaturaContratoComercial(id, dados = {}) { return this.worker(`/api/admin/comercial/contratos/${encodeURIComponent(id)}/gerar-fatura`, { method: "POST", body: JSON.stringify(dados) }); },
+
+  listarFaturasComerciais() { return this.worker("/api/admin/comercial/faturas?limit=500"); },
+  criarFaturaComercial(dados) { return this.worker("/api/admin/comercial/faturas", { method: "POST", body: JSON.stringify(dados) }); },
+  detalharFaturaComercial(id) { return this.worker(`/api/admin/comercial/faturas/${encodeURIComponent(id)}`); },
+  atualizarFaturaComercial(id, dados) { return this.worker(`/api/admin/comercial/faturas/${encodeURIComponent(id)}`, { method: "PATCH", body: JSON.stringify(dados) }); },
+  registrarPagamentoComercial(id, dados) { return this.worker(`/api/admin/comercial/faturas/${encodeURIComponent(id)}/pagamentos`, { method: "POST", body: JSON.stringify(dados) }); },
+  atualizarPagamentoComercial(id, dados) { return this.worker(`/api/admin/comercial/pagamentos/${encodeURIComponent(id)}`, { method: "PATCH", body: JSON.stringify(dados) }); },
+
+  listarModelosSiteComerciais() { return this.worker("/api/admin/comercial/modelos-site?limit=500"); },
+  criarModeloSiteComercial(dados) { return this.worker("/api/admin/comercial/modelos-site", { method: "POST", body: JSON.stringify(dados) }); },
+  atualizarModeloSiteComercial(id, dados) { return this.worker(`/api/admin/comercial/modelos-site/${encodeURIComponent(id)}`, { method: "PATCH", body: JSON.stringify(dados) }); },
+  listarSitesComerciais() { return this.worker("/api/admin/comercial/sites?limit=500"); },
+  criarSiteComercial(dados) { return this.worker("/api/admin/comercial/sites", { method: "POST", body: JSON.stringify(dados) }); },
+  atualizarSiteComercial(id, dados) { return this.worker(`/api/admin/comercial/sites/${encodeURIComponent(id)}`, { method: "PATCH", body: JSON.stringify(dados) }); },
+  listarRevendasComerciais() { return this.worker("/api/admin/comercial/revendas?limit=500"); },
+  criarRevendaComercial(dados) { return this.worker("/api/admin/comercial/revendas", { method: "POST", body: JSON.stringify(dados) }); },
+  atualizarRevendaComercial(id, dados) { return this.worker(`/api/admin/comercial/revendas/${encodeURIComponent(id)}`, { method: "PATCH", body: JSON.stringify(dados) }); },
+
   emailWorkerUrl() {
     return String(CONFIG.EMAIL_WORKER_URL || "").replace(/\/+$/, "");
   },

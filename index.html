@@ -7,19 +7,20 @@
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
   <meta http-equiv="Pragma" content="no-cache">
   <meta http-equiv="Expires" content="0">
-  <title>Central Rádios Brasil — Painel Administrativo v3.8.0</title>
+  <title>Central Rádios Brasil — Painel Administrativo v3.9.0</title>
 
-  <link rel="stylesheet" href="style.css?v=3.8.0">
-  <link rel="stylesheet" href="css/dashboard.css?v=3.8.0">
-  <link rel="stylesheet" href="css/radios.css?v=3.8.0">
-  <link rel="stylesheet" href="css/streams.css?v=3.8.0">
-  <link rel="stylesheet" href="css/emissoras.css?v=3.8.0">
-  <link rel="stylesheet" href="css/solicitacoes.css?v=3.8.0">
-  <link rel="stylesheet" href="css/emails.css?v=3.8.0">
-  <link rel="stylesheet" href="css/streaming-interesses.css?v=3.8.0">
-  <link rel="stylesheet" href="css/ocorrencias.css?v=3.8.0">
+  <link rel="stylesheet" href="style.css?v=3.9.0">
+  <link rel="stylesheet" href="css/dashboard.css?v=3.9.0">
+  <link rel="stylesheet" href="css/radios.css?v=3.9.0">
+  <link rel="stylesheet" href="css/streams.css?v=3.9.0">
+  <link rel="stylesheet" href="css/emissoras.css?v=3.9.0">
+  <link rel="stylesheet" href="css/solicitacoes.css?v=3.9.0">
+  <link rel="stylesheet" href="css/emails.css?v=3.9.0">
+  <link rel="stylesheet" href="css/streaming-interesses.css?v=3.9.0">
+  <link rel="stylesheet" href="css/ocorrencias.css?v=3.9.0">
+  <link rel="stylesheet" href="css/comercial.css?v=3.9.0">
 </head>
-<body data-app-version="3.8.0" data-build="dashboard-operacional">
+<body data-app-version="3.9.0" data-build="gestao-comercial-sites">
 <div class="app-shell">
   <aside class="sidebar">
     <div class="brand">
@@ -35,6 +36,7 @@
       <a class="nav-link" data-route="solicitacoes" href="#/solicitacoes">📥 Solicitações <span id="solicitacoes-nav-count" class="nav-alert-count hidden"></span></a>
       <a class="nav-link" data-route="ocorrencias" href="#/ocorrencias">⚠️ Ocorrências <span id="ocorrencias-nav-count" class="nav-alert-count hidden"></span></a>
       <a class="nav-link" data-route="streaming-interesses" href="#/streaming-interesses">🚀 Streaming CRB <span id="streaming-nav-count" class="nav-alert-count hidden"></span></a>
+      <a class="nav-link" data-route="comercial" href="#/comercial">💼 Gestão Comercial <span id="comercial-nav-count" class="nav-alert-count hidden"></span></a>
       <a class="nav-link" data-route="emails" href="#/emails">✉️ E-mails <span id="emails-nav-count" class="emails-nav-count nav-alert-count hidden"></span></a>
       <a class="nav-link" data-route="emissoras" href="#/emissoras">🏢 Emissoras</a>
         <a class="nav-link" data-route="publicacao" href="#/publicacao">📤 Publicação</a>
@@ -111,6 +113,10 @@
           <button type="button" class="operation-card" data-dashboard-route="streaming-interesses">
             <span class="operation-icon">🚀</span><small>Streaming CRB</small>
             <strong id="dashboard-alert-streaming">—</strong><em>Novos interessados</em>
+          </button>
+          <button type="button" class="operation-card" data-dashboard-route="comercial">
+            <span class="operation-icon">💼</span><small>Comercial</small>
+            <strong id="dashboard-alert-comercial">—</strong><em>Vencimentos, contratos e sites</em>
           </button>
           <button type="button" class="operation-card" data-dashboard-route="emails">
             <span class="operation-icon">✉️</span><small>E-mails</small>
@@ -1050,6 +1056,90 @@
         </section>
       </div>
 
+      <section id="comercial-page" class="hidden">
+        <div class="radios-toolbar comercial-toolbar">
+          <div>
+            <span id="comercial-status-badge" class="status-badge loading">Aguardando autenticação</span>
+            <h2>Gestão Comercial, Streaming e Sites</h2>
+            <p>Administre clientes, planos, contratos, vencimentos, pagamentos, infraestrutura e os futuros sites editáveis. <strong id="comercial-visible-count">0</strong> clientes cadastrados.</p>
+          </div>
+          <div class="toolbar-actions">
+            <button type="button" class="secondary-button" data-comercial-new="client">＋ Novo cliente</button>
+            <button id="comercial-refresh-button" type="button" class="primary-button">↻ Atualizar gestão</button>
+          </div>
+        </div>
+
+        <section class="comercial-kpis" aria-label="Resumo da gestão comercial">
+          <article class="success"><span>Clientes ativos</span><strong id="comercial-kpi-clientes">0</strong><small>Contratantes em operação</small></article>
+          <article class="success"><span>Receita mensal</span><strong id="comercial-kpi-receita">R$ 0,00</strong><small>Equivalente mensal dos contratos</small></article>
+          <article class="danger"><span>Faturas vencidas</span><strong id="comercial-kpi-vencidas">0</strong><small>Exigem cobrança ou análise</small></article>
+          <article><span>Sites publicados</span><strong id="comercial-kpi-sites">0</strong><small>Instâncias dos clientes</small></article>
+          <article class="warning"><span>Contas disponíveis</span><strong id="comercial-kpi-capacidade">0</strong><small>Capacidade da revenda</small></article>
+          <article><span>Modelos disponíveis</span><strong id="comercial-kpi-modelos">0</strong><small>Catálogo futuro de sites</small></article>
+        </section>
+
+        <nav class="comercial-tabs" aria-label="Áreas da gestão comercial">
+          <button type="button" class="comercial-tab active" data-comercial-tab="visao-geral">Visão geral</button>
+          <button type="button" class="comercial-tab" data-comercial-tab="clientes">Clientes</button>
+          <button type="button" class="comercial-tab" data-comercial-tab="planos">Planos</button>
+          <button type="button" class="comercial-tab" data-comercial-tab="contratos">Contratos</button>
+          <button type="button" class="comercial-tab" data-comercial-tab="faturas">Faturas e pagamentos</button>
+          <button type="button" class="comercial-tab" data-comercial-tab="sites">Sites editáveis</button>
+          <button type="button" class="comercial-tab" data-comercial-tab="infraestrutura">Infraestrutura</button>
+        </nav>
+
+        <section class="comercial-panel" data-comercial-panel="visao-geral">
+          <div class="comercial-overview-grid">
+            <article class="comercial-card">
+              <header class="comercial-card-header"><div><h3>Funil e pendências</h3><p>O que exige acompanhamento comercial.</p></div></header>
+              <div id="comercial-pipeline-summary" class="comercial-summary-list"></div>
+            </article>
+            <article class="comercial-card">
+              <header class="comercial-card-header"><div><h3>Capacidade da revenda</h3><p>Contas disponíveis sem inventar capacidade.</p></div></header>
+              <div id="comercial-capacity-summary" class="comercial-capacity"></div>
+            </article>
+          </div>
+          <article class="comercial-card" style="margin-top:16px">
+            <header class="comercial-card-header"><div><h3>Atividade comercial recente</h3><p>Histórico de clientes, contratos, faturas, sites e infraestrutura.</p></div></header>
+            <div id="comercial-activity-list" class="comercial-activity-list"></div>
+          </article>
+        </section>
+
+        <section class="comercial-panel hidden" data-comercial-panel="clientes">
+          <div class="comercial-section-header"><div><h3>Clientes do Streaming CRB</h3><p>Contratantes e prospects convertidos dos pré-cadastros.</p></div><button class="primary-button" type="button" data-comercial-new="client">＋ Novo cliente</button></div>
+          <section class="table-card"><div class="table-scroll"><table class="radios-table comercial-table"><thead><tr><th>Código</th><th>Cliente / rádio</th><th>Contato</th><th>Localização</th><th>Status</th><th>Serviços</th><th>Ações</th></tr></thead><tbody id="comercial-clientes-body"></tbody></table></div></section>
+        </section>
+
+        <section class="comercial-panel hidden" data-comercial-panel="planos">
+          <div class="comercial-section-header"><div><h3>Planos comercializados</h3><p>Defina seus próprios produtos, preços e recursos.</p></div><button class="primary-button" type="button" data-comercial-new="plan">＋ Novo plano</button></div>
+          <section class="table-card"><div class="table-scroll"><table class="radios-table comercial-table"><thead><tr><th>Código</th><th>Plano</th><th>Valor</th><th>Capacidade</th><th>Inclui</th><th>Status</th><th>Ações</th></tr></thead><tbody id="comercial-planos-body"></tbody></table></div></section>
+        </section>
+
+        <section class="comercial-panel hidden" data-comercial-panel="contratos">
+          <div class="comercial-section-header"><div><h3>Contratos e serviços</h3><p>Streaming, site, valores e vencimentos por cliente.</p></div><button class="primary-button" type="button" data-comercial-new="contract">＋ Novo contrato</button></div>
+          <section class="table-card"><div class="table-scroll"><table class="radios-table comercial-table"><thead><tr><th>Número</th><th>Cliente</th><th>Plano</th><th>Valor</th><th>Vencimento</th><th>Status</th><th>Faturas</th><th>Ações</th></tr></thead><tbody id="comercial-contratos-body"></tbody></table></div></section>
+        </section>
+
+        <section class="comercial-panel hidden" data-comercial-panel="faturas">
+          <div class="comercial-section-header"><div><h3>Faturas e pagamentos</h3><p>Baixa manual, parcial, cancelamento e estorno com histórico.</p></div><button class="primary-button" type="button" data-comercial-new="invoice">＋ Nova fatura</button></div>
+          <section class="table-card"><div class="table-scroll"><table class="radios-table comercial-table"><thead><tr><th>Fatura</th><th>Cliente</th><th>Vencimento</th><th>Total</th><th>Pago</th><th>Status</th><th>Forma</th><th>Ações</th></tr></thead><tbody id="comercial-faturas-body"></tbody></table></div></section>
+        </section>
+
+        <section class="comercial-panel hidden" data-comercial-panel="sites">
+          <div class="comercial-section-header"><div><h3>Catálogo de modelos</h3><p>Cadastre os modelos como planejamento antes do desenvolvimento.</p></div><button class="primary-button" type="button" data-comercial-new="model">＋ Novo modelo</button></div>
+          <section class="table-card"><div class="table-scroll"><table class="radios-table comercial-table"><thead><tr><th>Código</th><th>Modelo</th><th>Descrição</th><th>Campos editáveis</th><th>Status</th><th>Ações</th></tr></thead><tbody id="comercial-modelos-body"></tbody></table></div></section>
+          <div class="comercial-section-header" style="margin-top:22px"><div><h3>Sites dos clientes</h3><p>Modelo, domínio, publicação e permissões de edição.</p></div><button class="primary-button" type="button" data-comercial-new="site">＋ Preparar site</button></div>
+          <section class="table-card"><div class="table-scroll"><table class="radios-table comercial-table"><thead><tr><th>Código</th><th>Cliente</th><th>Site / modelo</th><th>Domínio</th><th>Permissões</th><th>Status</th><th>Ações</th></tr></thead><tbody id="comercial-sites-body"></tbody></table></div></section>
+          <p class="comercial-modal-note" style="margin-top:16px">O editor visual e o acesso individual do cliente serão criados no Commit 22.18. Esta etapa organiza os modelos, instâncias, domínios, estados e campos permitidos.</p>
+        </section>
+
+        <section class="comercial-panel hidden" data-comercial-panel="infraestrutura">
+          <div class="comercial-section-header"><div><h3>Infraestrutura de revenda</h3><p>Fornecedor, plano contratado, custo, vencimento e limite de contas.</p></div><button class="primary-button" type="button" data-comercial-new="revenda">＋ Nova infraestrutura</button></div>
+          <section class="table-card"><div class="table-scroll"><table class="radios-table comercial-table"><thead><tr><th>Código</th><th>Fornecedor</th><th>Capacidade</th><th>Custo mensal</th><th>Vencimento</th><th>Status</th><th>Ações</th></tr></thead><tbody id="comercial-revendas-body"></tbody></table></div></section>
+        </section>
+      </section>
+
+
       <section id="streaming-interesses-page" class="hidden">
         <div class="radios-toolbar streaming-toolbar">
           <div>
@@ -1297,6 +1387,7 @@
       </label>
 
       <div class="modal-actions">
+        <button id="streaming-convert-client" type="button" class="secondary-button">💼 Converter em cliente</button>
         <button id="streaming-modal-cancel" type="button" class="secondary-button">Cancelar</button>
         <button id="streaming-modal-save" type="submit" class="primary-button">Salvar atualização</button>
       </div>
@@ -2142,6 +2233,17 @@
   </section>
 </div>
 
+<div id="comercial-modal-backdrop" class="modal-backdrop hidden">
+  <section class="modal-card comercial-modal-card" role="dialog" aria-modal="true" aria-labelledby="comercial-modal-title">
+    <div class="modal-header"><div><span class="status-badge success">Gestão Comercial</span><h2 id="comercial-modal-title">Registro comercial</h2><p id="comercial-modal-subtitle"></p></div><button id="close-comercial-modal" class="close-button" type="button" aria-label="Fechar">×</button></div>
+    <form id="comercial-modal-form" class="comercial-form">
+      <div id="comercial-modal-form-fields" class="comercial-modal-body"></div>
+      <div class="modal-actions"><button id="comercial-modal-cancel" type="button" class="secondary-button">Cancelar</button><button id="comercial-modal-save" type="submit" class="primary-button">Salvar</button></div>
+    </form>
+  </section>
+</div>
+
+
 <div id="validation-modal-backdrop" class="modal-backdrop hidden">
   <section class="modal-card validation-modal-card" role="dialog"
     aria-modal="true" aria-labelledby="validation-status-title">
@@ -2214,21 +2316,22 @@
 </div>
 
 
-<script src="config.js?v=3.8.0"></script>
-<script src="js/utils.js?v=3.8.0"></script>
-<script src="js/api.js?v=3.8.0"></script>
-<script src="js/dashboard.js?v=3.8.0"></script>
-<script src="js/radios.js?v=3.8.0"></script>
-<script src="js/estados.js?v=3.8.0"></script>
-<script src="js/categorias.js?v=3.8.0"></script>
-<script src="js/cidades.js?v=3.8.0"></script>
-<script src="js/streams.js?v=3.8.0"></script>
-<script src="js/emissoras.js?v=3.8.0"></script>
-<script src="js/publicacao.js?v=3.8.0"></script>
-<script src="js/solicitacoes.js?v=3.8.0"></script>
-<script src="js/emails.js?v=3.8.0"></script>
-<script src="js/streaming-interesses.js?v=3.8.0"></script>
-<script src="js/ocorrencias.js?v=3.8.0"></script>
-<script src="app.js?v=3.8.0"></script>
+<script src="config.js?v=3.9.0"></script>
+<script src="js/utils.js?v=3.9.0"></script>
+<script src="js/api.js?v=3.9.0"></script>
+<script src="js/dashboard.js?v=3.9.0"></script>
+<script src="js/radios.js?v=3.9.0"></script>
+<script src="js/estados.js?v=3.9.0"></script>
+<script src="js/categorias.js?v=3.9.0"></script>
+<script src="js/cidades.js?v=3.9.0"></script>
+<script src="js/streams.js?v=3.9.0"></script>
+<script src="js/emissoras.js?v=3.9.0"></script>
+<script src="js/publicacao.js?v=3.9.0"></script>
+<script src="js/solicitacoes.js?v=3.9.0"></script>
+<script src="js/emails.js?v=3.9.0"></script>
+<script src="js/streaming-interesses.js?v=3.9.0"></script>
+<script src="js/ocorrencias.js?v=3.9.0"></script>
+<script src="js/comercial.js?v=3.9.0"></script>
+<script src="app.js?v=3.9.0"></script>
 </body>
 </html>
