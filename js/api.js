@@ -354,6 +354,11 @@ const API = {
   atualizarClienteComercial(id, dados) { return this.worker(`/api/admin/comercial/clientes/${encodeURIComponent(id)}`, { method: "PATCH", body: JSON.stringify(dados) }); },
   obterAcessoClienteComercial(id) { return this.worker(`/api/admin/comercial/clientes/${encodeURIComponent(id)}/acesso`); },
   gerenciarAcessoClienteComercial(id, dados) { return this.worker(`/api/admin/comercial/clientes/${encodeURIComponent(id)}/acesso`, { method: "POST", body: JSON.stringify(dados) }); },
+  listarUsuariosClienteComercial(id) { return this.worker(`/api/admin/comercial/clientes/${encodeURIComponent(id)}/usuarios`); },
+  criarUsuarioClienteComercial(id, dados) { return this.worker(`/api/admin/comercial/clientes/${encodeURIComponent(id)}/usuarios`, { method: "POST", body: JSON.stringify(dados) }); },
+  atualizarUsuarioClienteComercial(id, usuarioId, dados) { return this.worker(`/api/admin/comercial/clientes/${encodeURIComponent(id)}/usuarios/${encodeURIComponent(usuarioId)}`, { method: "PATCH", body: JSON.stringify(dados) }); },
+  excluirUsuarioClienteComercial(id, usuarioId) { return this.worker(`/api/admin/comercial/clientes/${encodeURIComponent(id)}/usuarios/${encodeURIComponent(usuarioId)}`, { method: "DELETE" }); },
+  redefinirSenhaUsuarioClienteComercial(id, usuarioId) { return this.worker(`/api/admin/comercial/clientes/${encodeURIComponent(id)}/usuarios/${encodeURIComponent(usuarioId)}/redefinir-senha`, { method: "POST", body: "{}" }); },
 
   listarPlanosComerciais() { return this.worker("/api/admin/comercial/planos?limit=500"); },
   criarPlanoComercial(dados) { return this.worker("/api/admin/comercial/planos", { method: "POST", body: JSON.stringify(dados) }); },

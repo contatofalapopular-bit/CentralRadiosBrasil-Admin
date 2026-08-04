@@ -1,3 +1,23 @@
+# Central Rádios Brasil — Admin 3.11.0
+
+## Usuários reais do Portal do Cliente
+
+O módulo **Gestão Comercial > Clientes** agora possui o botão **Usuários**, que permite administrar contas individuais do cliente pelo Worker v1.17.0.
+
+- lista a conta principal e usuários adicionais;
+- cria usuários com senha temporária;
+- edita perfil e áreas;
+- redefine senha;
+- ativa, suspende e exclui usuários secundários;
+- protege o Administrador principal;
+- preserva os demais módulos e integrações do Admin.
+
+Publique primeiro o Worker v1.17.0 e depois este Admin.
+
+---
+
+## Histórico anterior
+
 # Central Rádios Brasil — Admin 3.10.1
 
 Gestão comercial com regra de faturas por contrato, competência e serviço.

@@ -1,3 +1,16 @@
+# Changelog
+
+## 3.11.0 — Usuários reais e permissões no servidor
+
+- adiciona botão **Usuários** em Gestão Comercial > Clientes;
+- lista usuários individuais do Portal do Cliente;
+- cria contas com senha temporária;
+- edita perfil, áreas e status;
+- redefine senha;
+- protege a conta principal;
+- usa exclusivamente sessão administrativa Bearer;
+- preserva todos os módulos anteriores.
+
 ## 3.10.1 — Diagnóstico do módulo de solicitações
 
 - Painel confirmado na mesma API utilizada pelo Portal Público.

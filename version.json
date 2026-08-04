@@ -1,7 +1,7 @@
 {
   "app": "Central Rádios Brasil — Painel Administrativo",
-  "version": "3.10.1",
-  "release": "Correção integrada do módulo de solicitações",
+  "version": "3.11.0",
+  "release": "Usuários reais e permissões no servidor",
   "build": "2026-08-04",
   "modules": {
     "dashboard_operacional": true,
@@ -56,9 +56,13 @@
     "site-drafts",
     "site-version-history",
     "publication-request",
-    "admin-site-publication"
+    "admin-site-publication",
+    "client-multi-user-access",
+    "server-side-role-permissions",
+    "client-user-password-reset"
   ],
-  "name": "Commit 22.18 — Portal do Cliente",
-  "updatedAt": "2026-08-04T12:30:00Z",
-  "descricao": "Melhora o diagnóstico de conexão do módulo de solicitações e alinha o cache do painel com o Worker API 1.15.1."
+  "name": "v3.0.0 — Pacote 4",
+  "updatedAt": "2026-08-04T18:30:00Z",
+  "descricao": "Adiciona gestão administrativa de usuários individuais do Portal do Cliente, mantendo o acesso principal e todas as integrações anteriores.",
+  "pacote": "v3.0.0-pacote-4"
 }

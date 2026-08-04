@@ -51,6 +51,7 @@ const ComercialAdmin = (() => {
     const id = acao.dataset.id;
     if (tipo.endsWith("-edit")) return abrirFormulario(tipo.replace("-edit", ""), id);
     if (tipo === "client-access") return criarOuRedefinirAcessoCliente(id);
+    if (tipo === "client-users") return gerenciarUsuariosCliente(id);
     if (tipo === "site-content") return abrirConteudoSite(id);
     if (tipo === "site-publish") return publicarSite(id);
     if (tipo === "contract-invoice") return gerarFaturaContrato(id);
@@ -132,7 +133,7 @@ const ComercialAdmin = (() => {
       <td>${escaparHtml([item.cidade,item.estado].filter(Boolean).join(" — ") || "—")}</td>
       <td><span class="comercial-badge ${item.status}">${rotuloStatus(item.status)}</span></td>
       <td>${numero(item.contratos_ativos)} contrato(s) • ${numero(item.sites)} site(s)</td>
-      <td><div class="comercial-row-actions"><button data-comercial-action="client-edit" data-id="${item.id}">Abrir</button><button data-comercial-action="client-access" data-id="${item.id}">Acesso</button></div></td>
+      <td><div class="comercial-row-actions"><button data-comercial-action="client-edit" data-id="${item.id}">Abrir</button><button data-comercial-action="client-access" data-id="${item.id}">Acesso principal</button><button data-comercial-action="client-users" data-id="${item.id}">Usuários</button></div></td>
     </tr>`, "Nenhum cliente cadastrado.");
   }
 
@@ -363,6 +364,65 @@ const ComercialAdmin = (() => {
       alert(`ACESSO DO CLIENTE\n\nPortal: ${retorno.portalUrl || CONFIG.CLIENT_PORTAL_URL}\nE-mail: ${retorno.email}\nSenha temporária: ${retorno.senhaTemporaria}\n\nCopie estes dados agora. A senha não será exibida novamente.`);
       await carregarTudo();
     } catch (erro) { alert(erro.message || "Não foi possível preparar o acesso."); }
+  }
+
+  const perfisUsuariosCliente = ["Administrador","Editor","Redator","Comercial","Auditor","Somente leitura"];
+  const areasUsuariosCliente = ["site","conteudo","comercial","integracoes","publicacao","financeiro","auditoria","backup","usuarios"];
+
+  function removerDialogUsuariosCliente() {
+    document.getElementById("comercial-users-dialog")?.remove();
+  }
+
+  function montarDialogUsuariosCliente(cliente, usuarios) {
+    removerDialogUsuariosCliente();
+    const dialog=document.createElement("dialog");
+    dialog.id="comercial-users-dialog";
+    dialog.className="comercial-users-dialog";
+    dialog.innerHTML=`<form method="dialog" class="comercial-users-panel"><header><div><h2>Usuários — ${escaparHtml(cliente.nome_radio||cliente.nome||"Cliente")}</h2><p>Logins individuais e permissões validadas pelo Worker. A conta principal só pode ser administrada pela Central.</p></div><button value="cancel" aria-label="Fechar">×</button></header><div class="comercial-users-actions"><button type="button" id="comercial-user-new">+ Novo usuário</button><span>${usuarios.length} usuário(s)</span></div><div class="comercial-users-list">${usuarios.map(usuario=>`<article data-user-id="${usuario.id}"><div><strong>${escaparHtml(usuario.nome)}</strong><small>${escaparHtml(usuario.email)}</small><span>${escaparHtml(usuario.perfil)} • ${usuario.owner?"Administrador principal":usuario.status}</span></div><div class="comercial-row-actions"><button type="button" data-user-action="edit" data-user-id="${usuario.id}">Editar</button><button type="button" data-user-action="reset" data-user-id="${usuario.id}">Nova senha</button>${usuario.owner?"":`<button type="button" data-user-action="toggle" data-user-id="${usuario.id}">${usuario.ativo?"Suspender":"Ativar"}</button><button type="button" data-user-action="delete" data-user-id="${usuario.id}">Excluir</button>`}</div></article>`).join("")||'<p class="comercial-empty">Nenhum usuário encontrado.</p>'}</div></form>`;
+    document.body.appendChild(dialog);
+    dialog.addEventListener("close",removerDialogUsuariosCliente,{once:true});
+    dialog.querySelector("#comercial-user-new")?.addEventListener("click",()=>criarUsuarioClientePeloAdmin(cliente.id));
+    dialog.querySelectorAll("[data-user-action]").forEach(botao=>botao.addEventListener("click",()=>acaoUsuarioClientePeloAdmin(cliente.id,usuarios.find(u=>u.id===botao.dataset.userId),botao.dataset.userAction)));
+    dialog.showModal();
+  }
+
+  async function gerenciarUsuariosCliente(clienteId) {
+    const cliente=localizar("client",clienteId);if(!cliente)return;
+    try{const retorno=await API.listarUsuariosClienteComercial(clienteId);montarDialogUsuariosCliente(retorno.cliente||cliente,retorno.usuarios||[]);}catch(erro){alert(erro.message||"Não foi possível carregar os usuários.");}
+  }
+
+  async function criarUsuarioClientePeloAdmin(clienteId) {
+    const nome=prompt("Nome do novo usuário:");if(!nome)return;
+    const email=prompt("E-mail do novo usuário:");if(!email)return;
+    const perfil=prompt(`Perfil (${perfisUsuariosCliente.join(", ")}):`,"Editor");if(!perfil)return;
+    if(!perfisUsuariosCliente.includes(perfil))return alert("Perfil inválido.");
+    const areasPadrao=perfil==="Administrador"?["*"]:[];
+    const areasTexto=perfil==="Administrador"?"*":prompt(`Áreas separadas por vírgula. Disponíveis: ${areasUsuariosCliente.join(", ")}`,areasPadrao.join(","))||"";
+    const areas=areasTexto.split(",").map(v=>v.trim()).filter(Boolean);
+    try{const retorno=await API.criarUsuarioClienteComercial(clienteId,{nome,email,perfil,areas,status:"ativo"});alert(`NOVO USUÁRIO\n\nPortal: ${retorno.portalUrl||CONFIG.CLIENT_PORTAL_URL}\nE-mail: ${retorno.usuario?.email||email}\nSenha temporária: ${retorno.senhaTemporaria}\n\nCopie agora. A senha não será exibida novamente.`);await gerenciarUsuariosCliente(clienteId);}catch(erro){alert(erro.message||"Não foi possível criar o usuário.");}
+  }
+
+  async function acaoUsuarioClientePeloAdmin(clienteId,usuario,acao) {
+    if(!usuario)return;
+    try{
+      if(acao==="reset"){
+        if(!confirm(`Gerar nova senha temporária para ${usuario.nome}?`))return;
+        const retorno=await API.redefinirSenhaUsuarioClienteComercial(clienteId,usuario.id);
+        alert(`SENHA TEMPORÁRIA\n\nPortal: ${retorno.portalUrl||CONFIG.CLIENT_PORTAL_URL}\nE-mail: ${usuario.email}\nSenha: ${retorno.senhaTemporaria}\n\nCopie agora.`);
+      }else if(acao==="toggle"){
+        await API.atualizarUsuarioClienteComercial(clienteId,usuario.id,{status:usuario.ativo?"suspenso":"ativo"});
+      }else if(acao==="delete"){
+        if(!confirm(`Excluir o usuário ${usuario.nome}?`))return;
+        await API.excluirUsuarioClienteComercial(clienteId,usuario.id);
+      }else if(acao==="edit"){
+        const nome=prompt("Nome:",usuario.nome);if(!nome)return;
+        const perfil=usuario.owner?"Administrador":prompt(`Perfil (${perfisUsuariosCliente.join(", ")}):`,usuario.perfil);if(!perfil)return;
+        if(!perfisUsuariosCliente.includes(perfil))return alert("Perfil inválido.");
+        const areas=usuario.owner?["*"]:(prompt(`Áreas separadas por vírgula: ${areasUsuariosCliente.join(", ")}`,(usuario.areas||[]).join(","))||"").split(",").map(v=>v.trim()).filter(Boolean);
+        await API.atualizarUsuarioClienteComercial(clienteId,usuario.id,{nome,perfil,areas,status:usuario.ativo?"ativo":"suspenso"});
+      }
+      await gerenciarUsuariosCliente(clienteId);
+    }catch(erro){alert(erro.message||"Não foi possível atualizar o usuário.");}
   }
 
   async function abrirConteudoSite(id) {
