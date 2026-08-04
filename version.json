@@ -1,8 +1,8 @@
 {
   "app": "Central Rádios Brasil — Painel Administrativo",
-  "version": "3.10.0",
-  "release": "Início do Portal do Cliente e Modelo Rádio Essencial",
-  "build": "2026-08-03",
+  "version": "3.10.1",
+  "release": "Correção integrada do módulo de solicitações",
+  "build": "2026-08-04",
   "modules": {
     "dashboard_operacional": true,
     "dashboard": true,
@@ -59,6 +59,6 @@
     "admin-site-publication"
   ],
   "name": "Commit 22.18 — Portal do Cliente",
-  "updatedAt": "2026-08-03T19:20:00Z",
-  "descricao": "Adiciona acesso individual, modelo Rádio Essencial, rascunhos, versões e publicação administrativa."
+  "updatedAt": "2026-08-04T12:30:00Z",
+  "descricao": "Melhora o diagnóstico de conexão do módulo de solicitações e alinha o cache do painel com o Worker API 1.15.1."
 }

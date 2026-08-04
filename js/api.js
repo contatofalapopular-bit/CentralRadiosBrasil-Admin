@@ -147,10 +147,21 @@ const API = {
       return dados;
     } catch (erro) {
       if (erro.name === "AbortError") {
-        throw new Error(
+        const falha = new Error(
           "A API administrativa demorou mais que o permitido."
         );
+        falha.status = 0;
+        throw falha;
       }
+
+      if (erro instanceof TypeError) {
+        const falha = new Error(
+          "Não foi possível conectar ao Worker da Central Rádios Brasil. Verifique a internet e confirme se a API está publicada."
+        );
+        falha.status = 0;
+        throw falha;
+      }
+
       throw erro;
     } finally {
       clearTimeout(timer);
@@ -212,9 +223,19 @@ const API = {
       return dados;
     } catch (erro) {
       if (erro.name === "AbortError") {
-        throw new Error(
+        const falha = new Error(
           "A API administrativa demorou mais que o permitido."
         );
+        falha.status = 0;
+        throw falha;
+      }
+
+      if (erro instanceof TypeError) {
+        const falha = new Error(
+          "Não foi possível conectar ao Worker da Central Rádios Brasil. Verifique a internet e confirme se a API está publicada."
+        );
+        falha.status = 0;
+        throw falha;
       }
 
       throw erro;

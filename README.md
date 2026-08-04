@@ -1,4 +1,4 @@
-# Central Rádios Brasil — Admin 3.10.0
+# Central Rádios Brasil — Admin 3.10.1
 
 Gestão comercial com regra de faturas por contrato, competência e serviço.
 
@@ -101,3 +101,7 @@ Inclui a gestão de ocorrências públicas enviadas pelo Portal, com análise, p
 ## Versão 3.9.0 — Commit 22.17
 
 Inclui Gestão Comercial do Streaming CRB e preparação dos sites editáveis dos clientes. Consulte `GUIA-GESTAO-COMERCIAL.md`.
+## 3.10.1 — Correção integrada de solicitações
+
+O painel permanece apontando para o mesmo Worker do Portal Público. Esta revisão melhora o diagnóstico quando o Worker não responde e atualiza o cache dos arquivos. A correção principal de persistência está no Worker API 1.15.1.
+

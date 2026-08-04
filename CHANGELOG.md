@@ -1,6 +1,12 @@
+## 3.10.1 — Diagnóstico do módulo de solicitações
+
+- Painel confirmado na mesma API utilizada pelo Portal Público.
+- Mensagens de rede melhoradas para diferenciar falha de conexão, tempo excedido e erro retornado pelo Worker.
+- Versão dos arquivos atualizada para impedir carregamento de JavaScript antigo pelo navegador.
+
 # Changelog
 
-## 3.10.0 — Início do Portal do Cliente
+## 3.10.1 — Início do Portal do Cliente
 
 - instala o primeiro modelo oficial “Rádio Essencial”;
 - cria e redefine o acesso individual de cada cliente;
