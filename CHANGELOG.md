@@ -1,5 +1,12 @@
 # Changelog
 
+## 3.11.1 — Dashboard reorganizado e Gestão Comercial removida
+
+- Corrige espaçamentos e quebra de texto dos cards da fila operacional.
+- Remove o menu, página, modal, JavaScript, CSS e chamadas da Gestão Comercial no Admin.
+- Remove alertas, atividades e filas comerciais do Dashboard.
+- Preserva Worker, D1 e demais repositórios sem alterações.
+
 ## 3.11.0 — Usuários reais e permissões no servidor
 
 - adiciona botão **Usuários** em Gestão Comercial > Clientes;

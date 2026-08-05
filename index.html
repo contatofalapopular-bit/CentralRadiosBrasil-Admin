@@ -1,2337 +1,1919 @@
 <!DOCTYPE html>
+<!DOCTYPE html>
+
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
-  <meta name="description" content="Painel Administrativo da Central Rádios Brasil">
-  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
-  <meta http-equiv="Pragma" content="no-cache">
-  <meta http-equiv="Expires" content="0">
-  <title>Central Rádios Brasil — Painel Administrativo v3.9.0</title>
+<meta charset="utf-8"/>
+<meta content="width=device-width,initial-scale=1" name="viewport"/>
+<meta content="Painel Administrativo da Central Rádios Brasil" name="description"/>
+<meta content="no-cache, no-store, must-revalidate" http-equiv="Cache-Control"/>
+<meta content="no-cache" http-equiv="Pragma"/>
+<meta content="0" http-equiv="Expires"/>
+<title>Central Rádios Brasil — Painel Administrativo v3.11.1</title>
+<link href="style.css?v=3.11.1" rel="stylesheet"/>
+<link href="css/dashboard.css?v=3.11.1" rel="stylesheet"/>
+<link href="css/radios.css?v=3.11.1" rel="stylesheet"/>
+<link href="css/streams.css?v=3.11.1" rel="stylesheet"/>
+<link href="css/emissoras.css?v=3.11.1" rel="stylesheet"/>
+<link href="css/solicitacoes.css?v=3.11.1" rel="stylesheet"/>
+<link href="css/emails.css?v=3.11.1" rel="stylesheet"/>
+<link href="css/streaming-interesses.css?v=3.11.1" rel="stylesheet"/>
+<link href="css/ocorrencias.css?v=3.11.1" rel="stylesheet"/>
 
-  <link rel="stylesheet" href="style.css?v=3.11.0">
-  <link rel="stylesheet" href="css/dashboard.css?v=3.11.0">
-  <link rel="stylesheet" href="css/radios.css?v=3.11.0">
-  <link rel="stylesheet" href="css/streams.css?v=3.11.0">
-  <link rel="stylesheet" href="css/emissoras.css?v=3.11.0">
-  <link rel="stylesheet" href="css/solicitacoes.css?v=3.11.0">
-  <link rel="stylesheet" href="css/emails.css?v=3.11.0">
-  <link rel="stylesheet" href="css/streaming-interesses.css?v=3.11.0">
-  <link rel="stylesheet" href="css/ocorrencias.css?v=3.11.0">
-  <link rel="stylesheet" href="css/comercial.css?v=3.11.0">
 </head>
-<body data-app-version="3.9.0" data-build="gestao-comercial-sites">
+<body data-app-version="3.11.1" data-build="dashboard-reorganizado-sem-gestao-comercial">
 <div class="app-shell">
-  <aside class="sidebar">
-    <div class="brand">
-      <div class="brand-mark" aria-label="Central Rádios Brasil">CRB</div>
-      <div>
-        <strong>Central Rádios Brasil</strong>
-        <span>Painel Administrativo</span>
-      </div>
-    </div>
+<aside class="sidebar">
+<div class="brand">
+<div aria-label="Central Rádios Brasil" class="brand-mark">CRB</div>
+<div>
+<strong>Central Rádios Brasil</strong>
+<span>Painel Administrativo</span>
+</div>
+</div>
+<nav class="main-nav">
+<a class="nav-link active" data-route="dashboard" href="#/dashboard">🏠 Dashboard</a>
+<a class="nav-link" data-route="solicitacoes" href="#/solicitacoes">📥 Solicitações <span class="nav-alert-count hidden" id="solicitacoes-nav-count"></span></a>
+<a class="nav-link" data-route="ocorrencias" href="#/ocorrencias">⚠️ Ocorrências <span class="nav-alert-count hidden" id="ocorrencias-nav-count"></span></a>
+<a class="nav-link" data-route="streaming-interesses" href="#/streaming-interesses">🚀 Streaming CRB <span class="nav-alert-count hidden" id="streaming-nav-count"></span></a>
 
-    <nav class="main-nav">
-      <a class="nav-link active" data-route="dashboard" href="#/dashboard">🏠 Dashboard</a>
-      <a class="nav-link" data-route="solicitacoes" href="#/solicitacoes">📥 Solicitações <span id="solicitacoes-nav-count" class="nav-alert-count hidden"></span></a>
-      <a class="nav-link" data-route="ocorrencias" href="#/ocorrencias">⚠️ Ocorrências <span id="ocorrencias-nav-count" class="nav-alert-count hidden"></span></a>
-      <a class="nav-link" data-route="streaming-interesses" href="#/streaming-interesses">🚀 Streaming CRB <span id="streaming-nav-count" class="nav-alert-count hidden"></span></a>
-      <a class="nav-link" data-route="comercial" href="#/comercial">💼 Gestão Comercial <span id="comercial-nav-count" class="nav-alert-count hidden"></span></a>
-      <a class="nav-link" data-route="emails" href="#/emails">✉️ E-mails <span id="emails-nav-count" class="emails-nav-count nav-alert-count hidden"></span></a>
-      <a class="nav-link" data-route="emissoras" href="#/emissoras">🏢 Emissoras</a>
-        <a class="nav-link" data-route="publicacao" href="#/publicacao">📤 Publicação</a>
-      <a class="nav-link" data-route="radios" href="#/radios">📻 Rádios</a>
-      <a class="nav-link" data-route="estados" href="#/estados">🗺️ Estados</a>
-      <a class="nav-link" data-route="cidades" href="#/cidades">🏙️ Cidades</a>
-      <a class="nav-link" data-route="categorias" href="#/categorias">🎵 Categorias</a>
-      <a class="nav-link" data-route="streams" href="#/streams">📡 Streams <span id="streams-nav-count" class="nav-alert-count hidden"></span></a>
-      <a class="nav-link" data-route="configuracoes" href="#/configuracoes">
+<a class="nav-link" data-route="emails" href="#/emails">✉️ E-mails <span class="emails-nav-count nav-alert-count hidden" id="emails-nav-count"></span></a>
+<a class="nav-link" data-route="emissoras" href="#/emissoras">🏢 Emissoras</a>
+<a class="nav-link" data-route="publicacao" href="#/publicacao">📤 Publicação</a>
+<a class="nav-link" data-route="radios" href="#/radios">📻 Rádios</a>
+<a class="nav-link" data-route="estados" href="#/estados">🗺️ Estados</a>
+<a class="nav-link" data-route="cidades" href="#/cidades">🏙️ Cidades</a>
+<a class="nav-link" data-route="categorias" href="#/categorias">🎵 Categorias</a>
+<a class="nav-link" data-route="streams" href="#/streams">📡 Streams <span class="nav-alert-count hidden" id="streams-nav-count"></span></a>
+<a class="nav-link" data-route="configuracoes" href="#/configuracoes">
   ⚙️ Configurações
 </a>
-    </nav>
-
-    <div class="sidebar-footer" id="app-version">v2.4.0</div>
-  </aside>
-
-  <div class="content-area">
-    <header class="topbar">
-      <div>
-        <h1 id="page-title">Dashboard</h1>
-        <p id="page-subtitle">Dados oficiais do ecossistema Central Rádios Brasil</p>
-      </div>
-
-      <button id="refresh-button" class="secondary-button">↻ Atualizar dados</button>
-      <button id="theme-toggle" class="theme-button">🌙 Tema escuro</button>
-    </header>
-
-    <main class="main-content">
-      <section id="dashboard-page">
-        <section class="welcome-panel executive-welcome">
-          <div>
-            <span id="connection-badge" class="status-badge loading">
+</nav>
+<div class="sidebar-footer" id="app-version">v2.4.0</div>
+</aside>
+<div class="content-area">
+<header class="topbar">
+<div>
+<h1 id="page-title">Dashboard</h1>
+<p id="page-subtitle">Dados oficiais do ecossistema Central Rádios Brasil</p>
+</div>
+<button class="secondary-button" id="refresh-button">↻ Atualizar dados</button>
+<button class="theme-button" id="theme-toggle">🌙 Tema escuro</button>
+</header>
+<main class="main-content">
+<section id="dashboard-page">
+<section class="welcome-panel executive-welcome">
+<div>
+<span class="status-badge loading" id="connection-badge">
               Conectando à operação
             </span>
-            <h2>Centro de comando operacional</h2>
-            <p>
+<h2>Centro de comando operacional</h2>
+<p>
               Veja o que precisa de atenção agora, acompanhe as atividades recentes
               e acesse rapidamente cada módulo da Central Rádios Brasil.
             </p>
-            <div class="dashboard-session-actions">
-              <button id="dashboard-login-button" type="button" class="dashboard-session-button">
+<div class="dashboard-session-actions">
+<button class="dashboard-session-button" id="dashboard-login-button" type="button">
                 🔐 Entrar para ver alertas
               </button>
-              <span id="dashboard-session-note">Os dados do catálogo permanecem públicos; alertas exigem sessão administrativa.</span>
-            </div>
-          </div>
+<span id="dashboard-session-note">Os dados do catálogo permanecem públicos; alertas exigem sessão administrativa.</span>
+</div>
+</div>
+<div class="dataset-info">
+<span>Versão do banco</span>
+<strong id="dataset-version">—</strong>
+<small id="dashboard-data-source">Fonte: carregando…</small>
+<small id="last-update">Última atualização: carregando…</small>
+</div>
+</section>
+<section aria-labelledby="operations-title" class="operations-heading">
+<div>
+<span>Atenção agora</span>
+<h2 id="operations-title">Fila operacional</h2>
+<p id="dashboard-operational-status">Entre no Painel para carregar os alertas.</p>
+</div>
+<strong class="operations-total" id="dashboard-alert-total">—</strong>
+</section>
+<section aria-label="Alertas operacionais" class="operations-kpis">
+<button class="operation-card" data-dashboard-route="solicitacoes" type="button">
+<span class="operation-icon">📥</span><small>Solicitações</small>
+<strong id="dashboard-alert-solicitacoes">—</strong><em>Pendentes e em análise</em>
+</button>
+<button class="operation-card" data-dashboard-route="ocorrencias" type="button">
+<span class="operation-icon">⚠️</span><small>Ocorrências</small>
+<strong id="dashboard-alert-ocorrencias">—</strong><em>Novas ou prioritárias</em>
+</button>
+<button class="operation-card" data-dashboard-route="streaming-interesses" type="button">
+<span class="operation-icon">🚀</span><small>Streaming CRB</small>
+<strong id="dashboard-alert-streaming">—</strong><em>Novos interessados</em>
+</button>
 
-          <div class="dataset-info">
-            <span>Versão do banco</span>
-            <strong id="dataset-version">—</strong>
-            <small id="dashboard-data-source">Fonte: carregando…</small>
-            <small id="last-update">Última atualização: carregando…</small>
-          </div>
-        </section>
-
-        <section class="operations-heading" aria-labelledby="operations-title">
-          <div>
-            <span>Atenção agora</span>
-            <h2 id="operations-title">Fila operacional</h2>
-            <p id="dashboard-operational-status">Entre no Painel para carregar os alertas.</p>
-          </div>
-          <strong id="dashboard-alert-total" class="operations-total">—</strong>
-        </section>
-
-        <section class="operations-kpis" aria-label="Alertas operacionais">
-          <button type="button" class="operation-card" data-dashboard-route="solicitacoes">
-            <span class="operation-icon">📥</span><small>Solicitações</small>
-            <strong id="dashboard-alert-solicitacoes">—</strong><em>Pendentes e em análise</em>
-          </button>
-          <button type="button" class="operation-card" data-dashboard-route="ocorrencias">
-            <span class="operation-icon">⚠️</span><small>Ocorrências</small>
-            <strong id="dashboard-alert-ocorrencias">—</strong><em>Novas ou prioritárias</em>
-          </button>
-          <button type="button" class="operation-card" data-dashboard-route="streaming-interesses">
-            <span class="operation-icon">🚀</span><small>Streaming CRB</small>
-            <strong id="dashboard-alert-streaming">—</strong><em>Novos interessados</em>
-          </button>
-          <button type="button" class="operation-card" data-dashboard-route="comercial">
-            <span class="operation-icon">💼</span><small>Comercial</small>
-            <strong id="dashboard-alert-comercial">—</strong><em>Vencimentos, contratos e sites</em>
-          </button>
-          <button type="button" class="operation-card" data-dashboard-route="emails">
-            <span class="operation-icon">✉️</span><small>E-mails</small>
-            <strong id="dashboard-alert-emails">—</strong><em>Mensagens não lidas</em>
-          </button>
-          <button type="button" class="operation-card" data-dashboard-route="streams">
-            <span class="operation-icon">📡</span><small>Streams</small>
-            <strong id="dashboard-alert-streams">—</strong><em>Exigem atenção</em>
-          </button>
-        </section>
-
-        <section class="executive-grid executive-grid-main dashboard-operational-grid">
-          <article class="executive-panel activity-panel">
-            <header class="panel-heading">
-              <div><span>Movimentação da plataforma</span><h3>Atividade recente</h3></div>
-              <strong id="dashboard-activity-updated">—</strong>
-            </header>
-            <div id="dashboard-activity-list" class="activity-list">
-              <p class="dashboard-empty">Entre no Painel para carregar as atividades.</p>
-            </div>
-          </article>
-
-          <article class="executive-panel">
-            <header class="panel-heading">
-              <div><span>Resumo operacional</span><h3>Situação das filas</h3></div>
-            </header>
-            <div id="dashboard-queue-summary" class="queue-summary">
-              <p class="dashboard-empty">Aguardando sessão administrativa.</p>
-            </div>
-          </article>
-        </section>
-
-        <section class="dashboard-section-divider">
-          <div><span>Catálogo oficial</span><h2>Visão da rede</h2></div>
-        </section>
-
-        <section class="dashboard-kpis" aria-label="Indicadores principais">
-          <article class="executive-kpi">
-            <span class="kpi-icon">📻</span>
-            <div><small>Total de emissoras</small><strong id="total-radios">—</strong><span id="total-radios-detail">Base nacional</span></div>
-          </article>
-          <article class="executive-kpi kpi-success">
-            <span class="kpi-icon">🌐</span>
-            <div><small>Publicadas</small><strong id="total-publicadas">—</strong><span id="publicadas-percentual">— do total</span></div>
-          </article>
-          <article class="executive-kpi kpi-warning">
-            <span class="kpi-icon">🔎</span>
-            <div><small>Solicitações em análise</small><strong id="total-em-analise">—</strong><span>Aguardando decisão</span></div>
-          </article>
-          <article class="executive-kpi kpi-danger">
-            <span class="kpi-icon">⛔</span>
-            <div><small>Streams em atenção</small><strong id="total-bloqueadas">—</strong><span>Monitoramento técnico</span></div>
-          </article>
-          <article class="executive-kpi">
-            <span class="kpi-icon">🏅</span>
-            <div><small>Selo verificado</small><strong id="total-selo-verificado">—</strong><span id="selo-percentual">— do total</span></div>
-          </article>
-          <article class="executive-kpi">
-            <span class="kpi-icon">📡</span>
-            <div><small>Total de streams</small><strong id="total-streams">—</strong><span id="streams-seguros">— em HTTPS</span></div>
-          </article>
-        </section>
-
-        <section class="executive-grid executive-grid-main">
-          <article class="executive-panel">
-            <header class="panel-heading">
-              <div><span>Fluxo administrativo</span><h3>Status das solicitações</h3></div>
-              <button type="button" class="dashboard-link-button" data-dashboard-route="solicitacoes">Abrir solicitações</button>
-            </header>
-            <div id="dashboard-status-list" class="metric-list"></div>
-          </article>
-
-          <article class="executive-panel">
-            <header class="panel-heading">
-              <div><span>Identidade e autenticidade</span><h3>Selo Oficial</h3></div>
-            </header>
-            <div id="dashboard-seal-list" class="metric-list"></div>
-          </article>
-        </section>
-
-        <section class="executive-grid executive-grid-wide">
-          <article class="executive-panel">
-            <header class="panel-heading">
-              <div><span>Cobertura nacional</span><h3>Estados com mais emissoras</h3></div>
-              <strong id="total-estados">— estados</strong>
-            </header>
-            <div id="dashboard-states-list" class="ranking-list"></div>
-          </article>
-
-          <article class="executive-panel">
-            <header class="panel-heading">
-              <div><span>Conteúdo do catálogo</span><h3>Principais categorias</h3></div>
-              <strong id="total-categorias">— categorias</strong>
-            </header>
-            <div id="dashboard-categories-list" class="ranking-list"></div>
-          </article>
-
-          <article class="executive-panel">
-            <header class="panel-heading">
-              <div><span>Saúde técnica</span><h3>Streams e compatibilidade</h3></div>
-              <button type="button" class="dashboard-link-button" data-dashboard-route="streams">Abrir streams</button>
-            </header>
-            <div id="dashboard-stream-health" class="health-grid"></div>
-          </article>
-        </section>
-
-        <section class="executive-grid executive-grid-main">
-          <article class="executive-panel">
-            <header class="panel-heading">
-              <div><span>Operação</span><h3>Prontidão para publicação</h3></div>
-              <button type="button" class="dashboard-link-button" data-dashboard-route="publicacao">Abrir publicação</button>
-            </header>
-            <div class="readiness-grid">
-              <div class="readiness-item readiness-ready"><span>Prontas</span><strong id="dashboard-ready-count">—</strong><small>Ativas, públicas e com stream</small></div>
-              <div class="readiness-item readiness-pending"><span>Com pendências</span><strong id="dashboard-pending-count">—</strong><small>Precisam de correção</small></div>
-            </div>
-            <div id="dashboard-pending-summary" class="attention-list"></div>
-          </article>
-
-          <article class="executive-panel">
-            <header class="panel-heading">
-              <div><span>Dimensão da rede</span><h3>Alcance do catálogo</h3></div>
-            </header>
-            <div class="network-summary">
-              <div><span>🏙️</span><strong id="total-cidades">—</strong><small>Cidades</small></div>
-              <div><span>🗺️</span><strong id="network-total-estados">—</strong><small>Estados</small></div>
-              <div><span>✅</span><strong id="total-verificadas">—</strong><small>Verificadas</small></div>
-              <div><span>💎</span><strong id="dashboard-premium-count">—</strong><small>Planos avançados</small></div>
-            </div>
-          </article>
-        </section>
-
-        <section id="error-panel" class="error-panel hidden">
-          <strong>Não foi possível carregar os dados.</strong>
-          <p id="error-message"></p>
-          <button id="retry-button">Tentar novamente</button>
-        </section>
-      </section>
-
-
-      <section id="solicitacoes-page" class="hidden">
-        <div class="radios-toolbar solicitacoes-toolbar">
-          <div>
-            <span id="solicitacoes-status-badge" class="status-badge loading">
+<button class="operation-card" data-dashboard-route="emails" type="button">
+<span class="operation-icon">✉️</span><small>E-mails</small>
+<strong id="dashboard-alert-emails">—</strong><em>Mensagens não lidas</em>
+</button>
+<button class="operation-card" data-dashboard-route="streams" type="button">
+<span class="operation-icon">📡</span><small>Streams</small>
+<strong id="dashboard-alert-streams">—</strong><em>Exigem atenção</em>
+</button>
+</section>
+<section class="executive-grid executive-grid-main dashboard-operational-grid">
+<article class="executive-panel activity-panel">
+<header class="panel-heading">
+<div><span>Movimentação da plataforma</span><h3>Atividade recente</h3></div>
+<strong id="dashboard-activity-updated">—</strong>
+</header>
+<div class="activity-list" id="dashboard-activity-list">
+<p class="dashboard-empty">Entre no Painel para carregar as atividades.</p>
+</div>
+</article>
+<article class="executive-panel">
+<header class="panel-heading">
+<div><span>Resumo operacional</span><h3>Situação das filas</h3></div>
+</header>
+<div class="queue-summary" id="dashboard-queue-summary">
+<p class="dashboard-empty">Aguardando sessão administrativa.</p>
+</div>
+</article>
+</section>
+<section class="dashboard-section-divider">
+<div><span>Catálogo oficial</span><h2>Visão da rede</h2></div>
+</section>
+<section aria-label="Indicadores principais" class="dashboard-kpis">
+<article class="executive-kpi">
+<span class="kpi-icon">📻</span>
+<div><small>Total de emissoras</small><strong id="total-radios">—</strong><span id="total-radios-detail">Base nacional</span></div>
+</article>
+<article class="executive-kpi kpi-success">
+<span class="kpi-icon">🌐</span>
+<div><small>Publicadas</small><strong id="total-publicadas">—</strong><span id="publicadas-percentual">— do total</span></div>
+</article>
+<article class="executive-kpi kpi-warning">
+<span class="kpi-icon">🔎</span>
+<div><small>Solicitações em análise</small><strong id="total-em-analise">—</strong><span>Aguardando decisão</span></div>
+</article>
+<article class="executive-kpi kpi-danger">
+<span class="kpi-icon">⛔</span>
+<div><small>Streams em atenção</small><strong id="total-bloqueadas">—</strong><span>Monitoramento técnico</span></div>
+</article>
+<article class="executive-kpi">
+<span class="kpi-icon">🏅</span>
+<div><small>Selo verificado</small><strong id="total-selo-verificado">—</strong><span id="selo-percentual">— do total</span></div>
+</article>
+<article class="executive-kpi">
+<span class="kpi-icon">📡</span>
+<div><small>Total de streams</small><strong id="total-streams">—</strong><span id="streams-seguros">— em HTTPS</span></div>
+</article>
+</section>
+<section class="executive-grid executive-grid-main">
+<article class="executive-panel">
+<header class="panel-heading">
+<div><span>Fluxo administrativo</span><h3>Status das solicitações</h3></div>
+<button class="dashboard-link-button" data-dashboard-route="solicitacoes" type="button">Abrir solicitações</button>
+</header>
+<div class="metric-list" id="dashboard-status-list"></div>
+</article>
+<article class="executive-panel">
+<header class="panel-heading">
+<div><span>Identidade e autenticidade</span><h3>Selo Oficial</h3></div>
+</header>
+<div class="metric-list" id="dashboard-seal-list"></div>
+</article>
+</section>
+<section class="executive-grid executive-grid-wide">
+<article class="executive-panel">
+<header class="panel-heading">
+<div><span>Cobertura nacional</span><h3>Estados com mais emissoras</h3></div>
+<strong id="total-estados">— estados</strong>
+</header>
+<div class="ranking-list" id="dashboard-states-list"></div>
+</article>
+<article class="executive-panel">
+<header class="panel-heading">
+<div><span>Conteúdo do catálogo</span><h3>Principais categorias</h3></div>
+<strong id="total-categorias">— categorias</strong>
+</header>
+<div class="ranking-list" id="dashboard-categories-list"></div>
+</article>
+<article class="executive-panel">
+<header class="panel-heading">
+<div><span>Saúde técnica</span><h3>Streams e compatibilidade</h3></div>
+<button class="dashboard-link-button" data-dashboard-route="streams" type="button">Abrir streams</button>
+</header>
+<div class="health-grid" id="dashboard-stream-health"></div>
+</article>
+</section>
+<section class="executive-grid executive-grid-main">
+<article class="executive-panel">
+<header class="panel-heading">
+<div><span>Operação</span><h3>Prontidão para publicação</h3></div>
+<button class="dashboard-link-button" data-dashboard-route="publicacao" type="button">Abrir publicação</button>
+</header>
+<div class="readiness-grid">
+<div class="readiness-item readiness-ready"><span>Prontas</span><strong id="dashboard-ready-count">—</strong><small>Ativas, públicas e com stream</small></div>
+<div class="readiness-item readiness-pending"><span>Com pendências</span><strong id="dashboard-pending-count">—</strong><small>Precisam de correção</small></div>
+</div>
+<div class="attention-list" id="dashboard-pending-summary"></div>
+</article>
+<article class="executive-panel">
+<header class="panel-heading">
+<div><span>Dimensão da rede</span><h3>Alcance do catálogo</h3></div>
+</header>
+<div class="network-summary">
+<div><span>🏙️</span><strong id="total-cidades">—</strong><small>Cidades</small></div>
+<div><span>🗺️</span><strong id="network-total-estados">—</strong><small>Estados</small></div>
+<div><span>✅</span><strong id="total-verificadas">—</strong><small>Verificadas</small></div>
+<div><span>💎</span><strong id="dashboard-premium-count">—</strong><small>Planos avançados</small></div>
+</div>
+</article>
+</section>
+<section class="error-panel hidden" id="error-panel">
+<strong>Não foi possível carregar os dados.</strong>
+<p id="error-message"></p>
+<button id="retry-button">Tentar novamente</button>
+</section>
+</section>
+<section class="hidden" id="solicitacoes-page">
+<div class="radios-toolbar solicitacoes-toolbar">
+<div>
+<span class="status-badge loading" id="solicitacoes-status-badge">
               Aguardando autenticação
             </span>
-            <h2>Solicitações de emissoras</h2>
-            <p>
-              <strong id="solicitacoes-visible-count">0</strong> exibidas de
+<h2>Solicitações de emissoras</h2>
+<p>
+<strong id="solicitacoes-visible-count">0</strong> exibidas de
               <strong id="solicitacoes-total-count">0</strong> recebidas.
             </p>
-          </div>
-
-          <div class="toolbar-actions">
-            <button id="solicitacoes-chave-button" type="button"
-              class="secondary-button">
+</div>
+<div class="toolbar-actions">
+<button class="secondary-button" id="solicitacoes-chave-button" type="button">
               🔐 Entrar no painel
             </button>
-            <button id="solicitacoes-refresh-button" type="button"
-              class="primary-button">
+<button class="primary-button" id="solicitacoes-refresh-button" type="button">
               ↻ Atualizar solicitações
             </button>
-          </div>
-        </div>
-
-        <section class="solicitacoes-kpis" aria-label="Resumo das solicitações">
-          <article>
-            <span>Pendentes</span>
-            <strong id="solicitacoes-pendentes-count">0</strong>
-          </article>
-          <article>
-            <span>Em análise</span>
-            <strong id="solicitacoes-analise-count">0</strong>
-          </article>
-          <article>
-            <span>Aprovadas</span>
-            <strong id="solicitacoes-aprovadas-count">0</strong>
-          </article>
-          <article>
-            <span>Rejeitadas</span>
-            <strong id="solicitacoes-rejeitadas-count">0</strong>
-          </article>
-          <article>
-            <span>Sem logomarca</span>
-            <strong id="solicitacoes-sem-logo-count">0</strong>
-          </article>
-        </section>
-
-        <section class="filters-panel solicitacoes-filters">
-          <label>
+</div>
+</div>
+<section aria-label="Resumo das solicitações" class="solicitacoes-kpis">
+<article>
+<span>Pendentes</span>
+<strong id="solicitacoes-pendentes-count">0</strong>
+</article>
+<article>
+<span>Em análise</span>
+<strong id="solicitacoes-analise-count">0</strong>
+</article>
+<article>
+<span>Aprovadas</span>
+<strong id="solicitacoes-aprovadas-count">0</strong>
+</article>
+<article>
+<span>Rejeitadas</span>
+<strong id="solicitacoes-rejeitadas-count">0</strong>
+</article>
+<article>
+<span>Sem logomarca</span>
+<strong id="solicitacoes-sem-logo-count">0</strong>
+</article>
+</section>
+<section class="filters-panel solicitacoes-filters">
+<label>
             Buscar
-            <input id="solicitacao-search" type="search"
-              placeholder="Protocolo, rádio, cidade, estado ou e-mail">
-          </label>
-
-          <label>
+            <input id="solicitacao-search" placeholder="Protocolo, rádio, cidade, estado ou e-mail" type="search"/>
+</label>
+<label>
             Status
             <select id="solicitacao-status-filter">
-              <option value="">Todos os status</option>
-              <option value="pendente">Pendentes</option>
-              <option value="em_analise">Em análise</option>
-              <option value="aprovada">Aprovadas</option>
-              <option value="rejeitada">Rejeitadas</option>
-            </select>
-          </label>
-
-          <label>
+<option value="">Todos os status</option>
+<option value="pendente">Pendentes</option>
+<option value="em_analise">Em análise</option>
+<option value="aprovada">Aprovadas</option>
+<option value="rejeitada">Rejeitadas</option>
+</select>
+</label>
+<label>
             Logomarca
             <select id="solicitacao-logo-filter">
-              <option value="">Todas</option>
-              <option value="com_logo">Com logomarca</option>
-              <option value="sem_logo">Sem logomarca</option>
-            </select>
-          </label>
-        </section>
-
-        <div id="solicitacoes-aviso-chave"
-          class="solicitacoes-chave-panel">
-          <strong>Área administrativa protegida</strong>
-          <p>
+<option value="">Todas</option>
+<option value="com_logo">Com logomarca</option>
+<option value="sem_logo">Sem logomarca</option>
+</select>
+</label>
+</section>
+<div class="solicitacoes-chave-panel" id="solicitacoes-aviso-chave">
+<strong>Área administrativa protegida</strong>
+<p>
             Entre com a chave administrativa para criar uma sessão temporária e protegida.
             A chave não será guardada: somente um token temporário permanecerá nesta aba.
           </p>
-        </div>
-
-        <section class="table-card">
-          <div class="table-scroll">
-            <table class="radios-table solicitacoes-table">
-              <thead>
-                <tr>
-                  <th>Logomarca</th>
-                  <th>Emissora</th>
-                  <th>Localização</th>
-                  <th>Categoria</th>
-                  <th>Recebida em</th>
-                  <th>Status</th>
-                  <th>Ações</th>
-                </tr>
-              </thead>
-              <tbody id="solicitacoes-table-body">
-                <tr>
-                  <td colspan="7" class="empty-state">
+</div>
+<section class="table-card">
+<div class="table-scroll">
+<table class="radios-table solicitacoes-table">
+<thead>
+<tr>
+<th>Logomarca</th>
+<th>Emissora</th>
+<th>Localização</th>
+<th>Categoria</th>
+<th>Recebida em</th>
+<th>Status</th>
+<th>Ações</th>
+</tr>
+</thead>
+<tbody id="solicitacoes-table-body">
+<tr>
+<td class="empty-state" colspan="7">
                     Entre no painel para carregar as solicitações.
                   </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </section>
-
-        <section class="solicitacoes-alteracoes-bloco">
-          <div class="solicitacoes-subcabecalho">
-            <div>
-              <span class="status-badge loading" id="alteracoes-status-badge">
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section class="solicitacoes-alteracoes-bloco">
+<div class="solicitacoes-subcabecalho">
+<div>
+<span class="status-badge loading" id="alteracoes-status-badge">
                 Alterações aguardando sincronização
               </span>
-              <h3>Alterações solicitadas pelas emissoras</h3>
-              <p>
-                <strong id="alteracoes-pendentes-count">0</strong> pendentes ou em análise de
+<h3>Alterações solicitadas pelas emissoras</h3>
+<p>
+<strong id="alteracoes-pendentes-count">0</strong> pendentes ou em análise de
                 <strong id="alteracoes-total-count">0</strong> solicitações.
               </p>
-            </div>
-          </div>
-
-          <section class="table-card">
-            <div class="table-scroll">
-              <table class="radios-table solicitacoes-table">
-                <thead>
-                  <tr>
-                    <th>Solicitação</th>
-                    <th>Emissora</th>
-                    <th>Localização</th>
-                    <th>Stream proposto</th>
-                    <th>Recebida em</th>
-                    <th>Status</th>
-                    <th>Ações</th>
-                  </tr>
-                </thead>
-                <tbody id="alteracoes-table-body">
-                  <tr>
-                    <td colspan="7" class="empty-state">
+</div>
+</div>
+<section class="table-card">
+<div class="table-scroll">
+<table class="radios-table solicitacoes-table">
+<thead>
+<tr>
+<th>Solicitação</th>
+<th>Emissora</th>
+<th>Localização</th>
+<th>Stream proposto</th>
+<th>Recebida em</th>
+<th>Status</th>
+<th>Ações</th>
+</tr>
+</thead>
+<tbody id="alteracoes-table-body">
+<tr>
+<td class="empty-state" colspan="7">
                       Entre no painel para carregar as alterações.
                     </td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-          </section>
-        </section>
-      </section>
-
-      <section id="radios-page" class="hidden">
-        <div class="radios-toolbar">
-          <div>
-            <span id="radios-status-badge" class="status-badge loading">Carregando rádios</span>
-            <h2>Gerenciamento de rádios</h2>
-            <p>
-              <strong id="radios-visible-count">0</strong> exibidas de
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+</section>
+</section>
+<section class="hidden" id="radios-page">
+<div class="radios-toolbar">
+<div>
+<span class="status-badge loading" id="radios-status-badge">Carregando rádios</span>
+<h2>Gerenciamento de rádios</h2>
+<p>
+<strong id="radios-visible-count">0</strong> exibidas de
               <strong id="radios-total-count">0</strong> cadastradas.
             </p>
-          </div>
-
-          <div class="toolbar-actions">
-            <label class="file-button">
+</div>
+<div class="toolbar-actions">
+<label class="file-button">
               ⬆ Importar radios.json
-              <input id="import-radios-input" type="file" accept=".json,application/json">
-            </label>
-            <button id="export-radios-button" class="secondary-button">✓ Validar e gerar bancos</button>
-            <button id="new-radio-button" class="primary-button">＋ Nova rádio</button>
-          </div>
-        </div>
-
-        <div id="draft-banner" class="draft-banner hidden">
-          <div>
-            <strong>Existem alterações salvas somente neste navegador.</strong>
-            <span>Exporte o arquivo radios.json para publicá-las no repositório de dados.</span>
-          </div>
-          <button id="discard-draft-button" class="text-button">Descartar rascunho</button>
-        </div>
-
-        <section class="filters-panel">
-          <label>
+              <input accept=".json,application/json" id="import-radios-input" type="file"/>
+</label>
+<button class="secondary-button" id="export-radios-button">✓ Validar e gerar bancos</button>
+<button class="primary-button" id="new-radio-button">＋ Nova rádio</button>
+</div>
+</div>
+<div class="draft-banner hidden" id="draft-banner">
+<div>
+<strong>Existem alterações salvas somente neste navegador.</strong>
+<span>Exporte o arquivo radios.json para publicá-las no repositório de dados.</span>
+</div>
+<button class="text-button" id="discard-draft-button">Descartar rascunho</button>
+</div>
+<section class="filters-panel">
+<label>
             Buscar
-            <input id="radio-search" type="search" placeholder="Nome, cidade, estado ou categoria">
-          </label>
-
-          <label>
+            <input id="radio-search" placeholder="Nome, cidade, estado ou categoria" type="search"/>
+</label>
+<label>
             Estado
             <select id="radio-uf-filter">
-              <option value="">Todos os estados</option>
-            </select>
-          </label>
-
-          <label>
+<option value="">Todos os estados</option>
+</select>
+</label>
+<label>
             Categoria
             <select id="radio-category-filter">
-              <option value="">Todas as categorias</option>
-            </select>
-          </label>
-
-          <label>
+<option value="">Todas as categorias</option>
+</select>
+</label>
+<label>
             Status
             <select id="radio-status-filter">
-              <option value="">Todos os status</option>
-              <option value="online">Online</option>
-              <option value="offline">Offline</option>
-              <option value="nao_testado">Não testado</option>
-            </select>
-          </label>
-        </section>
-
-        <section class="table-card">
-          <div class="table-scroll">
-            <table class="radios-table">
-              <thead>
-                <tr>
-                  <th>Rádio</th>
-                  <th>Cidade</th>
-                  <th>UF</th>
-                  <th>Categoria</th>
-                  <th>Status</th>
-                  <th>Verificada</th>
-                  <th>Stream principal</th>
-                  <th>Ações</th>
-                </tr>
-              </thead>
-              <tbody id="radios-table-body">
-                <tr><td colspan="8" class="empty-state">Carregando…</td></tr>
-              </tbody>
-            </table>
-          </div>
-        </section>
-      </section>
-
-      <section id="estados-page" class="hidden">
-        <div class="radios-toolbar">
-          <div>
-            <span class="status-badge success">Lista oficial carregada</span>
-            <h2>Cadastro de estados</h2>
-            <p>
-              <strong id="estados-visible-count">27</strong> exibidos de
+<option value="">Todos os status</option>
+<option value="online">Online</option>
+<option value="offline">Offline</option>
+<option value="nao_testado">Não testado</option>
+</select>
+</label>
+</section>
+<section class="table-card">
+<div class="table-scroll">
+<table class="radios-table">
+<thead>
+<tr>
+<th>Rádio</th>
+<th>Cidade</th>
+<th>UF</th>
+<th>Categoria</th>
+<th>Status</th>
+<th>Verificada</th>
+<th>Stream principal</th>
+<th>Ações</th>
+</tr>
+</thead>
+<tbody id="radios-table-body">
+<tr><td class="empty-state" colspan="8">Carregando…</td></tr>
+</tbody>
+</table>
+</div>
+</section>
+</section>
+<section class="hidden" id="estados-page">
+<div class="radios-toolbar">
+<div>
+<span class="status-badge success">Lista oficial carregada</span>
+<h2>Cadastro de estados</h2>
+<p>
+<strong id="estados-visible-count">27</strong> exibidos de
               <strong id="estados-total-count">27</strong>.
               Ativos: <strong id="estados-active-count">27</strong>.
             </p>
-          </div>
-
-          <div class="toolbar-actions">
-            <button id="reset-estados-button" class="secondary-button">
+</div>
+<div class="toolbar-actions">
+<button class="secondary-button" id="reset-estados-button">
               ↺ Restaurar lista oficial
             </button>
-            <button id="export-estados-button" class="primary-button">
+<button class="primary-button" id="export-estados-button">
               ⬇ Exportar estados.json
             </button>
-          </div>
-        </div>
-
-        <section class="filters-panel states-filters">
-          <label>
+</div>
+</div>
+<section class="filters-panel states-filters">
+<label>
             Buscar
-            <input id="estado-search" type="search"
-              placeholder="Sigla, estado ou região">
-          </label>
-
-          <label>
+            <input id="estado-search" placeholder="Sigla, estado ou região" type="search"/>
+</label>
+<label>
             Região
             <select id="estado-region-filter">
-              <option value="">Todas as regiões</option>
-              <option value="Norte">Norte</option>
-              <option value="Nordeste">Nordeste</option>
-              <option value="Centro-Oeste">Centro-Oeste</option>
-              <option value="Sudeste">Sudeste</option>
-              <option value="Sul">Sul</option>
-            </select>
-          </label>
-        </section>
-
-        <section class="table-card">
-          <div class="table-scroll">
-            <table class="radios-table states-table">
-              <thead>
-                <tr>
-                  <th>UF</th>
-                  <th>Estado</th>
-                  <th>Região</th>
-                  <th>Status</th>
-                  <th>Ações</th>
-                </tr>
-              </thead>
-              <tbody id="estados-table-body"></tbody>
-            </table>
-          </div>
-        </section>
-      </section>
-
-
-      <section id="categorias-page" class="hidden">
-        <div class="radios-toolbar">
-          <div>
-            <span class="status-badge success">Categorias disponíveis</span>
-            <h2>Cadastro de categorias</h2>
-            <p>
-              <strong id="categorias-visible-count">0</strong> exibidas de
+<option value="">Todas as regiões</option>
+<option value="Norte">Norte</option>
+<option value="Nordeste">Nordeste</option>
+<option value="Centro-Oeste">Centro-Oeste</option>
+<option value="Sudeste">Sudeste</option>
+<option value="Sul">Sul</option>
+</select>
+</label>
+</section>
+<section class="table-card">
+<div class="table-scroll">
+<table class="radios-table states-table">
+<thead>
+<tr>
+<th>UF</th>
+<th>Estado</th>
+<th>Região</th>
+<th>Status</th>
+<th>Ações</th>
+</tr>
+</thead>
+<tbody id="estados-table-body"></tbody>
+</table>
+</div>
+</section>
+</section>
+<section class="hidden" id="categorias-page">
+<div class="radios-toolbar">
+<div>
+<span class="status-badge success">Categorias disponíveis</span>
+<h2>Cadastro de categorias</h2>
+<p>
+<strong id="categorias-visible-count">0</strong> exibidas de
               <strong id="categorias-total-count">0</strong>.
               Ativas: <strong id="categorias-active-count">0</strong>.
             </p>
-          </div>
-
-          <div class="toolbar-actions">
-            <button id="reset-categorias-button" class="secondary-button">
+</div>
+<div class="toolbar-actions">
+<button class="secondary-button" id="reset-categorias-button">
               ↺ Restaurar lista inicial
             </button>
-            <button id="export-categorias-button" class="secondary-button">
+<button class="secondary-button" id="export-categorias-button">
               ⬇ Exportar categorias.json
             </button>
-            <button id="new-category-button" class="primary-button">
+<button class="primary-button" id="new-category-button">
               ＋ Nova categoria
             </button>
-          </div>
-        </div>
-
-        <section class="filters-panel states-filters">
-          <label>
+</div>
+</div>
+<section class="filters-panel states-filters">
+<label>
             Buscar
-            <input id="categoria-search" type="search"
-              placeholder="Nome, descrição ou identificador">
-          </label>
-
-          <label>
+            <input id="categoria-search" placeholder="Nome, descrição ou identificador" type="search"/>
+</label>
+<label>
             Status
             <select id="categoria-status-filter">
-              <option value="">Todos os status</option>
-              <option value="ativa">Ativas</option>
-              <option value="inativa">Inativas</option>
-            </select>
-          </label>
-        </section>
-
-        <section class="table-card">
-          <div class="table-scroll">
-            <table class="radios-table categories-table">
-              <thead>
-                <tr>
-                  <th>Categoria</th>
-                  <th>ID</th>
-                  <th>Descrição</th>
-                  <th>Status</th>
-                  <th>Ações</th>
-                </tr>
-              </thead>
-              <tbody id="categorias-table-body"></tbody>
-            </table>
-          </div>
-        </section>
-      </section>
-
-
-      <section id="cidades-page" class="hidden">
-        <div class="radios-toolbar">
-          <div>
-            <span id="cidades-status-badge" class="status-badge loading">
+<option value="">Todos os status</option>
+<option value="ativa">Ativas</option>
+<option value="inativa">Inativas</option>
+</select>
+</label>
+</section>
+<section class="table-card">
+<div class="table-scroll">
+<table class="radios-table categories-table">
+<thead>
+<tr>
+<th>Categoria</th>
+<th>ID</th>
+<th>Descrição</th>
+<th>Status</th>
+<th>Ações</th>
+</tr>
+</thead>
+<tbody id="categorias-table-body"></tbody>
+</table>
+</div>
+</section>
+</section>
+<section class="hidden" id="cidades-page">
+<div class="radios-toolbar">
+<div>
+<span class="status-badge loading" id="cidades-status-badge">
               Aguardando consulta ao IBGE
             </span>
-            <h2>Cadastro nacional de cidades</h2>
-            <p>
-              <strong id="cidades-visible-count">0</strong> encontradas de
+<h2>Cadastro nacional de cidades</h2>
+<p>
+<strong id="cidades-visible-count">0</strong> encontradas de
               <strong id="cidades-total-count">0</strong>.
             </p>
-            <small id="cidades-source-note">
+<small id="cidades-source-note">
               Fonte oficial: IBGE — API de Localidades.
             </small>
-          </div>
-
-          <div class="toolbar-actions">
-            <button id="reload-cidades-button" class="secondary-button">
+</div>
+<div class="toolbar-actions">
+<button class="secondary-button" id="reload-cidades-button">
               ↻ Atualizar pelo IBGE
             </button>
-            <button id="export-cidades-button" class="primary-button">
+<button class="primary-button" id="export-cidades-button">
               ⬇ Exportar cidades.json
             </button>
-          </div>
-        </div>
-
-        <section class="filters-panel cities-filters">
-          <label>
+</div>
+</div>
+<section class="filters-panel cities-filters">
+<label>
             Buscar município
-            <input id="cidade-search" type="search"
-              placeholder="Nome, código IBGE, estado ou região">
-          </label>
-
-          <label>
+            <input id="cidade-search" placeholder="Nome, código IBGE, estado ou região" type="search"/>
+</label>
+<label>
             Estado
             <select id="cidade-uf-filter">
-              <option value="">Todos os estados</option>
-            </select>
-          </label>
-
-          <label>
+<option value="">Todos os estados</option>
+</select>
+</label>
+<label>
             Região
             <select id="cidade-region-filter">
-              <option value="">Todas as regiões</option>
-            </select>
-          </label>
-        </section>
-
-        <p id="cidades-table-note" class="table-note">
+<option value="">Todas as regiões</option>
+</select>
+</label>
+</section>
+<p class="table-note" id="cidades-table-note">
           Aguardando carregamento.
         </p>
-
-        <section class="table-card">
-          <div class="table-scroll">
-            <table class="radios-table cities-table">
-              <thead>
-                <tr>
-                  <th>Município</th>
-                  <th>UF</th>
-                  <th>Estado</th>
-                  <th>Região</th>
-                  <th>Código IBGE</th>
-                  <th>Origem</th>
-                </tr>
-              </thead>
-              <tbody id="cidades-table-body">
-                <tr>
-                  <td colspan="6" class="empty-state">
+<section class="table-card">
+<div class="table-scroll">
+<table class="radios-table cities-table">
+<thead>
+<tr>
+<th>Município</th>
+<th>UF</th>
+<th>Estado</th>
+<th>Região</th>
+<th>Código IBGE</th>
+<th>Origem</th>
+</tr>
+</thead>
+<tbody id="cidades-table-body">
+<tr>
+<td class="empty-state" colspan="6">
                     Carregando municípios…
                   </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </section>
-      </section>
-
-
-      <section id="streams-page" class="hidden">
-        <div class="radios-toolbar">
-          <div>
-            <span id="streams-status-badge" class="status-badge loading">
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+</section>
+<section class="hidden" id="streams-page">
+<div class="radios-toolbar">
+<div>
+<span class="status-badge loading" id="streams-status-badge">
               Aguardando carregamento
             </span>
-            <h2>Cadastro de streams</h2>
-            <p>
-              <strong id="streams-visible-count">0</strong> exibidos de
+<h2>Cadastro de streams</h2>
+<p>
+<strong id="streams-visible-count">0</strong> exibidos de
               <strong id="streams-total-count">0</strong>.
               Online: <strong id="streams-online-count">0</strong>.
               Offline: <strong id="streams-offline-count">0</strong>.
             </p>
-          </div>
-
-          <div class="toolbar-actions">
-            <button id="monitor-streams-button" class="primary-button">
+</div>
+<div class="toolbar-actions">
+<button class="primary-button" id="monitor-streams-button">
               🔎 Verificar todos agora
             </button>
-            <button id="reset-streams-button" class="secondary-button">
+<button class="secondary-button" id="reset-streams-button">
               ↺ Recarregar de radios.json
             </button>
-            <button id="export-streams-button" class="secondary-button">
+<button class="secondary-button" id="export-streams-button">
               ⬇ Exportar streams.json
             </button>
-            <button id="new-stream-button" class="primary-button">
+<button class="primary-button" id="new-stream-button">
               ＋ Novo stream
             </button>
-          </div>
-        </div>
-
-        <section class="stream-monitoramento-resumo">
-          <article><span>Online</span><strong id="monitor-online-count">0</strong></article>
-          <article><span>Instáveis</span><strong id="monitor-instavel-count">0</strong></article>
-          <article><span>Fora do portal</span><strong id="monitor-fora-count">0</strong></article>
-          <article><span>Suspensas</span><strong id="monitor-suspensa-count">0</strong></article>
-          <article class="stream-monitoramento-data">
-            <span>Última verificação automática</span>
-            <strong id="monitor-ultima-execucao">Ainda não executada</strong>
-          </article>
-        </section>
-
-        <section class="filters-panel stream-filters">
-          <label>
+</div>
+</div>
+<section class="stream-monitoramento-resumo">
+<article><span>Online</span><strong id="monitor-online-count">0</strong></article>
+<article><span>Instáveis</span><strong id="monitor-instavel-count">0</strong></article>
+<article><span>Fora do portal</span><strong id="monitor-fora-count">0</strong></article>
+<article><span>Suspensas</span><strong id="monitor-suspensa-count">0</strong></article>
+<article class="stream-monitoramento-data">
+<span>Última verificação automática</span>
+<strong id="monitor-ultima-execucao">Ainda não executada</strong>
+</article>
+</section>
+<section class="filters-panel stream-filters">
+<label>
             Buscar
-            <input id="stream-search" type="search"
-              placeholder="Rádio, nome do stream, URL ou codec">
-          </label>
-
-          <label>
+            <input id="stream-search" placeholder="Rádio, nome do stream, URL ou codec" type="search"/>
+</label>
+<label>
             Status
             <select id="stream-status-filter">
-              <option value="">Todos os status</option>
-              <option value="online">Online</option>
-              <option value="instavel">Instável</option>
-              <option value="fora_portal">Fora do portal</option>
-              <option value="suspensa">Suspensa</option>
-              <option value="offline">Offline manual</option>
-              <option value="nao_testado">Não testado</option>
-            </select>
-          </label>
-
-          <label>
+<option value="">Todos os status</option>
+<option value="online">Online</option>
+<option value="instavel">Instável</option>
+<option value="fora_portal">Fora do portal</option>
+<option value="suspensa">Suspensa</option>
+<option value="offline">Offline manual</option>
+<option value="nao_testado">Não testado</option>
+</select>
+</label>
+<label>
             Protocolo
             <select id="stream-protocol-filter">
-              <option value="">Todos</option>
-              <option value="HTTPS">HTTPS</option>
-              <option value="HTTP">HTTP</option>
-            </select>
-          </label>
-        </section>
-
-        <section class="table-card">
-          <div class="table-scroll">
-            <table class="radios-table streams-table">
-              <thead>
-                <tr>
-                  <th>Rádio / Stream</th>
-                  <th>URL</th>
-                  <th>Protocolo</th>
-                  <th>Codec</th>
-                  <th>Bitrate</th>
-                  <th>Status</th>
-                  <th>Resposta</th>
-                  <th>Última verificação</th>
-                  <th>Ações</th>
-                </tr>
-              </thead>
-              <tbody id="streams-table-body">
-                <tr>
-                  <td colspan="9" class="empty-state">Carregando…</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </section>
-      </section>
-
-
-      <section id="emissoras-page" class="hidden">
-        <div class="radios-toolbar">
-          <div>
-            <span class="status-badge success">Estrutura inicial ativa</span>
-            <h2>Cadastro Nacional de Emissoras</h2>
-            <p>
-              <strong id="emissoras-visible-count">0</strong> emissoras exibidas.
+<option value="">Todos</option>
+<option value="HTTPS">HTTPS</option>
+<option value="HTTP">HTTP</option>
+</select>
+</label>
+</section>
+<section class="table-card">
+<div class="table-scroll">
+<table class="radios-table streams-table">
+<thead>
+<tr>
+<th>Rádio / Stream</th>
+<th>URL</th>
+<th>Protocolo</th>
+<th>Codec</th>
+<th>Bitrate</th>
+<th>Status</th>
+<th>Resposta</th>
+<th>Última verificação</th>
+<th>Ações</th>
+</tr>
+</thead>
+<tbody id="streams-table-body">
+<tr>
+<td class="empty-state" colspan="9">Carregando…</td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+</section>
+<section class="hidden" id="emissoras-page">
+<div class="radios-toolbar">
+<div>
+<span class="status-badge success">Estrutura inicial ativa</span>
+<h2>Cadastro Nacional de Emissoras</h2>
+<p>
+<strong id="emissoras-visible-count">0</strong> emissoras exibidas.
             </p>
-          </div>
-
-          <div class="toolbar-actions">
-            <label class="file-button">
+</div>
+<div class="toolbar-actions">
+<label class="file-button">
               ⬆ Importar banco
-              <input id="import-emissoras-input" type="file"
-                accept=".json,application/json">
-            </label>
-            <button id="export-emissoras-button" class="secondary-button">
+              <input accept=".json,application/json" id="import-emissoras-input" type="file"/>
+</label>
+<button class="secondary-button" id="export-emissoras-button">
               ✓ Validar e gerar bancos
             </button>
-            <button id="new-emissora-button" class="primary-button">
+<button class="primary-button" id="new-emissora-button">
               ＋ Nova emissora
             </button>
-          </div>
-        </div>
-
-        <div id="emissoras-draft-banner" class="draft-banner hidden">
-          <div>
-            <strong>Existem alterações salvas neste navegador.</strong>
-            <span>
+</div>
+</div>
+<div class="draft-banner hidden" id="emissoras-draft-banner">
+<div>
+<strong>Existem alterações salvas neste navegador.</strong>
+<span>
               Exporte radios.json para publicar as alterações no banco oficial.
             </span>
-          </div>
-          <button id="discard-emissoras-draft-button" class="text-button">
+</div>
+<button class="text-button" id="discard-emissoras-draft-button">
             Descartar rascunho
           </button>
-        </div>
-
-
-        <section class="emissoras-stats">
-          <article>
-            <span>Total</span>
-            <strong id="emissoras-total-count">0</strong>
-          </article>
-          <article>
-            <span>FM</span>
-            <strong id="emissoras-fm-count">0</strong>
-          </article>
-          <article>
-            <span>AM</span>
-            <strong id="emissoras-am-count">0</strong>
-          </article>
-          <article>
-            <span>Web</span>
-            <strong id="emissoras-web-count">0</strong>
-          </article>
-          <article>
-            <span>Ativas</span>
-            <strong id="emissoras-active-count">0</strong>
-          </article>
-          <article>
-            <span>Verificadas</span>
-            <strong id="emissoras-verified-count">0</strong>
-          </article>
-        </section>
-
-        <section class="filters-panel emissoras-filters">
-          <label>
+</div>
+<section class="emissoras-stats">
+<article>
+<span>Total</span>
+<strong id="emissoras-total-count">0</strong>
+</article>
+<article>
+<span>FM</span>
+<strong id="emissoras-fm-count">0</strong>
+</article>
+<article>
+<span>AM</span>
+<strong id="emissoras-am-count">0</strong>
+</article>
+<article>
+<span>Web</span>
+<strong id="emissoras-web-count">0</strong>
+</article>
+<article>
+<span>Ativas</span>
+<strong id="emissoras-active-count">0</strong>
+</article>
+<article>
+<span>Verificadas</span>
+<strong id="emissoras-verified-count">0</strong>
+</article>
+</section>
+<section class="filters-panel emissoras-filters">
+<label>
             Buscar
-            <input id="emissora-search" type="search"
-              placeholder="Nome, cidade, estado, categoria ou frequência">
-          </label>
-
-          <label>
+            <input id="emissora-search" placeholder="Nome, cidade, estado, categoria ou frequência" type="search"/>
+</label>
+<label>
             Estado
             <select id="emissora-uf-filter">
-              <option value="">Todos os estados</option>
-            </select>
-          </label>
-
-          <label>
+<option value="">Todos os estados</option>
+</select>
+</label>
+<label>
             Tipo
             <select id="emissora-type-filter">
-              <option value="">Todos os tipos</option>
-              <option value="FM">FM</option>
-              <option value="AM">AM</option>
-              <option value="Web">Web</option>
-            </select>
-          </label>
-
-          <label>
+<option value="">Todos os tipos</option>
+<option value="FM">FM</option>
+<option value="AM">AM</option>
+<option value="Web">Web</option>
+</select>
+</label>
+<label>
             Status do cadastro
             <select id="emissora-status-filter">
-              <option value="">Todos os status</option>
-              <option value="cadastro_recebido">Cadastro recebido</option>
-              <option value="em_analise">Em análise</option>
-              <option value="aprovada">Aprovada</option>
-              <option value="aguardando_selo">Aguardando selo</option>
-              <option value="publicada">Publicada</option>
-              <option value="suspensa">Suspensa</option>
-              <option value="rejeitada">Rejeitada</option>
-              <option value="ativa">Ativas</option>
-              <option value="inativa">Inativas</option>
-            </select>
-          </label>
-
-          <label>
+<option value="">Todos os status</option>
+<option value="cadastro_recebido">Cadastro recebido</option>
+<option value="em_analise">Em análise</option>
+<option value="aprovada">Aprovada</option>
+<option value="aguardando_selo">Aguardando selo</option>
+<option value="publicada">Publicada</option>
+<option value="suspensa">Suspensa</option>
+<option value="rejeitada">Rejeitada</option>
+<option value="ativa">Ativas</option>
+<option value="inativa">Inativas</option>
+</select>
+</label>
+<label>
             Ordenar
             <select id="emissora-sort">
-              <option value="nome">Nome A–Z</option>
-              <option value="nome-desc">Nome Z–A</option>
-              <option value="cidade">Cidade</option>
-              <option value="estado">Estado</option>
-              <option value="atualizacao">Última atualização</option>
-            </select>
-          </label>
-        </section>
-
-        <section class="table-card">
-          <div class="table-scroll">
-            <table class="radios-table emissoras-table">
-              <thead>
-                <tr>
-                  <th>Emissora</th>
-                  <th>Tipo</th>
-                  <th>Frequência</th>
-                  <th>Cidade</th>
-                  <th>UF</th>
-                  <th>Categoria</th>
-                  <th>Streams</th>
-                  <th>Status</th>
-                  <th>Ações</th>
-                </tr>
-              </thead>
-              <tbody id="emissoras-table-body">
-                <tr>
-                  <td colspan="9" class="empty-state">Carregando…</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </section>
-      </section>
-      <section id="ocorrencias-page" class="hidden">
-        <div class="radios-toolbar ocorrencias-toolbar">
-          <div>
-            <span id="ocorrencias-status-badge" class="status-badge loading">Aguardando autenticação</span>
-            <h2>Ocorrências e confiabilidade</h2>
-            <p>Analise relatos enviados pelo Portal sem alterar automaticamente o catálogo. <strong id="ocorrencias-visible-count">0</strong> registros exibidos.</p>
-          </div>
-          <div class="toolbar-actions">
-            <a class="secondary-button" href="https://centralradiosbrasil.com.br/ocorrencias/" target="_blank" rel="noopener">↗ Abrir página pública</a>
-            <button id="ocorrencias-refresh-button" type="button" class="primary-button">↻ Atualizar ocorrências</button>
-          </div>
-        </div>
-
-        <section class="ocorrencias-kpis" aria-label="Resumo das ocorrências">
-          <article><span>Total</span><strong id="ocorrencias-total-count">0</strong></article>
-          <article><span>Novas</span><strong id="ocorrencias-new-count">0</strong></article>
-          <article><span>Em análise</span><strong id="ocorrencias-analysis-count">0</strong></article>
-          <article><span>Resolvidas</span><strong id="ocorrencias-resolved-count">0</strong></article>
-          <article><span>Prioritárias</span><strong id="ocorrencias-priority-count">0</strong></article>
-        </section>
-
-        <section class="ocorrencias-filters" aria-label="Filtros das ocorrências">
-          <label>Buscar
-            <input id="ocorrencias-search" type="search" placeholder="Protocolo, rádio, contato ou mensagem" autocomplete="off">
-          </label>
-          <label>Status
+<option value="nome">Nome A–Z</option>
+<option value="nome-desc">Nome Z–A</option>
+<option value="cidade">Cidade</option>
+<option value="estado">Estado</option>
+<option value="atualizacao">Última atualização</option>
+</select>
+</label>
+</section>
+<section class="table-card">
+<div class="table-scroll">
+<table class="radios-table emissoras-table">
+<thead>
+<tr>
+<th>Emissora</th>
+<th>Tipo</th>
+<th>Frequência</th>
+<th>Cidade</th>
+<th>UF</th>
+<th>Categoria</th>
+<th>Streams</th>
+<th>Status</th>
+<th>Ações</th>
+</tr>
+</thead>
+<tbody id="emissoras-table-body">
+<tr>
+<td class="empty-state" colspan="9">Carregando…</td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+</section>
+<section class="hidden" id="ocorrencias-page">
+<div class="radios-toolbar ocorrencias-toolbar">
+<div>
+<span class="status-badge loading" id="ocorrencias-status-badge">Aguardando autenticação</span>
+<h2>Ocorrências e confiabilidade</h2>
+<p>Analise relatos enviados pelo Portal sem alterar automaticamente o catálogo. <strong id="ocorrencias-visible-count">0</strong> registros exibidos.</p>
+</div>
+<div class="toolbar-actions">
+<a class="secondary-button" href="https://centralradiosbrasil.com.br/ocorrencias/" rel="noopener" target="_blank">↗ Abrir página pública</a>
+<button class="primary-button" id="ocorrencias-refresh-button" type="button">↻ Atualizar ocorrências</button>
+</div>
+</div>
+<section aria-label="Resumo das ocorrências" class="ocorrencias-kpis">
+<article><span>Total</span><strong id="ocorrencias-total-count">0</strong></article>
+<article><span>Novas</span><strong id="ocorrencias-new-count">0</strong></article>
+<article><span>Em análise</span><strong id="ocorrencias-analysis-count">0</strong></article>
+<article><span>Resolvidas</span><strong id="ocorrencias-resolved-count">0</strong></article>
+<article><span>Prioritárias</span><strong id="ocorrencias-priority-count">0</strong></article>
+</section>
+<section aria-label="Filtros das ocorrências" class="ocorrencias-filters">
+<label>Buscar
+            <input autocomplete="off" id="ocorrencias-search" placeholder="Protocolo, rádio, contato ou mensagem" type="search"/>
+</label>
+<label>Status
             <select id="ocorrencias-status-filter">
-              <option value="">Todos os status</option>
-              <option value="nova">Novas</option>
-              <option value="em_analise">Em análise</option>
-              <option value="resolvida">Resolvidas</option>
-              <option value="arquivada">Arquivadas</option>
-            </select>
-          </label>
-          <label>Tipo
+<option value="">Todos os status</option>
+<option value="nova">Novas</option>
+<option value="em_analise">Em análise</option>
+<option value="resolvida">Resolvidas</option>
+<option value="arquivada">Arquivadas</option>
+</select>
+</label>
+<label>Tipo
             <select id="ocorrencias-type-filter">
-              <option value="">Todos os tipos</option>
-              <option value="radio_fora_do_ar">Rádio fora do ar</option>
-              <option value="dados_incorretos">Dados incorretos</option>
-              <option value="conteudo_inadequado">Conteúdo inadequado</option>
-              <option value="problema_no_portal">Problema no Portal</option>
-              <option value="suporte_geral">Suporte geral</option>
-              <option value="seguranca_abuso">Segurança ou abuso</option>
-            </select>
-          </label>
-          <label>Prioridade
+<option value="">Todos os tipos</option>
+<option value="radio_fora_do_ar">Rádio fora do ar</option>
+<option value="dados_incorretos">Dados incorretos</option>
+<option value="conteudo_inadequado">Conteúdo inadequado</option>
+<option value="problema_no_portal">Problema no Portal</option>
+<option value="suporte_geral">Suporte geral</option>
+<option value="seguranca_abuso">Segurança ou abuso</option>
+</select>
+</label>
+<label>Prioridade
             <select id="ocorrencias-priority-filter">
-              <option value="">Todas</option>
-              <option value="normal">Normal</option>
-              <option value="alta">Alta</option>
-              <option value="critica">Crítica</option>
-            </select>
-          </label>
-        </section>
-
-        <section class="table-card">
-          <div class="table-scroll">
-            <table class="radios-table ocorrencias-table">
-              <thead><tr><th>Protocolo</th><th>Tipo</th><th>Emissora</th><th>Contato</th><th>Prioridade</th><th>Status</th><th>Recebida em</th><th>Ações</th></tr></thead>
-              <tbody id="ocorrencias-table-body"><tr><td colspan="8" class="ocorrencias-empty">Carregando ocorrências…</td></tr></tbody>
-            </table>
-          </div>
-        </section>
-      </section>
-
-      <div id="ocorrencias-modal-backdrop" class="ocorrencias-modal-backdrop hidden" role="presentation">
-        <section class="ocorrencias-modal" role="dialog" aria-modal="true" aria-labelledby="ocorrencias-modal-title">
-          <header class="ocorrencias-modal-header">
-            <div><small id="ocorrencias-modal-protocol">—</small><h2 id="ocorrencias-modal-title">Ocorrência</h2></div>
-            <button id="close-ocorrencias-modal" class="ocorrencias-modal-close" type="button" aria-label="Fechar detalhes">×</button>
-          </header>
-          <div class="ocorrencias-modal-body">
-            <div class="ocorrencias-detalhes-grid">
-              <div class="ocorrencias-detalhe"><span>Emissora</span><strong id="ocorrencias-detail-radio">—</strong></div>
-              <div class="ocorrencias-detalhe"><span>Localização</span><strong id="ocorrencias-detail-location">—</strong></div>
-              <div class="ocorrencias-detalhe"><span>Contato</span><strong id="ocorrencias-detail-contact">—</strong></div>
-              <div class="ocorrencias-detalhe"><span>E-mail</span><strong id="ocorrencias-detail-email">—</strong></div>
-              <div class="ocorrencias-detalhe"><span>Recebida em</span><strong id="ocorrencias-detail-date">—</strong></div>
-              <div class="ocorrencias-detalhe"><span>Página de origem</span><strong id="ocorrencias-detail-page">—</strong></div>
-            </div>
-            <div id="ocorrencias-detail-message" class="ocorrencias-mensagem-admin">—</div>
-            <div class="ocorrencias-links">
-              <a id="ocorrencias-email-link" href="#">✉️ Enviar e-mail</a>
-              <a id="ocorrencias-radio-link" href="#" target="_blank" rel="noopener">📻 Abrir emissora</a>
-              <button id="ocorrencias-copy-protocol" type="button">⧉ Copiar protocolo</button>
-            </div>
-
-            <form id="ocorrencias-form-admin">
-              <div class="ocorrencias-form-grid">
-                <label>Status
+<option value="">Todas</option>
+<option value="normal">Normal</option>
+<option value="alta">Alta</option>
+<option value="critica">Crítica</option>
+</select>
+</label>
+</section>
+<section class="table-card">
+<div class="table-scroll">
+<table class="radios-table ocorrencias-table">
+<thead><tr><th>Protocolo</th><th>Tipo</th><th>Emissora</th><th>Contato</th><th>Prioridade</th><th>Status</th><th>Recebida em</th><th>Ações</th></tr></thead>
+<tbody id="ocorrencias-table-body"><tr><td class="ocorrencias-empty" colspan="8">Carregando ocorrências…</td></tr></tbody>
+</table>
+</div>
+</section>
+</section>
+<div class="ocorrencias-modal-backdrop hidden" id="ocorrencias-modal-backdrop" role="presentation">
+<section aria-labelledby="ocorrencias-modal-title" aria-modal="true" class="ocorrencias-modal" role="dialog">
+<header class="ocorrencias-modal-header">
+<div><small id="ocorrencias-modal-protocol">—</small><h2 id="ocorrencias-modal-title">Ocorrência</h2></div>
+<button aria-label="Fechar detalhes" class="ocorrencias-modal-close" id="close-ocorrencias-modal" type="button">×</button>
+</header>
+<div class="ocorrencias-modal-body">
+<div class="ocorrencias-detalhes-grid">
+<div class="ocorrencias-detalhe"><span>Emissora</span><strong id="ocorrencias-detail-radio">—</strong></div>
+<div class="ocorrencias-detalhe"><span>Localização</span><strong id="ocorrencias-detail-location">—</strong></div>
+<div class="ocorrencias-detalhe"><span>Contato</span><strong id="ocorrencias-detail-contact">—</strong></div>
+<div class="ocorrencias-detalhe"><span>E-mail</span><strong id="ocorrencias-detail-email">—</strong></div>
+<div class="ocorrencias-detalhe"><span>Recebida em</span><strong id="ocorrencias-detail-date">—</strong></div>
+<div class="ocorrencias-detalhe"><span>Página de origem</span><strong id="ocorrencias-detail-page">—</strong></div>
+</div>
+<div class="ocorrencias-mensagem-admin" id="ocorrencias-detail-message">—</div>
+<div class="ocorrencias-links">
+<a href="#" id="ocorrencias-email-link">✉️ Enviar e-mail</a>
+<a href="#" id="ocorrencias-radio-link" rel="noopener" target="_blank">📻 Abrir emissora</a>
+<button id="ocorrencias-copy-protocol" type="button">⧉ Copiar protocolo</button>
+</div>
+<form id="ocorrencias-form-admin">
+<div class="ocorrencias-form-grid">
+<label>Status
                   <select id="ocorrencias-admin-status">
-                    <option value="nova">Nova</option>
-                    <option value="em_analise">Em análise</option>
-                    <option value="resolvida">Resolvida</option>
-                    <option value="arquivada">Arquivada</option>
-                  </select>
-                </label>
-                <label>Prioridade
+<option value="nova">Nova</option>
+<option value="em_analise">Em análise</option>
+<option value="resolvida">Resolvida</option>
+<option value="arquivada">Arquivada</option>
+</select>
+</label>
+<label>Prioridade
                   <select id="ocorrencias-admin-priority">
-                    <option value="normal">Normal</option>
-                    <option value="alta">Alta</option>
-                    <option value="critica">Crítica</option>
-                  </select>
-                </label>
-              </div>
-              <label class="ocorrencias-form-full">Observações administrativas
+<option value="normal">Normal</option>
+<option value="alta">Alta</option>
+<option value="critica">Crítica</option>
+</select>
+</label>
+</div>
+<label class="ocorrencias-form-full">Observações administrativas
                 <textarea id="ocorrencias-admin-notes" maxlength="1600" placeholder="Registre verificações e contatos realizados."></textarea>
-              </label>
-              <label class="ocorrencias-form-full">Resolução
+</label>
+<label class="ocorrencias-form-full">Resolução
                 <textarea id="ocorrencias-admin-resolution" maxlength="1600" placeholder="Descreva a solução ou conclusão da análise."></textarea>
-              </label>
-              <section class="ocorrencias-historico">
-                <h3>Histórico</h3>
-                <div id="ocorrencias-history-list" class="ocorrencias-historico-lista"></div>
-              </section>
-              <div class="ocorrencias-modal-actions">
-                <button id="ocorrencias-modal-cancel" type="button" class="secondary-button">Cancelar</button>
-                <button id="ocorrencias-modal-save" type="submit" class="primary-button">Salvar atualização</button>
-              </div>
-            </form>
-          </div>
-        </section>
-      </div>
+</label>
+<section class="ocorrencias-historico">
+<h3>Histórico</h3>
+<div class="ocorrencias-historico-lista" id="ocorrencias-history-list"></div>
+</section>
+<div class="ocorrencias-modal-actions">
+<button class="secondary-button" id="ocorrencias-modal-cancel" type="button">Cancelar</button>
+<button class="primary-button" id="ocorrencias-modal-save" type="submit">Salvar atualização</button>
+</div>
+</form>
+</div>
+</section>
+</div>
 
-      <section id="comercial-page" class="hidden">
-        <div class="radios-toolbar comercial-toolbar">
-          <div>
-            <span id="comercial-status-badge" class="status-badge loading">Aguardando autenticação</span>
-            <h2>Gestão Comercial, Streaming e Sites</h2>
-            <p>Administre clientes, planos, contratos, vencimentos, pagamentos, infraestrutura e os futuros sites editáveis. <strong id="comercial-visible-count">0</strong> clientes cadastrados.</p>
-          </div>
-          <div class="toolbar-actions">
-            <button type="button" class="secondary-button" data-comercial-new="client">＋ Novo cliente</button>
-            <button id="comercial-refresh-button" type="button" class="primary-button">↻ Atualizar gestão</button>
-          </div>
-        </div>
-
-        <section class="comercial-kpis" aria-label="Resumo da gestão comercial">
-          <article class="success"><span>Clientes ativos</span><strong id="comercial-kpi-clientes">0</strong><small>Contratantes em operação</small></article>
-          <article class="success"><span>Receita mensal</span><strong id="comercial-kpi-receita">R$ 0,00</strong><small>Equivalente mensal dos contratos</small></article>
-          <article class="danger"><span>Faturas vencidas</span><strong id="comercial-kpi-vencidas">0</strong><small>Exigem cobrança ou análise</small></article>
-          <article><span>Sites publicados</span><strong id="comercial-kpi-sites">0</strong><small>Instâncias dos clientes</small></article>
-          <article class="warning"><span>Contas disponíveis</span><strong id="comercial-kpi-capacidade">0</strong><small>Capacidade da revenda</small></article>
-          <article><span>Modelos disponíveis</span><strong id="comercial-kpi-modelos">0</strong><small>Catálogo futuro de sites</small></article>
-        </section>
-
-        <nav class="comercial-tabs" aria-label="Áreas da gestão comercial">
-          <button type="button" class="comercial-tab active" data-comercial-tab="visao-geral">Visão geral</button>
-          <button type="button" class="comercial-tab" data-comercial-tab="clientes">Clientes</button>
-          <button type="button" class="comercial-tab" data-comercial-tab="planos">Planos</button>
-          <button type="button" class="comercial-tab" data-comercial-tab="contratos">Contratos</button>
-          <button type="button" class="comercial-tab" data-comercial-tab="faturas">Faturas e pagamentos</button>
-          <button type="button" class="comercial-tab" data-comercial-tab="sites">Sites editáveis</button>
-          <button type="button" class="comercial-tab" data-comercial-tab="infraestrutura">Infraestrutura</button>
-        </nav>
-
-        <section class="comercial-panel" data-comercial-panel="visao-geral">
-          <div class="comercial-overview-grid">
-            <article class="comercial-card">
-              <header class="comercial-card-header"><div><h3>Funil e pendências</h3><p>O que exige acompanhamento comercial.</p></div></header>
-              <div id="comercial-pipeline-summary" class="comercial-summary-list"></div>
-            </article>
-            <article class="comercial-card">
-              <header class="comercial-card-header"><div><h3>Capacidade da revenda</h3><p>Contas disponíveis sem inventar capacidade.</p></div></header>
-              <div id="comercial-capacity-summary" class="comercial-capacity"></div>
-            </article>
-          </div>
-          <article class="comercial-card" style="margin-top:16px">
-            <header class="comercial-card-header"><div><h3>Atividade comercial recente</h3><p>Histórico de clientes, contratos, faturas, sites e infraestrutura.</p></div></header>
-            <div id="comercial-activity-list" class="comercial-activity-list"></div>
-          </article>
-        </section>
-
-        <section class="comercial-panel hidden" data-comercial-panel="clientes">
-          <div class="comercial-section-header"><div><h3>Clientes do Streaming CRB</h3><p>Contratantes e prospects convertidos dos pré-cadastros.</p></div><button class="primary-button" type="button" data-comercial-new="client">＋ Novo cliente</button></div>
-          <section class="table-card"><div class="table-scroll"><table class="radios-table comercial-table"><thead><tr><th>Código</th><th>Cliente / rádio</th><th>Contato</th><th>Localização</th><th>Status</th><th>Serviços</th><th>Ações</th></tr></thead><tbody id="comercial-clientes-body"></tbody></table></div></section>
-        </section>
-
-        <section class="comercial-panel hidden" data-comercial-panel="planos">
-          <div class="comercial-section-header"><div><h3>Planos comercializados</h3><p>Defina seus próprios produtos, preços e recursos.</p></div><button class="primary-button" type="button" data-comercial-new="plan">＋ Novo plano</button></div>
-          <section class="table-card"><div class="table-scroll"><table class="radios-table comercial-table"><thead><tr><th>Código</th><th>Plano</th><th>Valor</th><th>Capacidade</th><th>Inclui</th><th>Status</th><th>Ações</th></tr></thead><tbody id="comercial-planos-body"></tbody></table></div></section>
-        </section>
-
-        <section class="comercial-panel hidden" data-comercial-panel="contratos">
-          <div class="comercial-section-header"><div><h3>Contratos e serviços</h3><p>Streaming, site, valores e vencimentos por cliente.</p></div><button class="primary-button" type="button" data-comercial-new="contract">＋ Novo contrato</button></div>
-          <section class="table-card"><div class="table-scroll"><table class="radios-table comercial-table"><thead><tr><th>Número</th><th>Cliente</th><th>Plano</th><th>Valor</th><th>Vencimento</th><th>Status</th><th>Faturas</th><th>Ações</th></tr></thead><tbody id="comercial-contratos-body"></tbody></table></div></section>
-        </section>
-
-        <section class="comercial-panel hidden" data-comercial-panel="faturas">
-          <div class="comercial-section-header"><div><h3>Faturas e pagamentos</h3><p>Baixa manual, parcial, cancelamento e estorno com histórico.</p></div><button class="primary-button" type="button" data-comercial-new="invoice">＋ Nova fatura</button></div>
-          <section class="table-card"><div class="table-scroll"><table class="radios-table comercial-table"><thead><tr><th>Fatura</th><th>Cliente</th><th>Vencimento</th><th>Total</th><th>Pago</th><th>Status</th><th>Forma</th><th>Ações</th></tr></thead><tbody id="comercial-faturas-body"></tbody></table></div></section>
-        </section>
-
-        <section class="comercial-panel hidden" data-comercial-panel="sites">
-          <div class="comercial-section-header"><div><h3>Catálogo de modelos</h3><p>Modelos disponíveis para os sites editáveis dos clientes.</p></div><div class="toolbar-actions"><button id="comercial-seed-model-button" class="secondary-button" type="button">★ Instalar Rádio Essencial</button><button class="primary-button" type="button" data-comercial-new="model">＋ Novo modelo</button></div></div>
-          <section class="table-card"><div class="table-scroll"><table class="radios-table comercial-table"><thead><tr><th>Código</th><th>Modelo</th><th>Descrição</th><th>Campos editáveis</th><th>Status</th><th>Ações</th></tr></thead><tbody id="comercial-modelos-body"></tbody></table></div></section>
-          <div class="comercial-section-header" style="margin-top:22px"><div><h3>Sites dos clientes</h3><p>Modelo, domínio, publicação e permissões de edição.</p></div><button class="primary-button" type="button" data-comercial-new="site">＋ Preparar site</button></div>
-          <section class="table-card"><div class="table-scroll"><table class="radios-table comercial-table"><thead><tr><th>Código</th><th>Cliente</th><th>Site / modelo</th><th>Domínio</th><th>Permissões</th><th>Status</th><th>Ações</th></tr></thead><tbody id="comercial-sites-body"></tbody></table></div></section>
-          <p class="comercial-modal-note" style="margin-top:16px">Commit 22.18 iniciado: o acesso individual, o rascunho, a solicitação de publicação e a publicação administrativa já estão disponíveis. O domínio definitivo será configurado após o teste do piloto.</p>
-        </section>
-
-        <section class="comercial-panel hidden" data-comercial-panel="infraestrutura">
-          <div class="comercial-section-header"><div><h3>Infraestrutura de revenda</h3><p>Fornecedor, plano contratado, custo, vencimento e limite de contas.</p></div><button class="primary-button" type="button" data-comercial-new="revenda">＋ Nova infraestrutura</button></div>
-          <section class="table-card"><div class="table-scroll"><table class="radios-table comercial-table"><thead><tr><th>Código</th><th>Fornecedor</th><th>Capacidade</th><th>Custo mensal</th><th>Vencimento</th><th>Status</th><th>Ações</th></tr></thead><tbody id="comercial-revendas-body"></tbody></table></div></section>
-        </section>
-      </section>
-
-
-      <section id="streaming-interesses-page" class="hidden">
-        <div class="radios-toolbar streaming-toolbar">
-          <div>
-            <span id="streaming-status-badge" class="status-badge loading">Aguardando autenticação</span>
-            <h2>Interessados no Streaming CRB</h2>
-            <p>
+<section class="hidden" id="streaming-interesses-page">
+<div class="radios-toolbar streaming-toolbar">
+<div>
+<span class="status-badge loading" id="streaming-status-badge">Aguardando autenticação</span>
+<h2>Interessados no Streaming CRB</h2>
+<p>
               Acompanhe os pré-cadastros enviados pela página comercial e conduza cada oportunidade até a contratação.
               <strong id="streaming-visible-count">0</strong> registros exibidos.
             </p>
-          </div>
-          <div class="toolbar-actions">
-            <a class="secondary-button" href="https://centralradiosbrasil.com.br/streaming/" target="_blank" rel="noopener">↗ Abrir página pública</a>
-            <button id="streaming-refresh-button" type="button" class="primary-button">↻ Atualizar interessados</button>
-          </div>
-        </div>
-
-        <section class="streaming-kpis" aria-label="Resumo dos interessados no Streaming CRB">
-          <article><span>Total</span><strong id="streaming-total-count">0</strong></article>
-          <article><span>Novos</span><strong id="streaming-new-count">0</strong></article>
-          <article><span>Contatados</span><strong id="streaming-contacted-count">0</strong></article>
-          <article><span>Qualificados</span><strong id="streaming-qualified-count">0</strong></article>
-          <article><span>Convertidos</span><strong id="streaming-converted-count">0</strong></article>
-        </section>
-
-        <section class="streaming-filters" aria-label="Filtros dos pré-cadastros">
-          <label>
+</div>
+<div class="toolbar-actions">
+<a class="secondary-button" href="https://centralradiosbrasil.com.br/streaming/" rel="noopener" target="_blank">↗ Abrir página pública</a>
+<button class="primary-button" id="streaming-refresh-button" type="button">↻ Atualizar interessados</button>
+</div>
+</div>
+<section aria-label="Resumo dos interessados no Streaming CRB" class="streaming-kpis">
+<article><span>Total</span><strong id="streaming-total-count">0</strong></article>
+<article><span>Novos</span><strong id="streaming-new-count">0</strong></article>
+<article><span>Contatados</span><strong id="streaming-contacted-count">0</strong></article>
+<article><span>Qualificados</span><strong id="streaming-qualified-count">0</strong></article>
+<article><span>Convertidos</span><strong id="streaming-converted-count">0</strong></article>
+</section>
+<section aria-label="Filtros dos pré-cadastros" class="streaming-filters">
+<label>
             Buscar interessado
-            <input id="streaming-search" type="search" placeholder="Nome, e-mail, projeto ou protocolo" autocomplete="off">
-          </label>
-          <label>
+            <input autocomplete="off" id="streaming-search" placeholder="Nome, e-mail, projeto ou protocolo" type="search"/>
+</label>
+<label>
             Status comercial
             <select id="streaming-status-filter">
-              <option value="">Todos os status</option>
-              <option value="novo">Novos</option>
-              <option value="contatado">Contatados</option>
-              <option value="qualificado">Qualificados</option>
-              <option value="convertido">Convertidos</option>
-              <option value="arquivado">Arquivados</option>
-            </select>
-          </label>
-        </section>
-
-        <section class="table-card">
-          <div class="table-scroll">
-            <table class="radios-table streaming-table">
-              <thead>
-                <tr>
-                  <th>Protocolo</th>
-                  <th>Interessado</th>
-                  <th>Projeto</th>
-                  <th>Localização</th>
-                  <th>Recursos</th>
-                  <th>Status</th>
-                  <th>Recebido em</th>
-                  <th>Ações</th>
-                </tr>
-              </thead>
-              <tbody id="streaming-table-body">
-                <tr><td colspan="8" class="streaming-empty">Carregando interessados…</td></tr>
-              </tbody>
-            </table>
-          </div>
-        </section>
-      </section>
-
-<section id="emails-page" class="hidden">
-        <div class="radios-toolbar emails-toolbar">
-          <div>
-            <span id="emails-status-badge" class="status-badge loading">Aguardando conexão</span>
-            <h2>Central de e-mails</h2>
-            <p><strong id="emails-visible-count">0</strong> mensagens exibidas.</p>
-          </div>
-          <div class="toolbar-actions">
-            <button id="emails-compose-button" type="button" class="primary-button">✉️ Escrever e-mail</button>
-            <button id="emails-refresh-button" type="button" class="secondary-button">↻ Atualizar</button>
-          </div>
-        </div>
-
-        <p id="emails-mode-note" class="emails-mode-note testing">
+<option value="">Todos os status</option>
+<option value="novo">Novos</option>
+<option value="contatado">Contatados</option>
+<option value="qualificado">Qualificados</option>
+<option value="convertido">Convertidos</option>
+<option value="arquivado">Arquivados</option>
+</select>
+</label>
+</section>
+<section class="table-card">
+<div class="table-scroll">
+<table class="radios-table streaming-table">
+<thead>
+<tr>
+<th>Protocolo</th>
+<th>Interessado</th>
+<th>Projeto</th>
+<th>Localização</th>
+<th>Recursos</th>
+<th>Status</th>
+<th>Recebido em</th>
+<th>Ações</th>
+</tr>
+</thead>
+<tbody id="streaming-table-body">
+<tr><td class="streaming-empty" colspan="8">Carregando interessados…</td></tr>
+</tbody>
+</table>
+</div>
+</section>
+</section>
+<section class="hidden" id="emails-page">
+<div class="radios-toolbar emails-toolbar">
+<div>
+<span class="status-badge loading" id="emails-status-badge">Aguardando conexão</span>
+<h2>Central de e-mails</h2>
+<p><strong id="emails-visible-count">0</strong> mensagens exibidas.</p>
+</div>
+<div class="toolbar-actions">
+<button class="primary-button" id="emails-compose-button" type="button">✉️ Escrever e-mail</button>
+<button class="secondary-button" id="emails-refresh-button" type="button">↻ Atualizar</button>
+</div>
+</div>
+<p class="emails-mode-note testing" id="emails-mode-note">
           Modo de testes: respostas limitadas ao destinatário verificado.
         </p>
-        <p class="emails-storage-note">
+<p class="emails-storage-note">
           Armazenamento atual: remetente, assunto, texto e histórico no D1. Anexos recebidos ficam disponíveis na cópia de segurança enviada ao Gmail.
         </p>
-
-        <section class="emails-layout" aria-label="Gerenciador de e-mails">
-          <nav class="emails-folders" aria-label="Pastas de e-mail">
-            <button class="emails-folder active" type="button" data-email-box="entrada"><span>📥 Entrada</span><strong id="emails-count-inbox">0</strong></button>
-            <button class="emails-folder" type="button" data-email-box="enviados"><span>📤 Enviados</span><strong id="emails-count-sent">0</strong></button>
-            <button class="emails-folder" type="button" data-email-box="arquivados"><span>🗃️ Arquivados</span><strong id="emails-count-archived">0</strong></button>
-            <button class="emails-folder" type="button" data-email-box="lixeira"><span>🗑️ Lixeira</span><strong id="emails-count-trash">0</strong></button>
-            <div class="emails-folder" aria-label="Mensagens não lidas"><span>🔵 Não lidas</span><strong id="emails-count-unread">0</strong></div>
-          </nav>
-
-          <div class="emails-list-panel">
-            <label class="emails-search-wrap">
-              <span class="sr-only">Pesquisar e-mails</span>
-              <input id="emails-search" type="search" placeholder="Pesquisar por remetente, assunto ou conteúdo">
-            </label>
-            <div id="emails-list" class="emails-list" role="list"></div>
-          </div>
-
-          <article id="email-reader" class="email-reader">
-            <div id="email-reader-empty" class="email-reader-empty">
-              <div><strong>Selecione uma mensagem</strong><p>O conteúdo aparecerá nesta área.</p></div>
-            </div>
-            <div id="email-reader-content" class="hidden">
-              <header class="email-reader-header">
-                <span class="status-badge success">Mensagem</span>
-                <h2 id="email-reader-subject">Assunto</h2>
-                <p id="email-reader-from"></p>
-                <time id="email-reader-date"></time>
-              </header>
-              <div class="email-reader-actions">
-                <button id="email-reply-button" type="button" class="primary-button">↩ Responder</button>
-                <button id="email-unread-button" type="button" class="secondary-button">Marcar como não lida</button>
-                <button id="email-archive-button" type="button" class="secondary-button">Arquivar</button>
-                <button id="email-trash-button" type="button" class="danger-button">Lixeira</button>
-                <button id="email-restore-button" type="button" class="secondary-button hidden">Restaurar</button>
-              </div>
-              <pre id="email-reader-body" class="email-reader-body"></pre>
-              <div id="email-attachments" class="email-attachments"></div>
-              <section>
-                <h3>Conversa</h3>
-                <div id="email-thread" class="email-thread"></div>
-              </section>
-            </div>
-          </article>
-        </section>
-      </section>
-
-<section id="configuracoes-page" class="hidden">
-  <div class="radios-toolbar">
-    <div>
-      <span class="status-badge success">Configuração local</span>
-      <h2>Configurações do painel</h2>
-      <p>
+<section aria-label="Gerenciador de e-mails" class="emails-layout">
+<nav aria-label="Pastas de e-mail" class="emails-folders">
+<button class="emails-folder active" data-email-box="entrada" type="button"><span>📥 Entrada</span><strong id="emails-count-inbox">0</strong></button>
+<button class="emails-folder" data-email-box="enviados" type="button"><span>📤 Enviados</span><strong id="emails-count-sent">0</strong></button>
+<button class="emails-folder" data-email-box="arquivados" type="button"><span>🗃️ Arquivados</span><strong id="emails-count-archived">0</strong></button>
+<button class="emails-folder" data-email-box="lixeira" type="button"><span>🗑️ Lixeira</span><strong id="emails-count-trash">0</strong></button>
+<div aria-label="Mensagens não lidas" class="emails-folder"><span>🔵 Não lidas</span><strong id="emails-count-unread">0</strong></div>
+</nav>
+<div class="emails-list-panel">
+<label class="emails-search-wrap">
+<span class="sr-only">Pesquisar e-mails</span>
+<input id="emails-search" placeholder="Pesquisar por remetente, assunto ou conteúdo" type="search"/>
+</label>
+<div class="emails-list" id="emails-list" role="list"></div>
+</div>
+<article class="email-reader" id="email-reader">
+<div class="email-reader-empty" id="email-reader-empty">
+<div><strong>Selecione uma mensagem</strong><p>O conteúdo aparecerá nesta área.</p></div>
+</div>
+<div class="hidden" id="email-reader-content">
+<header class="email-reader-header">
+<span class="status-badge success">Mensagem</span>
+<h2 id="email-reader-subject">Assunto</h2>
+<p id="email-reader-from"></p>
+<time id="email-reader-date"></time>
+</header>
+<div class="email-reader-actions">
+<button class="primary-button" id="email-reply-button" type="button">↩ Responder</button>
+<button class="secondary-button" id="email-unread-button" type="button">Marcar como não lida</button>
+<button class="secondary-button" id="email-archive-button" type="button">Arquivar</button>
+<button class="danger-button" id="email-trash-button" type="button">Lixeira</button>
+<button class="secondary-button hidden" id="email-restore-button" type="button">Restaurar</button>
+</div>
+<pre class="email-reader-body" id="email-reader-body"></pre>
+<div class="email-attachments" id="email-attachments"></div>
+<section>
+<h3>Conversa</h3>
+<div class="email-thread" id="email-thread"></div>
+</section>
+</div>
+</article>
+</section>
+</section>
+<section class="hidden" id="configuracoes-page">
+<div class="radios-toolbar">
+<div>
+<span class="status-badge success">Configuração local</span>
+<h2>Configurações do painel</h2>
+<p>
         Informações técnicas e preferências utilizadas pelo
         Central Rádios Brasil Admin.
       </p>
-    </div>
-  </div>
-
-  <section class="table-card">
-    <div style="padding:20px">
-      <p>
+</div>
+</div>
+<section class="table-card">
+<div style="padding:20px">
+<p>
         O módulo de configurações está sendo preparado.
       </p>
-    </div>
-  </section>
-</section>
-   <section id="publicacao-page" class="hidden">
-  <div class="radios-toolbar publicacao-hero">
-    <div>
-      <span id="publicacao-status-badge" class="status-badge loading">Aguardando dados</span>
-      <h2>Publicação Inteligente</h2>
-      <p>O sistema analisa a prontidão e inclui somente emissoras aptas nos bancos oficiais.</p><div class="publication-meta"><span>Última validação: <strong id="publicacao-ultima-validacao">Ainda não realizada</strong></span><span id="publicacao-sync-status" class="publication-sync publication-sync--stale">Catálogo ainda não validado</span></div>
-    </div>
-    <div class="toolbar-actions">
-      <button id="publicacao-refresh-button" type="button" class="secondary-button">↻ Atualizar</button>
-      <button id="publicacao-validar-button" type="button" class="primary-button">✓ Validar e preparar</button>
-    </div>
-  </div>
-
-  <section class="publicacao-kpis">
-    <article><span>Analisadas</span><strong id="publicacao-total-emissoras">0</strong></article>
-    <article class="kpi-ready"><span>Prontas</span><strong id="publicacao-total-aptas">0</strong></article>
-    <article class="kpi-pending"><span>Pendentes</span><strong id="publicacao-total-pendentes">0</strong></article>
-    <article class="kpi-blocked"><span>Bloqueadas</span><strong id="publicacao-total-bloqueadas">0</strong></article>
-    <article><span>Qualidade média</span><strong id="publicacao-qualidade-media">0%</strong></article>
-  </section>
-
-  <section id="publicacao-resumo-executivo" class="publication-summary publication-summary--empty" aria-live="polite">
-    <strong>Aguardando validação</strong><span>Use o botão Validar e preparar para gerar o diagnóstico oficial.</span>
-  </section>
-
-  <section class="publicacao-card publicacao-relatorio">
-    <div class="publicacao-card-header"><div><span class="status-badge loading">Relatório</span><h3>Prontidão por emissora</h3></div></div>
-    <p id="publicacao-resumo">Clique em <strong>Validar e preparar</strong> para gerar o diagnóstico oficial.</p>
-    <div id="publicacao-avaliacoes-list" class="readiness-list"></div>
-  </section>
-
-  <section class="publicacao-grid">
-    <article class="publicacao-card"><h3>radios.json</h3><p>Banco completo do catálogo, contendo somente emissoras aptas.</p><button id="publicacao-gerar-radios-button" type="button" class="secondary-button" disabled>↓ Gerar radios.json</button></article>
-    <article class="publicacao-card"><h3>radios-esp32.json</h3><p>Banco otimizado para o aparelho, contendo somente streams válidos.</p><button id="publicacao-gerar-esp32-button" type="button" class="secondary-button" disabled>↓ Gerar radios-esp32.json</button></article>
-  </section>
-
-  <section id="publicacao-resultado-operacao" class="publication-result" hidden aria-live="polite"></section>
-
-  <section class="publicacao-card publication-history-card">
-    <div class="publicacao-card-header"><div><span class="status-badge loading">Histórico</span><h3>Últimas publicações neste navegador</h3></div></div>
-    <div id="publicacao-historico-list" class="publication-history-list"></div>
-  </section>
-</section>
-    
-    </main>
-  </div>
 </div>
-
-
-<div id="streaming-modal-backdrop" class="modal-backdrop hidden">
-  <section class="modal-card streaming-modal-card" role="dialog" aria-modal="true" aria-labelledby="streaming-modal-title">
-    <div class="modal-header">
-      <div>
-        <span id="streaming-modal-protocol">CRB-STR</span>
-        <h2 id="streaming-modal-title">Interessado no Streaming CRB</h2>
-      </div>
-      <button id="close-streaming-modal" type="button" class="close-button" aria-label="Fechar">×</button>
-    </div>
-
-    <dl class="streaming-modal-summary">
-      <div><dt>E-mail</dt><dd id="streaming-detail-email">—</dd></div>
-      <div><dt>WhatsApp</dt><dd id="streaming-detail-whatsapp">—</dd></div>
-      <div><dt>Localização</dt><dd id="streaming-detail-location">—</dd></div>
-      <div><dt>Nome do projeto</dt><dd id="streaming-detail-project">—</dd></div>
-      <div><dt>Situação atual</dt><dd id="streaming-detail-situation">—</dd></div>
-      <div><dt>Previsão de início</dt><dd id="streaming-detail-start">—</dd></div>
-      <div><dt>Recebido em</dt><dd id="streaming-detail-date">—</dd></div>
-      <div><dt>Origem</dt><dd id="streaming-detail-origin">—</dd></div>
-      <div class="full"><dt>Recursos de interesse</dt><dd id="streaming-detail-resources" class="streaming-resources"></dd></div>
-      <div class="full"><dt>Mensagem do interessado</dt><dd id="streaming-detail-message">—</dd></div>
-    </dl>
-
-    <div class="streaming-contact-actions">
-      <a id="streaming-email-link" href="#">✉ Enviar e-mail</a>
-      <a id="streaming-whatsapp-link" href="#" target="_blank" rel="noopener">💬 Abrir WhatsApp</a>
-      <button id="streaming-copy-protocol" type="button">⧉ Copiar protocolo</button>
-    </div>
-
-    <form id="streaming-interest-form" class="streaming-modal-form">
-      <label>
+</section>
+</section>
+<section class="hidden" id="publicacao-page">
+<div class="radios-toolbar publicacao-hero">
+<div>
+<span class="status-badge loading" id="publicacao-status-badge">Aguardando dados</span>
+<h2>Publicação Inteligente</h2>
+<p>O sistema analisa a prontidão e inclui somente emissoras aptas nos bancos oficiais.</p><div class="publication-meta"><span>Última validação: <strong id="publicacao-ultima-validacao">Ainda não realizada</strong></span><span class="publication-sync publication-sync--stale" id="publicacao-sync-status">Catálogo ainda não validado</span></div>
+</div>
+<div class="toolbar-actions">
+<button class="secondary-button" id="publicacao-refresh-button" type="button">↻ Atualizar</button>
+<button class="primary-button" id="publicacao-validar-button" type="button">✓ Validar e preparar</button>
+</div>
+</div>
+<section class="publicacao-kpis">
+<article><span>Analisadas</span><strong id="publicacao-total-emissoras">0</strong></article>
+<article class="kpi-ready"><span>Prontas</span><strong id="publicacao-total-aptas">0</strong></article>
+<article class="kpi-pending"><span>Pendentes</span><strong id="publicacao-total-pendentes">0</strong></article>
+<article class="kpi-blocked"><span>Bloqueadas</span><strong id="publicacao-total-bloqueadas">0</strong></article>
+<article><span>Qualidade média</span><strong id="publicacao-qualidade-media">0%</strong></article>
+</section>
+<section aria-live="polite" class="publication-summary publication-summary--empty" id="publicacao-resumo-executivo">
+<strong>Aguardando validação</strong><span>Use o botão Validar e preparar para gerar o diagnóstico oficial.</span>
+</section>
+<section class="publicacao-card publicacao-relatorio">
+<div class="publicacao-card-header"><div><span class="status-badge loading">Relatório</span><h3>Prontidão por emissora</h3></div></div>
+<p id="publicacao-resumo">Clique em <strong>Validar e preparar</strong> para gerar o diagnóstico oficial.</p>
+<div class="readiness-list" id="publicacao-avaliacoes-list"></div>
+</section>
+<section class="publicacao-grid">
+<article class="publicacao-card"><h3>radios.json</h3><p>Banco completo do catálogo, contendo somente emissoras aptas.</p><button class="secondary-button" disabled="" id="publicacao-gerar-radios-button" type="button">↓ Gerar radios.json</button></article>
+<article class="publicacao-card"><h3>radios-esp32.json</h3><p>Banco otimizado para o aparelho, contendo somente streams válidos.</p><button class="secondary-button" disabled="" id="publicacao-gerar-esp32-button" type="button">↓ Gerar radios-esp32.json</button></article>
+</section>
+<section aria-live="polite" class="publication-result" hidden="" id="publicacao-resultado-operacao"></section>
+<section class="publicacao-card publication-history-card">
+<div class="publicacao-card-header"><div><span class="status-badge loading">Histórico</span><h3>Últimas publicações neste navegador</h3></div></div>
+<div class="publication-history-list" id="publicacao-historico-list"></div>
+</section>
+</section>
+</main>
+</div>
+</div>
+<div class="modal-backdrop hidden" id="streaming-modal-backdrop">
+<section aria-labelledby="streaming-modal-title" aria-modal="true" class="modal-card streaming-modal-card" role="dialog">
+<div class="modal-header">
+<div>
+<span id="streaming-modal-protocol">CRB-STR</span>
+<h2 id="streaming-modal-title">Interessado no Streaming CRB</h2>
+</div>
+<button aria-label="Fechar" class="close-button" id="close-streaming-modal" type="button">×</button>
+</div>
+<dl class="streaming-modal-summary">
+<div><dt>E-mail</dt><dd id="streaming-detail-email">—</dd></div>
+<div><dt>WhatsApp</dt><dd id="streaming-detail-whatsapp">—</dd></div>
+<div><dt>Localização</dt><dd id="streaming-detail-location">—</dd></div>
+<div><dt>Nome do projeto</dt><dd id="streaming-detail-project">—</dd></div>
+<div><dt>Situação atual</dt><dd id="streaming-detail-situation">—</dd></div>
+<div><dt>Previsão de início</dt><dd id="streaming-detail-start">—</dd></div>
+<div><dt>Recebido em</dt><dd id="streaming-detail-date">—</dd></div>
+<div><dt>Origem</dt><dd id="streaming-detail-origin">—</dd></div>
+<div class="full"><dt>Recursos de interesse</dt><dd class="streaming-resources" id="streaming-detail-resources"></dd></div>
+<div class="full"><dt>Mensagem do interessado</dt><dd id="streaming-detail-message">—</dd></div>
+</dl>
+<div class="streaming-contact-actions">
+<a href="#" id="streaming-email-link">✉ Enviar e-mail</a>
+<a href="#" id="streaming-whatsapp-link" rel="noopener" target="_blank">💬 Abrir WhatsApp</a>
+<button id="streaming-copy-protocol" type="button">⧉ Copiar protocolo</button>
+</div>
+<form class="streaming-modal-form" id="streaming-interest-form">
+<label>
         Status comercial
-        <select id="streaming-interest-status" required>
-          <option value="novo">Novo</option>
-          <option value="contatado">Contatado</option>
-          <option value="qualificado">Qualificado</option>
-          <option value="convertido">Convertido</option>
-          <option value="arquivado">Arquivado</option>
-        </select>
-      </label>
-
-      <label>
+        <select id="streaming-interest-status" required="">
+<option value="novo">Novo</option>
+<option value="contatado">Contatado</option>
+<option value="qualificado">Qualificado</option>
+<option value="convertido">Convertido</option>
+<option value="arquivado">Arquivado</option>
+</select>
+</label>
+<label>
         Observações administrativas
         <textarea id="streaming-interest-notes" maxlength="1200" placeholder="Registre contato, necessidade, proposta enviada ou próximo passo."></textarea>
-      </label>
-
-      <div class="modal-actions">
-        <button id="streaming-convert-client" type="button" class="secondary-button">💼 Converter em cliente</button>
-        <button id="streaming-modal-cancel" type="button" class="secondary-button">Cancelar</button>
-        <button id="streaming-modal-save" type="submit" class="primary-button">Salvar atualização</button>
-      </div>
-    </form>
-  </section>
+</label>
+<div class="modal-actions">
+<button class="secondary-button" id="streaming-convert-client" type="button">💼 Converter em cliente</button>
+<button class="secondary-button" id="streaming-modal-cancel" type="button">Cancelar</button>
+<button class="primary-button" id="streaming-modal-save" type="submit">Salvar atualização</button>
 </div>
-
-
-<div id="solicitacao-modal-backdrop" class="modal-backdrop hidden">
-  <section class="modal-card solicitacao-modal-card" role="dialog"
-    aria-modal="true" aria-labelledby="solicitacao-modal-title">
-
-    <div class="modal-header">
-      <div>
-        <span>📥 Portal da Emissora</span>
-        <h2 id="solicitacao-modal-title">Analisar solicitação</h2>
-      </div>
-
-      <button id="close-solicitacao-modal" class="close-button"
-        type="button" aria-label="Fechar">×</button>
-    </div>
-
-    <div class="solicitacao-detalhe-layout">
-      <aside class="solicitacao-logo-card">
-        <div id="solicitacao-logo-preview"
-          class="solicitacao-logo-preview">
-          <span>📻</span>
-          <small>Sem logomarca</small>
-        </div>
-        <span id="solicitacao-logo-status"
-          class="solicitacao-logo-status sem-logo">
+</form>
+</section>
+</div>
+<div class="modal-backdrop hidden" id="solicitacao-modal-backdrop">
+<section aria-labelledby="solicitacao-modal-title" aria-modal="true" class="modal-card solicitacao-modal-card" role="dialog">
+<div class="modal-header">
+<div>
+<span>📥 Portal da Emissora</span>
+<h2 id="solicitacao-modal-title">Analisar solicitação</h2>
+</div>
+<button aria-label="Fechar" class="close-button" id="close-solicitacao-modal" type="button">×</button>
+</div>
+<div class="solicitacao-detalhe-layout">
+<aside class="solicitacao-logo-card">
+<div class="solicitacao-logo-preview" id="solicitacao-logo-preview">
+<span>📻</span>
+<small>Sem logomarca</small>
+</div>
+<span class="solicitacao-logo-status sem-logo" id="solicitacao-logo-status">
           Logo pendente
         </span>
-      </aside>
-
-      <div class="solicitacao-detalhes">
-        <div class="solicitacao-protocolo">
-          <span>Protocolo</span>
-          <strong id="solicitacao-detalhe-protocolo">—</strong>
-        </div>
-
-        <dl class="solicitacao-dados-grid">
-          <div><dt>Rádio</dt><dd id="solicitacao-detalhe-nome">—</dd></div>
-          <div><dt>Localização</dt><dd id="solicitacao-detalhe-localizacao">—</dd></div>
-          <div><dt>Categoria</dt><dd id="solicitacao-detalhe-categoria">—</dd></div>
-          <div><dt>Plano solicitado</dt><dd id="solicitacao-detalhe-plano">—</dd></div>
-          <div><dt>E-mail</dt><dd id="solicitacao-detalhe-email">—</dd></div>
-          <div><dt>WhatsApp</dt><dd id="solicitacao-detalhe-whatsapp">—</dd></div>
-          <div class="full"><dt>Site</dt><dd id="solicitacao-detalhe-site">—</dd></div>
-          <div class="full"><dt>Stream</dt><dd id="solicitacao-detalhe-stream">—</dd></div>
-          <div class="full"><dt>Descrição</dt><dd id="solicitacao-detalhe-descricao">—</dd></div>
-          <div class="full"><dt>Observação administrativa</dt><dd id="solicitacao-detalhe-observacao">—</dd></div>
-        </dl>
-
-        <label class="solicitacao-observacao-campo">
+</aside>
+<div class="solicitacao-detalhes">
+<div class="solicitacao-protocolo">
+<span>Protocolo</span>
+<strong id="solicitacao-detalhe-protocolo">—</strong>
+</div>
+<dl class="solicitacao-dados-grid">
+<div><dt>Rádio</dt><dd id="solicitacao-detalhe-nome">—</dd></div>
+<div><dt>Localização</dt><dd id="solicitacao-detalhe-localizacao">—</dd></div>
+<div><dt>Categoria</dt><dd id="solicitacao-detalhe-categoria">—</dd></div>
+<div><dt>Plano solicitado</dt><dd id="solicitacao-detalhe-plano">—</dd></div>
+<div><dt>E-mail</dt><dd id="solicitacao-detalhe-email">—</dd></div>
+<div><dt>WhatsApp</dt><dd id="solicitacao-detalhe-whatsapp">—</dd></div>
+<div class="full"><dt>Site</dt><dd id="solicitacao-detalhe-site">—</dd></div>
+<div class="full"><dt>Stream</dt><dd id="solicitacao-detalhe-stream">—</dd></div>
+<div class="full"><dt>Descrição</dt><dd id="solicitacao-detalhe-descricao">—</dd></div>
+<div class="full"><dt>Observação administrativa</dt><dd id="solicitacao-detalhe-observacao">—</dd></div>
+</dl>
+<label class="solicitacao-observacao-campo">
           Observação da análise
-          <textarea id="solicitacao-observacao" rows="3"
-            maxlength="700"
-            placeholder="Registre pendências, motivo da decisão ou informações da análise."></textarea>
-        </label>
-      </div>
-    </div>
-
-    <div class="modal-actions solicitacao-modal-actions">
-      <button id="solicitacao-marcar-analise-button"
-        type="button" class="secondary-button">
+          <textarea id="solicitacao-observacao" maxlength="700" placeholder="Registre pendências, motivo da decisão ou informações da análise." rows="3"></textarea>
+</label>
+</div>
+</div>
+<div class="modal-actions solicitacao-modal-actions">
+<button class="secondary-button" id="solicitacao-marcar-analise-button" type="button">
         🔎 Marcar em análise
       </button>
-      <button id="solicitacao-rejeitar-button"
-        type="button" class="secondary-button solicitacao-danger-button">
+<button class="secondary-button solicitacao-danger-button" id="solicitacao-rejeitar-button" type="button">
         ⛔ Rejeitar
       </button>
-      <button id="solicitacao-importar-button"
-        type="button" class="secondary-button">
+<button class="secondary-button" id="solicitacao-importar-button" type="button">
         📋 Importar para análise
       </button>
-      <button id="solicitacao-aprovar-button"
-        type="button" class="primary-button">
+<button class="primary-button" id="solicitacao-aprovar-button" type="button">
         ✓ Aprovar e importar
       </button>
-    </div>
-  </section>
 </div>
-
-<div id="alteracao-modal-backdrop" class="modal-backdrop hidden">
-  <section class="modal-card solicitacao-modal-card" role="dialog"
-    aria-modal="true" aria-labelledby="alteracao-modal-title">
-
-    <div class="modal-header">
-      <div>
-        <span>✏️ Alteração solicitada</span>
-        <h2 id="alteracao-modal-title">Analisar alteração</h2>
-      </div>
-      <button id="close-alteracao-modal" class="close-button"
-        type="button" aria-label="Fechar">×</button>
-    </div>
-
-    <div class="alteracao-identificacao">
-      <strong id="alteracao-detalhe-id">—</strong>
-      <span>Cadastro original: <b id="alteracao-detalhe-protocolo">—</b></span>
-    </div>
-
-    <div class="alteracao-comparacao">
-      <table class="radios-table">
-        <thead>
-          <tr><th>Campo</th><th>Publicado atualmente</th><th>Alteração solicitada</th></tr>
-        </thead>
-        <tbody id="alteracao-comparacao-body"></tbody>
-      </table>
-    </div>
-
-    <div id="alteracao-logo-proposta" class="alteracao-logo-proposta hidden"></div>
-
-    <label class="solicitacao-observacao-campo">
+</section>
+</div>
+<div class="modal-backdrop hidden" id="alteracao-modal-backdrop">
+<section aria-labelledby="alteracao-modal-title" aria-modal="true" class="modal-card solicitacao-modal-card" role="dialog">
+<div class="modal-header">
+<div>
+<span>✏️ Alteração solicitada</span>
+<h2 id="alteracao-modal-title">Analisar alteração</h2>
+</div>
+<button aria-label="Fechar" class="close-button" id="close-alteracao-modal" type="button">×</button>
+</div>
+<div class="alteracao-identificacao">
+<strong id="alteracao-detalhe-id">—</strong>
+<span>Cadastro original: <b id="alteracao-detalhe-protocolo">—</b></span>
+</div>
+<div class="alteracao-comparacao">
+<table class="radios-table">
+<thead>
+<tr><th>Campo</th><th>Publicado atualmente</th><th>Alteração solicitada</th></tr>
+</thead>
+<tbody id="alteracao-comparacao-body"></tbody>
+</table>
+</div>
+<div class="alteracao-logo-proposta hidden" id="alteracao-logo-proposta"></div>
+<label class="solicitacao-observacao-campo">
       Observação da análise
-      <textarea id="alteracao-observacao" rows="3" maxlength="700"
-        placeholder="Registre a decisão ou alguma orientação para a emissora."></textarea>
-    </label>
-
-    <div class="modal-actions solicitacao-modal-actions">
-      <button id="alteracao-marcar-analise-button"
-        type="button" class="secondary-button">
+      <textarea id="alteracao-observacao" maxlength="700" placeholder="Registre a decisão ou alguma orientação para a emissora." rows="3"></textarea>
+</label>
+<div class="modal-actions solicitacao-modal-actions">
+<button class="secondary-button" id="alteracao-marcar-analise-button" type="button">
         🔎 Marcar em análise
       </button>
-      <button id="alteracao-rejeitar-button"
-        type="button" class="secondary-button solicitacao-danger-button">
+<button class="secondary-button solicitacao-danger-button" id="alteracao-rejeitar-button" type="button">
         ⛔ Rejeitar
       </button>
-      <button id="alteracao-aplicar-button"
-        type="button" class="primary-button">
+<button class="primary-button" id="alteracao-aplicar-button" type="button">
         ✓ Aprovar e aplicar na emissora
       </button>
-    </div>
-  </section>
 </div>
-
-<div id="radio-modal-backdrop" class="modal-backdrop hidden">
-  <section class="modal-card" role="dialog" aria-modal="true" aria-labelledby="radio-modal-title">
-    <div class="modal-header">
-      <div>
-        <span>Catálogo de emissoras</span>
-        <h2 id="radio-modal-title">Cadastrar nova rádio</h2>
-      </div>
-      <button id="cancel-radio-form" class="close-button" type="button" aria-label="Fechar">×</button>
-    </div>
-
-    <form id="radio-form">
-      <div class="form-grid">
-        <label class="full-field">
+</section>
+</div>
+<div class="modal-backdrop hidden" id="radio-modal-backdrop">
+<section aria-labelledby="radio-modal-title" aria-modal="true" class="modal-card" role="dialog">
+<div class="modal-header">
+<div>
+<span>Catálogo de emissoras</span>
+<h2 id="radio-modal-title">Cadastrar nova rádio</h2>
+</div>
+<button aria-label="Fechar" class="close-button" id="cancel-radio-form" type="button">×</button>
+</div>
+<form id="radio-form">
+<div class="form-grid">
+<label class="full-field">
           Nome da rádio *
-          <input id="radio-name" required maxlength="120"
-            placeholder="Ex.: Rádio Fala Popular">
-        </label>
-
-        <label>
+          <input id="radio-name" maxlength="120" placeholder="Ex.: Rádio Fala Popular" required=""/>
+</label>
+<label>
           País
-          <input id="radio-country" value="Brasil" readonly>
-        </label>
-
-        <label>
+          <input id="radio-country" readonly="" value="Brasil"/>
+</label>
+<label>
           Cidade *
-          <input id="radio-city" required maxlength="100"
-            placeholder="Rio Verde">
-        </label>
-
-        <label>
+          <input id="radio-city" maxlength="100" placeholder="Rio Verde" required=""/>
+</label>
+<label>
           Estado *
-          <select id="radio-state" required>
-            <option value="">Selecione o estado</option>
-          </select>
-        </label>
-
-        <label>
+          <select id="radio-state" required="">
+<option value="">Selecione o estado</option>
+</select>
+</label>
+<label>
           Categoria principal *
-          <select id="radio-category" required>
-            <option value="">Selecione a categoria</option>
-          </select>
-        </label>
-
-        <label id="radio-category-other-field" class="hidden full-field">
+          <select id="radio-category" required="">
+<option value="">Selecione a categoria</option>
+</select>
+</label>
+<label class="hidden full-field" id="radio-category-other-field">
           Outra categoria *
-          <input id="radio-category-other" maxlength="80"
-            placeholder="Digite a categoria">
-        </label>
-
-        <label>
+          <input id="radio-category-other" maxlength="80" placeholder="Digite a categoria"/>
+</label>
+<label>
           Categorias adicionais
-          <input id="radio-extra-categories" maxlength="200"
-            placeholder="Notícias, Popular, Comunitária">
-        </label>
-
-        <label class="full-field">
+          <input id="radio-extra-categories" maxlength="200" placeholder="Notícias, Popular, Comunitária"/>
+</label>
+<label class="full-field">
           Descrição
-          <textarea id="radio-description" rows="3" maxlength="500"
-            placeholder="Descrição curta da emissora"></textarea>
-        </label>
-
-        <label>
+          <textarea id="radio-description" maxlength="500" placeholder="Descrição curta da emissora" rows="3"></textarea>
+</label>
+<label>
           Site oficial
-          <input id="radio-site" type="url" placeholder="https://">
-        </label>
-
-        <label>
+          <input id="radio-site" placeholder="https://" type="url"/>
+</label>
+<label>
           URL do logotipo
-          <input id="radio-logo" type="url" placeholder="https://">
-        </label>
-
-        <label>
+          <input id="radio-logo" placeholder="https://" type="url"/>
+</label>
+<label>
           Instagram
-          <input id="radio-instagram" type="url" placeholder="https://instagram.com/">
-        </label>
-
-        <label>
+          <input id="radio-instagram" placeholder="https://instagram.com/" type="url"/>
+</label>
+<label>
           Facebook
-          <input id="radio-facebook" type="url" placeholder="https://facebook.com/">
-        </label>
-
-        <label class="full-field">
+          <input id="radio-facebook" placeholder="https://facebook.com/" type="url"/>
+</label>
+<label class="full-field">
           WhatsApp
-          <input id="radio-whatsapp" maxlength="30"
-            placeholder="5564999999999">
-        </label>
-
-        <label class="full-field">
+          <input id="radio-whatsapp" maxlength="30" placeholder="5564999999999"/>
+</label>
+<label class="full-field">
           URL do stream principal *
-          <input id="radio-stream" type="url" required placeholder="https://">
-        </label>
-
-        <div class="full-field stream-test-box">
-          <div>
-            <strong>Teste do stream</strong>
-            <small>
+          <input id="radio-stream" placeholder="https://" required="" type="url"/>
+</label>
+<div class="full-field stream-test-box">
+<div>
+<strong>Teste do stream</strong>
+<small>
               O teste tenta reproduzir o áudio diretamente no navegador.
             </small>
-          </div>
-
-          <div class="stream-test-actions">
-            <button id="test-form-stream-button" type="button"
-              class="secondary-button">▶ Testar</button>
-            <button id="stop-form-stream-button" type="button"
-              class="secondary-button">■ Parar</button>
-          </div>
-
-          <p id="form-stream-result"
-            class="stream-test-result neutral">
+</div>
+<div class="stream-test-actions">
+<button class="secondary-button" id="test-form-stream-button" type="button">▶ Testar</button>
+<button class="secondary-button" id="stop-form-stream-button" type="button">■ Parar</button>
+</div>
+<p class="stream-test-result neutral" id="form-stream-result">
             Nenhum teste realizado.
           </p>
-        </div>
-
-        <label class="checkbox-field full-field">
-          <input id="radio-verified" type="checkbox">
+</div>
+<label class="checkbox-field full-field">
+<input id="radio-verified" type="checkbox"/>
           Rádio verificada
         </label>
-
-        <label class="checkbox-field full-field">
-          <input id="radio-active" type="checkbox" checked>
+<label class="checkbox-field full-field">
+<input checked="" id="radio-active" type="checkbox"/>
           Rádio ativa no catálogo
         </label>
-      </div>
-
-      <p class="form-note">
+</div>
+<p class="form-note">
         Os dados são salvos como rascunho neste navegador. Para atualizar o
         banco oficial, exporte o arquivo radios.json e publique-o no
         repositório CentralRadiosBrasil-Dados.
       </p>
-
-      <div class="modal-actions">
-        <button type="button" class="secondary-button"
-          onclick="RadiosAdmin.fecharFormulario()">Cancelar</button>
-        <button type="submit" class="primary-button">Salvar rascunho</button>
-      </div>
-    </form>
-  </section>
+<div class="modal-actions">
+<button class="secondary-button" onclick="RadiosAdmin.fecharFormulario()" type="button">Cancelar</button>
+<button class="primary-button" type="submit">Salvar rascunho</button>
 </div>
-
-
-<div id="categoria-modal-backdrop" class="modal-backdrop hidden">
-  <section class="modal-card category-modal" role="dialog" aria-modal="true"
-    aria-labelledby="categoria-modal-title">
-
-    <div class="modal-header">
-      <div>
-        <span>Organização do catálogo</span>
-        <h2 id="categoria-modal-title">Nova categoria</h2>
-      </div>
-
-      <button id="cancel-categoria-form" class="close-button"
-        type="button" aria-label="Fechar">×</button>
-    </div>
-
-    <form id="categoria-form">
-      <div class="form-grid">
-        <label class="full-field">
+</form>
+</section>
+</div>
+<div class="modal-backdrop hidden" id="categoria-modal-backdrop">
+<section aria-labelledby="categoria-modal-title" aria-modal="true" class="modal-card category-modal" role="dialog">
+<div class="modal-header">
+<div>
+<span>Organização do catálogo</span>
+<h2 id="categoria-modal-title">Nova categoria</h2>
+</div>
+<button aria-label="Fechar" class="close-button" id="cancel-categoria-form" type="button">×</button>
+</div>
+<form id="categoria-form">
+<div class="form-grid">
+<label class="full-field">
           Nome da categoria *
-          <input id="categoria-name" required maxlength="80"
-            placeholder="Ex.: Jazz">
-        </label>
-
-        <label class="full-field">
+          <input id="categoria-name" maxlength="80" placeholder="Ex.: Jazz" required=""/>
+</label>
+<label class="full-field">
           Descrição
-          <textarea id="categoria-description" rows="4" maxlength="300"
-            placeholder="Descrição curta da categoria"></textarea>
-        </label>
-
-        <label class="checkbox-field full-field">
-          <input id="categoria-active" type="checkbox" checked>
+          <textarea id="categoria-description" maxlength="300" placeholder="Descrição curta da categoria" rows="4"></textarea>
+</label>
+<label class="checkbox-field full-field">
+<input checked="" id="categoria-active" type="checkbox"/>
           Categoria ativa
         </label>
-      </div>
-
-      <div class="modal-actions">
-        <button type="button" class="secondary-button"
-          onclick="CategoriasAdmin.fecharFormulario()">Cancelar</button>
-        <button type="submit" class="primary-button">Salvar categoria</button>
-      </div>
-    </form>
-  </section>
 </div>
-
-
-
-<div id="stream-modal-backdrop" class="modal-backdrop hidden">
-  <section class="modal-card" role="dialog" aria-modal="true"
-    aria-labelledby="stream-modal-title">
-
-    <div class="modal-header">
-      <div>
-        <span>Links de transmissão</span>
-        <h2 id="stream-modal-title">Novo stream</h2>
-      </div>
-
-      <button id="cancel-stream-form" class="close-button"
-        type="button" aria-label="Fechar">×</button>
-    </div>
-
-    <form id="stream-form">
-      <div class="form-grid">
-        <label class="full-field">
+<div class="modal-actions">
+<button class="secondary-button" onclick="CategoriasAdmin.fecharFormulario()" type="button">Cancelar</button>
+<button class="primary-button" type="submit">Salvar categoria</button>
+</div>
+</form>
+</section>
+</div>
+<div class="modal-backdrop hidden" id="stream-modal-backdrop">
+<section aria-labelledby="stream-modal-title" aria-modal="true" class="modal-card" role="dialog">
+<div class="modal-header">
+<div>
+<span>Links de transmissão</span>
+<h2 id="stream-modal-title">Novo stream</h2>
+</div>
+<button aria-label="Fechar" class="close-button" id="cancel-stream-form" type="button">×</button>
+</div>
+<form id="stream-form">
+<div class="form-grid">
+<label class="full-field">
           Nome da rádio *
-          <input id="stream-radio-name" required maxlength="120">
-        </label>
-
-        <label>
+          <input id="stream-radio-name" maxlength="120" required=""/>
+</label>
+<label>
           Nome do stream *
-          <input id="stream-name" required maxlength="80"
-            placeholder="Principal">
-        </label>
-
-        <label>
+          <input id="stream-name" maxlength="80" placeholder="Principal" required=""/>
+</label>
+<label>
           Codec
-          <input id="stream-codec" maxlength="30"
-            placeholder="MP3, AAC, OGG">
-        </label>
-
-        <label class="full-field">
+          <input id="stream-codec" maxlength="30" placeholder="MP3, AAC, OGG"/>
+</label>
+<label class="full-field">
           URL do stream *
-          <input id="stream-url" type="url" required
-            placeholder="https://">
-        </label>
-
-        <label>
+          <input id="stream-url" placeholder="https://" required="" type="url"/>
+</label>
+<label>
           Bitrate (kbps)
-          <input id="stream-bitrate" type="number" min="1" max="1000">
-        </label>
-
-        <label class="checkbox-field">
-          <input id="stream-principal" type="checkbox" checked>
+          <input id="stream-bitrate" max="1000" min="1" type="number"/>
+</label>
+<label class="checkbox-field">
+<input checked="" id="stream-principal" type="checkbox"/>
           Stream principal
         </label>
-
-        <div class="full-field stream-test-box">
-          <div class="stream-test-actions">
-            <button id="test-stream-form-button" type="button"
-              class="secondary-button">▶ Testar</button>
-            <button id="stop-stream-form-button" type="button"
-              class="secondary-button">■ Parar</button>
-          </div>
-
-          <p id="stream-form-result"
-            class="stream-test-result neutral">
+<div class="full-field stream-test-box">
+<div class="stream-test-actions">
+<button class="secondary-button" id="test-stream-form-button" type="button">▶ Testar</button>
+<button class="secondary-button" id="stop-stream-form-button" type="button">■ Parar</button>
+</div>
+<p class="stream-test-result neutral" id="stream-form-result">
             Nenhum teste realizado.
           </p>
-        </div>
-      </div>
-
-      <div class="modal-actions">
-        <button type="button" class="secondary-button"
-          onclick="StreamsAdmin.fecharFormulario()">Cancelar</button>
-        <button type="submit" class="primary-button">Salvar stream</button>
-      </div>
-    </form>
-  </section>
 </div>
-
-
-
-<div id="emissora-modal-backdrop" class="modal-backdrop hidden">
-  <section class="modal-card emissora-modal-card" role="dialog"
-    aria-modal="true" aria-labelledby="emissora-modal-title">
-
-    <div class="modal-header">
-      <div>
-        <span>📻 Cadastro Nacional de Emissoras</span>
-        <h2 id="emissora-modal-title">Nova emissora</h2>
-      </div>
-
-      <button id="cancel-emissora-form" class="close-button"
-        type="button" aria-label="Fechar">×</button>
-    </div>
-
-    <form id="emissora-form">
-      <fieldset class="form-section">
-        <legend>📻 Dados da emissora</legend>
-
-        <div class="form-grid">
-          <label class="full-field">
+</div>
+<div class="modal-actions">
+<button class="secondary-button" onclick="StreamsAdmin.fecharFormulario()" type="button">Cancelar</button>
+<button class="primary-button" type="submit">Salvar stream</button>
+</div>
+</form>
+</section>
+</div>
+<div class="modal-backdrop hidden" id="emissora-modal-backdrop">
+<section aria-labelledby="emissora-modal-title" aria-modal="true" class="modal-card emissora-modal-card" role="dialog">
+<div class="modal-header">
+<div>
+<span>📻 Cadastro Nacional de Emissoras</span>
+<h2 id="emissora-modal-title">Nova emissora</h2>
+</div>
+<button aria-label="Fechar" class="close-button" id="cancel-emissora-form" type="button">×</button>
+</div>
+<form id="emissora-form">
+<fieldset class="form-section">
+<legend>📻 Dados da emissora</legend>
+<div class="form-grid">
+<label class="full-field">
             Nome da emissora *
-            <input id="emissora-name" required maxlength="120">
-          </label>
-
-          <label>
+            <input id="emissora-name" maxlength="120" required=""/>
+</label>
+<label>
             Nome fantasia
-            <input id="emissora-fantasy-name" maxlength="120">
-          </label>
-
-          <label>
+            <input id="emissora-fantasy-name" maxlength="120"/>
+</label>
+<label>
             Razão social
-            <input id="emissora-company-name" maxlength="160">
-          </label>
-
-          <label class="full-field">
+            <input id="emissora-company-name" maxlength="160"/>
+</label>
+<label class="full-field">
             Slogan
-            <input id="emissora-slogan" maxlength="180">
-          </label>
-
-          <label>
+            <input id="emissora-slogan" maxlength="180"/>
+</label>
+<label>
             Tipo *
-            <select id="emissora-type" required>
-              <option value="FM">FM</option>
-              <option value="AM">AM</option>
-              <option value="Web">Web</option>
-            </select>
-          </label>
-
-          <label>
+            <select id="emissora-type" required="">
+<option value="FM">FM</option>
+<option value="AM">AM</option>
+<option value="Web">Web</option>
+</select>
+</label>
+<label>
             Frequência
-            <input id="emissora-frequency" maxlength="20"
-              placeholder="Ex.: 98.7 MHz">
-          </label>
-
-          <label class="full-field">
+            <input id="emissora-frequency" maxlength="20" placeholder="Ex.: 98.7 MHz"/>
+</label>
+<label class="full-field">
             Categoria principal *
-            <select id="emissora-category" required>
-              <option value="">Selecione a categoria</option>
-            </select>
-          </label>
-
-          <label class="full-field">
+            <select id="emissora-category" required="">
+<option value="">Selecione a categoria</option>
+</select>
+</label>
+<label class="full-field">
             Descrição
-            <textarea id="emissora-description" rows="4" maxlength="1000"></textarea>
-          </label>
-        </div>
-      </fieldset>
-
-      <fieldset class="form-section">
-      <legend>📍 Localização</legend>
-
-        <div class="form-grid">
-          <label>
+            <textarea id="emissora-description" maxlength="1000" rows="4"></textarea>
+</label>
+</div>
+</fieldset>
+<fieldset class="form-section">
+<legend>📍 Localização</legend>
+<div class="form-grid">
+<label>
             País
-            <input id="emissora-country" value="Brasil" readonly>
-          </label>
-
-          <label>
+            <input id="emissora-country" readonly="" value="Brasil"/>
+</label>
+<label>
             Estado *
-            <select id="emissora-state" required>
-              <option value="">Selecione o estado</option>
-            </select>
-          </label>
-
-          <label>
+            <select id="emissora-state" required="">
+<option value="">Selecione o estado</option>
+</select>
+</label>
+<label>
             Cidade *
-            <select id="emissora-city" required disabled>
-              <option value="">Selecione a cidade</option>
-            </select>
-          </label>
-
-          <label>
+            <select disabled="" id="emissora-city" required="">
+<option value="">Selecione a cidade</option>
+</select>
+</label>
+<label>
             CEP
-            <input id="emissora-cep" maxlength="10" placeholder="00000-000">
-          </label>
-
-          <label class="full-field">
+            <input id="emissora-cep" maxlength="10" placeholder="00000-000"/>
+</label>
+<label class="full-field">
             Endereço
-            <input id="emissora-address" maxlength="220">
-          </label>
-
-          <label>
+            <input id="emissora-address" maxlength="220"/>
+</label>
+<label>
             Latitude
-            <input id="emissora-latitude" type="number" step="any">
-          </label>
-
-          <label>
+            <input id="emissora-latitude" step="any" type="number"/>
+</label>
+<label>
             Longitude
-            <input id="emissora-longitude" type="number" step="any">
-          </label>
-        </div>
-      </fieldset>
-
-      <fieldset class="form-section">
-      <legend>☎️ Contatos e presença digital</legend>
-
-        <div class="form-grid">
-          <label>
+            <input id="emissora-longitude" step="any" type="number"/>
+</label>
+</div>
+</fieldset>
+<fieldset class="form-section">
+<legend>☎️ Contatos e presença digital</legend>
+<div class="form-grid">
+<label>
             Telefone
-            <input id="emissora-phone" maxlength="30">
-          </label>
-
-          <label>
+            <input id="emissora-phone" maxlength="30"/>
+</label>
+<label>
             WhatsApp
-            <input id="emissora-whatsapp" maxlength="30">
-          </label>
-
-          <label class="full-field">
+            <input id="emissora-whatsapp" maxlength="30"/>
+</label>
+<label class="full-field">
             E-mail
-            <input id="emissora-email" type="email" maxlength="160">
-          </label>
-
-          <label class="full-field">
+            <input id="emissora-email" maxlength="160" type="email"/>
+</label>
+<label class="full-field">
             Site
-            <input id="emissora-site" type="url" placeholder="https://">
-          </label>
-
-          <label>
+            <input id="emissora-site" placeholder="https://" type="url"/>
+</label>
+<label>
             Facebook
-            <input id="emissora-facebook" type="url" placeholder="https://">
-          </label>
-
-          <label>
+            <input id="emissora-facebook" placeholder="https://" type="url"/>
+</label>
+<label>
             Instagram
-            <input id="emissora-instagram" type="url" placeholder="https://">
-          </label>
-
-          <label class="full-field">
+            <input id="emissora-instagram" placeholder="https://" type="url"/>
+</label>
+<label class="full-field">
             YouTube
-            <input id="emissora-youtube" type="url" placeholder="https://">
-          </label>
-        </div>
-      </fieldset>
-
-      <fieldset class="form-section">
-        <legend>📡 Streams da emissora</legend>
-
-        <div class="linked-streams-header">
-          <div>
-            <strong>
-              <span id="emissora-streams-count">0</span> stream(s)
+            <input id="emissora-youtube" placeholder="https://" type="url"/>
+</label>
+</div>
+</fieldset>
+<fieldset class="form-section">
+<legend>📡 Streams da emissora</legend>
+<div class="linked-streams-header">
+<div>
+<strong>
+<span id="emissora-streams-count">0</span> stream(s)
             </strong>
-            <small>
+<small>
               Defina um stream principal e quantos streams de reserva forem
               necessários.
             </small>
-          </div>
-
-          <button id="add-emissora-stream-button" type="button"
-            class="primary-button">
+</div>
+<button class="primary-button" id="add-emissora-stream-button" type="button">
             ＋ Adicionar stream
           </button>
-        </div>
-
-        <div class="table-scroll linked-streams-table-wrapper">
-          <table class="radios-table linked-streams-table">
-            <thead>
-              <tr>
-                <th>Nome</th>
-                <th>URL</th>
-                <th>Codec</th>
-                <th>Bitrate</th>
-                <th>Status</th>
-                <th>Principal</th>
-                <th>Ações</th>
-              </tr>
-            </thead>
-            <tbody id="emissora-streams-table-body">
-              <tr>
-                <td colspan="7" class="empty-state">
+</div>
+<div class="table-scroll linked-streams-table-wrapper">
+<table class="radios-table linked-streams-table">
+<thead>
+<tr>
+<th>Nome</th>
+<th>URL</th>
+<th>Codec</th>
+<th>Bitrate</th>
+<th>Status</th>
+<th>Principal</th>
+<th>Ações</th>
+</tr>
+</thead>
+<tbody id="emissora-streams-table-body">
+<tr>
+<td class="empty-state" colspan="7">
                   Nenhum stream adicionado a esta emissora.
                 </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </fieldset>
-
-      <fieldset class="form-section administration-section">
-        <legend>⚙️ Administração e publicação</legend>
-
-        <div class="emissora-workflow-panel">
-          <div class="workflow-status-card">
-            <span class="workflow-card-label">Status atual</span>
-            <strong id="emissora-workflow-status"
-              class="registration-status registration-status--cadastro_recebido">
+</tr>
+</tbody>
+</table>
+</div>
+</fieldset>
+<fieldset class="form-section administration-section">
+<legend>⚙️ Administração e publicação</legend>
+<div class="emissora-workflow-panel">
+<div class="workflow-status-card">
+<span class="workflow-card-label">Status atual</span>
+<strong class="registration-status registration-status--cadastro_recebido" id="emissora-workflow-status">
               Cadastro recebido
             </strong>
-            <small id="emissora-workflow-next-step">Próximo passo: revisar os dados recebidos.</small>
-          </div>
-
-          <div class="workflow-progress-card">
-            <div class="workflow-progress-heading">
-              <span>Perfil da emissora</span>
-              <strong id="emissora-profile-percent">0%</strong>
-            </div>
-            <div class="workflow-progress-track" role="progressbar"
-              aria-label="Perfil completo" aria-valuemin="0" aria-valuemax="100"
-              aria-valuenow="0" id="emissora-profile-progress">
-              <span id="emissora-profile-progress-bar"></span>
-            </div>
-            <small id="emissora-profile-summary">Preencha os dados para calcular o perfil.</small>
-          </div>
-        </div>
-
-        <div class="form-grid administration-grid">
-          <label>
+<small id="emissora-workflow-next-step">Próximo passo: revisar os dados recebidos.</small>
+</div>
+<div class="workflow-progress-card">
+<div class="workflow-progress-heading">
+<span>Perfil da emissora</span>
+<strong id="emissora-profile-percent">0%</strong>
+</div>
+<div aria-label="Perfil completo" aria-valuemax="100" aria-valuemin="0" aria-valuenow="0" class="workflow-progress-track" id="emissora-profile-progress" role="progressbar">
+<span id="emissora-profile-progress-bar"></span>
+</div>
+<small id="emissora-profile-summary">Preencha os dados para calcular o perfil.</small>
+</div>
+</div>
+<div class="form-grid administration-grid">
+<label>
             Status do cadastro
-            <select id="emissora-status-cadastro" required>
-              <option value="cadastro_recebido">Cadastro recebido</option>
-              <option value="em_analise">Em análise</option>
-              <option value="aprovada">Aprovada</option>
-              <option value="aguardando_selo">Aguardando selo</option>
-              <option value="publicada">Publicada</option>
-              <option value="suspensa">Suspensa</option>
-              <option value="rejeitada">Rejeitada</option>
-            </select>
-          </label>
-
-          <label>
+            <select id="emissora-status-cadastro" required="">
+<option value="cadastro_recebido">Cadastro recebido</option>
+<option value="em_analise">Em análise</option>
+<option value="aprovada">Aprovada</option>
+<option value="aguardando_selo">Aguardando selo</option>
+<option value="publicada">Publicada</option>
+<option value="suspensa">Suspensa</option>
+<option value="rejeitada">Rejeitada</option>
+</select>
+</label>
+<label>
             Plano
             <select id="emissora-plano">
-              <option value="gratuito">Gratuito</option>
-              <option value="parceira_verificada">Parceira verificada</option>
-              <option value="premium">Premium</option>
-            </select>
-          </label>
-
-          <section class="official-seal-card full-field" aria-labelledby="official-seal-title">
-            <div class="official-seal-heading">
-              <div>
-                <span class="official-seal-kicker">Identidade e autenticidade</span>
-                <strong id="official-seal-title">🏅 Selo Oficial</strong>
-              </div>
-              <span id="emissora-selo-badge" class="seal-status seal-status--nao_solicitado">Não solicitado</span>
-            </div>
-
-            <div class="form-grid official-seal-grid">
-              <label>
+<option value="gratuito">Gratuito</option>
+<option value="parceira_verificada">Parceira verificada</option>
+<option value="premium">Premium</option>
+</select>
+</label>
+<section aria-labelledby="official-seal-title" class="official-seal-card full-field">
+<div class="official-seal-heading">
+<div>
+<span class="official-seal-kicker">Identidade e autenticidade</span>
+<strong id="official-seal-title">🏅 Selo Oficial</strong>
+</div>
+<span class="seal-status seal-status--nao_solicitado" id="emissora-selo-badge">Não solicitado</span>
+</div>
+<div class="form-grid official-seal-grid">
+<label>
                 Status do selo
                 <select id="emissora-selo-status">
-                  <option value="nao_solicitado">Não solicitado</option>
-                  <option value="solicitado">Solicitado</option>
-                  <option value="em_analise">Em análise</option>
-                  <option value="aguardando_validacao">Aguardando validação</option>
-                  <option value="verificado">Verificado</option>
-                  <option value="suspenso">Suspenso</option>
-                </select>
-              </label>
-
-              <label>
+<option value="nao_solicitado">Não solicitado</option>
+<option value="solicitado">Solicitado</option>
+<option value="em_analise">Em análise</option>
+<option value="aguardando_validacao">Aguardando validação</option>
+<option value="verificado">Verificado</option>
+<option value="suspenso">Suspenso</option>
+</select>
+</label>
+<label>
                 Código oficial
                 <div class="input-with-action">
-                  <input id="emissora-selo-codigo" type="text" readonly
-                    placeholder="Gerado ao salvar a solicitação">
-                  <button id="generate-seal-code-button" type="button" class="secondary-button compact-button">
+<input id="emissora-selo-codigo" placeholder="Gerado ao salvar a solicitação" readonly="" type="text"/>
+<button class="secondary-button compact-button" id="generate-seal-code-button" type="button">
                     Gerar código
                   </button>
-                </div>
-              </label>
-
-              <label>
+</div>
+</label>
+<label>
                 Domínio verificado
-                <input id="emissora-selo-dominio" type="text" maxlength="180"
-                  placeholder="Ex.: radioexemplo.com.br">
-              </label>
-
-              <label>
+                <input id="emissora-selo-dominio" maxlength="180" placeholder="Ex.: radioexemplo.com.br" type="text"/>
+</label>
+<label>
                 Método de validação
                 <select id="emissora-selo-metodo">
-                  <option value="nao_definido">Não definido</option>
-                  <option value="dns">Registro DNS</option>
-                  <option value="arquivo_html">Arquivo HTML</option>
-                  <option value="meta_tag">Meta tag</option>
-                  <option value="manual">Validação manual</option>
-                </select>
-              </label>
-
-              <label>
+<option value="nao_definido">Não definido</option>
+<option value="dns">Registro DNS</option>
+<option value="arquivo_html">Arquivo HTML</option>
+<option value="meta_tag">Meta tag</option>
+<option value="manual">Validação manual</option>
+</select>
+</label>
+<label>
                 Última verificação
-                <input id="emissora-selo-ultima-verificacao" type="datetime-local">
-              </label>
-
-              <label>
+                <input id="emissora-selo-ultima-verificacao" type="datetime-local"/>
+</label>
+<label>
                 Página pública de verificação
-                <input id="emissora-selo-pagina" type="text" readonly
-                  placeholder="Disponível quando houver código oficial">
-              </label>
-            </div>
-
-            <div class="seal-history-panel">
-              <div class="seal-history-heading">
-                <strong>Histórico do selo</strong>
-                <small>As mudanças de status são registradas ao salvar.</small>
-              </div>
-              <ol id="emissora-selo-historico" class="seal-history-list">
-                <li class="empty-state">Nenhuma movimentação registrada.</li>
-              </ol>
-            </div>
-          </section>
-
-          <div class="workflow-checklist-card full-field">
-            <div class="workflow-checklist-heading">
-              <strong>Checklist do perfil</strong>
-              <span id="emissora-profile-items-count">0 de 10 concluídos</span>
-            </div>
-            <ul id="emissora-profile-checklist" class="workflow-checklist"></ul>
-          </div>
-
-          <label class="full-field">
+                <input id="emissora-selo-pagina" placeholder="Disponível quando houver código oficial" readonly="" type="text"/>
+</label>
+</div>
+<div class="seal-history-panel">
+<div class="seal-history-heading">
+<strong>Histórico do selo</strong>
+<small>As mudanças de status são registradas ao salvar.</small>
+</div>
+<ol class="seal-history-list" id="emissora-selo-historico">
+<li class="empty-state">Nenhuma movimentação registrada.</li>
+</ol>
+</div>
+</section>
+<div class="workflow-checklist-card full-field">
+<div class="workflow-checklist-heading">
+<strong>Checklist do perfil</strong>
+<span id="emissora-profile-items-count">0 de 10 concluídos</span>
+</div>
+<ul class="workflow-checklist" id="emissora-profile-checklist"></ul>
+</div>
+<label class="full-field">
             Observações
-            <textarea id="emissora-notes" rows="3" maxlength="700"></textarea>
-          </label>
-
-          <label class="checkbox-field">
-            <input id="emissora-active" type="checkbox" checked>
+            <textarea id="emissora-notes" maxlength="700" rows="3"></textarea>
+</label>
+<label class="checkbox-field">
+<input checked="" id="emissora-active" type="checkbox"/>
             Emissora ativa
           </label>
-
-          <label class="checkbox-field">
-            <input id="emissora-verified" type="checkbox">
+<label class="checkbox-field">
+<input id="emissora-verified" type="checkbox"/>
             Emissora verificada
           </label>
-
-          <label class="checkbox-field">
-            <input id="emissora-public" type="checkbox" checked>
+<label class="checkbox-field">
+<input checked="" id="emissora-public" type="checkbox"/>
             Exibir no catálogo público
           </label>
-        </div>
-      </fieldset>
-
-      <p class="form-note">
+</div>
+</fieldset>
+<p class="form-note">
         Os dados são salvos localmente. Use “Exportar radios.json” para
         publicar as alterações no repositório de dados.
       </p>
-
-      <div class="modal-actions">
-        <button type="button" class="secondary-button"
-          onclick="EmissorasAdmin.fecharFormulario()">Cancelar</button>
-        <button type="submit" class="primary-button">
+<div class="modal-actions">
+<button class="secondary-button" onclick="EmissorasAdmin.fecharFormulario()" type="button">Cancelar</button>
+<button class="primary-button" type="submit">
           Salvar emissora
         </button>
-      </div>
-    </form>
-  </section>
 </div>
-
-
-<div id="emissora-stream-modal-backdrop" class="modal-backdrop hidden">
-  <section class="modal-card linked-stream-modal" role="dialog"
-    aria-modal="true" aria-labelledby="emissora-stream-modal-title">
-
-    <div class="modal-header">
-      <div>
-        <span>Streams da emissora</span>
-        <h2 id="emissora-stream-modal-title">Adicionar stream</h2>
-      </div>
-
-      <button id="cancel-emissora-stream-form" class="close-button"
-        type="button" aria-label="Fechar">×</button>
-    </div>
-
-    <form id="emissora-stream-form">
-      <div class="form-grid">
-        <label class="full-field">
+</form>
+</section>
+</div>
+<div class="modal-backdrop hidden" id="emissora-stream-modal-backdrop">
+<section aria-labelledby="emissora-stream-modal-title" aria-modal="true" class="modal-card linked-stream-modal" role="dialog">
+<div class="modal-header">
+<div>
+<span>Streams da emissora</span>
+<h2 id="emissora-stream-modal-title">Adicionar stream</h2>
+</div>
+<button aria-label="Fechar" class="close-button" id="cancel-emissora-stream-form" type="button">×</button>
+</div>
+<form id="emissora-stream-form">
+<div class="form-grid">
+<label class="full-field">
           Nome do stream *
-          <input id="emissora-stream-name" required maxlength="80"
-            placeholder="Principal, Backup, AAC...">
-        </label>
-
-        <label class="full-field">
+          <input id="emissora-stream-name" maxlength="80" placeholder="Principal, Backup, AAC..." required=""/>
+</label>
+<label class="full-field">
           URL do stream *
-          <input id="emissora-stream-url" type="url" required
-            placeholder="https://">
-        </label>
-
-        <label>
+          <input id="emissora-stream-url" placeholder="https://" required="" type="url"/>
+</label>
+<label>
           Codec
-          <input id="emissora-stream-codec" maxlength="30"
-            placeholder="MP3, AAC, OGG">
-        </label>
-
-        <label>
+          <input id="emissora-stream-codec" maxlength="30" placeholder="MP3, AAC, OGG"/>
+</label>
+<label>
           Bitrate (kbps)
-          <input id="emissora-stream-bitrate" type="number"
-            min="1" max="1000">
-        </label>
-
-        <label class="checkbox-field full-field">
-          <input id="emissora-stream-principal" type="checkbox">
+          <input id="emissora-stream-bitrate" max="1000" min="1" type="number"/>
+</label>
+<label class="checkbox-field full-field">
+<input id="emissora-stream-principal" type="checkbox"/>
           Stream principal
         </label>
-      </div>
-
-      <div class="modal-actions">
-        <button type="button" class="secondary-button"
-          onclick="EmissorasAdmin.fecharStreamFormulario()">
+</div>
+<div class="modal-actions">
+<button class="secondary-button" onclick="EmissorasAdmin.fecharStreamFormulario()" type="button">
           Cancelar
         </button>
-        <button type="submit" class="primary-button">
+<button class="primary-button" type="submit">
           Salvar stream
         </button>
-      </div>
-    </form>
-  </section>
+</div>
+</form>
+</section>
+</div>
+<div class="modal-backdrop hidden" id="emails-compose-backdrop">
+<section aria-labelledby="emails-compose-title" aria-modal="true" class="modal-card emails-compose-card" role="dialog">
+<div class="modal-header">
+<div><span class="status-badge success">Suporte</span><h2 id="emails-compose-title">Escrever e-mail</h2></div>
+<button aria-label="Fechar" class="close-button" id="emails-compose-close" type="button">×</button>
+</div>
+<form class="emails-compose-form" id="emails-compose-form">
+<input id="email-compose-reply-id" name="replyToId" type="hidden"/>
+<label>Para<input autocomplete="email" id="email-compose-to" name="to" required="" type="email"/></label>
+<label>Assunto<input id="email-compose-subject" maxlength="500" name="subject" required=""/></label>
+<label>Mensagem<textarea id="email-compose-text" maxlength="250000" name="text" required=""></textarea></label>
+<p class="form-hint email-attachments-disabled">Anexos ainda não são enviados pelo Painel. Para anexar arquivos, use temporariamente o Gmail de segurança. A assinatura oficial da Central Rádios Brasil será adicionada automaticamente.</p>
+<div class="modal-actions">
+<button class="secondary-button" id="emails-compose-cancel" type="button">Cancelar</button>
+<button class="primary-button" id="email-compose-send" type="submit">Enviar e-mail</button>
+</div>
+</form>
+</section>
 </div>
 
-
-
-<div id="emails-compose-backdrop" class="modal-backdrop hidden">
-  <section class="modal-card emails-compose-card" role="dialog" aria-modal="true" aria-labelledby="emails-compose-title">
-    <div class="modal-header">
-      <div><span class="status-badge success">Suporte</span><h2 id="emails-compose-title">Escrever e-mail</h2></div>
-      <button id="emails-compose-close" class="close-button" type="button" aria-label="Fechar">×</button>
-    </div>
-    <form id="emails-compose-form" class="emails-compose-form">
-      <input id="email-compose-reply-id" name="replyToId" type="hidden">
-      <label>Para<input id="email-compose-to" name="to" type="email" required autocomplete="email"></label>
-      <label>Assunto<input id="email-compose-subject" name="subject" maxlength="500" required></label>
-      <label>Mensagem<textarea id="email-compose-text" name="text" maxlength="250000" required></textarea></label>
-      <p class="form-hint email-attachments-disabled">Anexos ainda não são enviados pelo Painel. Para anexar arquivos, use temporariamente o Gmail de segurança. A assinatura oficial da Central Rádios Brasil será adicionada automaticamente.</p>
-      <div class="modal-actions">
-        <button id="emails-compose-cancel" type="button" class="secondary-button">Cancelar</button>
-        <button id="email-compose-send" type="submit" class="primary-button">Enviar e-mail</button>
-      </div>
-    </form>
-  </section>
-</div>
-
-<div id="comercial-modal-backdrop" class="modal-backdrop hidden">
-  <section class="modal-card comercial-modal-card" role="dialog" aria-modal="true" aria-labelledby="comercial-modal-title">
-    <div class="modal-header"><div><span class="status-badge success">Gestão Comercial</span><h2 id="comercial-modal-title">Registro comercial</h2><p id="comercial-modal-subtitle"></p></div><button id="close-comercial-modal" class="close-button" type="button" aria-label="Fechar">×</button></div>
-    <form id="comercial-modal-form" class="comercial-form">
-      <div id="comercial-modal-form-fields" class="comercial-modal-body"></div>
-      <div class="modal-actions"><button id="comercial-modal-cancel" type="button" class="secondary-button">Cancelar</button><button id="comercial-modal-save" type="submit" class="primary-button">Salvar</button></div>
-    </form>
-  </section>
-</div>
-
-
-<div id="validation-modal-backdrop" class="modal-backdrop hidden">
-  <section class="modal-card validation-modal-card" role="dialog"
-    aria-modal="true" aria-labelledby="validation-status-title">
-
-    <div class="modal-header">
-      <div>
-        <span id="validation-status-badge"
-          class="status-badge loading">
+<div class="modal-backdrop hidden" id="validation-modal-backdrop">
+<section aria-labelledby="validation-status-title" aria-modal="true" class="modal-card validation-modal-card" role="dialog">
+<div class="modal-header">
+<div>
+<span class="status-badge loading" id="validation-status-badge">
           Validação
         </span>
-        <h2 id="validation-status-title">
+<h2 id="validation-status-title">
           Validação do banco oficial
         </h2>
-      </div>
-
-      <button id="close-validation-modal" class="close-button"
-        type="button" aria-label="Fechar">×</button>
-    </div>
-
-    <p id="validation-summary" class="validation-summary">
+</div>
+<button aria-label="Fechar" class="close-button" id="close-validation-modal" type="button">×</button>
+</div>
+<p class="validation-summary" id="validation-summary">
       Aguardando validação.
     </p>
-
-    <section class="validation-stats">
-      <article>
-        <span>Publicáveis</span>
-        <strong id="validation-public-count">0</strong>
-      </article>
-      <article>
-        <span>Erros</span>
-        <strong id="validation-errors-count">0</strong>
-      </article>
-      <article>
-        <span>Avisos</span>
-        <strong id="validation-warnings-count">0</strong>
-      </article>
-    </section>
-
-    <div class="validation-columns">
-      <section>
-        <h3>Erros que impedem a exportação</h3>
-        <ul id="validation-errors-list"
-          class="validation-list"></ul>
-      </section>
-
-      <section>
-        <h3>Avisos para revisão</h3>
-        <ul id="validation-warnings-list"
-          class="validation-list"></ul>
-      </section>
-    </div>
-
-    <div class="modal-actions validation-actions">
-      <button id="download-validation-report-button"
-        type="button" class="secondary-button">
+<section class="validation-stats">
+<article>
+<span>Publicáveis</span>
+<strong id="validation-public-count">0</strong>
+</article>
+<article>
+<span>Erros</span>
+<strong id="validation-errors-count">0</strong>
+</article>
+<article>
+<span>Avisos</span>
+<strong id="validation-warnings-count">0</strong>
+</article>
+</section>
+<div class="validation-columns">
+<section>
+<h3>Erros que impedem a exportação</h3>
+<ul class="validation-list" id="validation-errors-list"></ul>
+</section>
+<section>
+<h3>Avisos para revisão</h3>
+<ul class="validation-list" id="validation-warnings-list"></ul>
+</section>
+</div>
+<div class="modal-actions validation-actions">
+<button class="secondary-button" id="download-validation-report-button" type="button">
         ⬇ Relatório
       </button>
-
-      <button id="download-esp32-json-button"
-        type="button" class="secondary-button">
+<button class="secondary-button" id="download-esp32-json-button" type="button">
         ⬇ radios-esp32.json
       </button>
-
-      <button id="download-official-json-button"
-        type="button" class="primary-button">
+<button class="primary-button" id="download-official-json-button" type="button">
         ⬇ radios.json oficial
       </button>
-    </div>
-  </section>
 </div>
+</section>
+</div>
+<script src="config.js?v=3.11.1"></script>
+<script src="js/utils.js?v=3.11.1"></script>
+<script src="js/api.js?v=3.11.1"></script>
+<script src="js/dashboard.js?v=3.11.1"></script>
+<script src="js/radios.js?v=3.11.1"></script>
+<script src="js/estados.js?v=3.11.1"></script>
+<script src="js/categorias.js?v=3.11.1"></script>
+<script src="js/cidades.js?v=3.11.1"></script>
+<script src="js/streams.js?v=3.11.1"></script>
+<script src="js/emissoras.js?v=3.11.1"></script>
+<script src="js/publicacao.js?v=3.11.1"></script>
+<script src="js/solicitacoes.js?v=3.11.1"></script>
+<script src="js/emails.js?v=3.11.1"></script>
+<script src="js/streaming-interesses.js?v=3.11.1"></script>
+<script src="js/ocorrencias.js?v=3.11.1"></script>
 
-
-<script src="config.js?v=3.11.0"></script>
-<script src="js/utils.js?v=3.11.0"></script>
-<script src="js/api.js?v=3.11.0"></script>
-<script src="js/dashboard.js?v=3.11.0"></script>
-<script src="js/radios.js?v=3.11.0"></script>
-<script src="js/estados.js?v=3.11.0"></script>
-<script src="js/categorias.js?v=3.11.0"></script>
-<script src="js/cidades.js?v=3.11.0"></script>
-<script src="js/streams.js?v=3.11.0"></script>
-<script src="js/emissoras.js?v=3.11.0"></script>
-<script src="js/publicacao.js?v=3.11.0"></script>
-<script src="js/solicitacoes.js?v=3.11.0"></script>
-<script src="js/emails.js?v=3.11.0"></script>
-<script src="js/streaming-interesses.js?v=3.11.0"></script>
-<script src="js/ocorrencias.js?v=3.11.0"></script>
-<script src="js/comercial.js?v=3.11.0"></script>
-<script src="app.js?v=3.11.0"></script>
+<script src="app.js?v=3.11.1"></script>
 </body>
 </html>

@@ -194,7 +194,7 @@ function renderizarCatalogoDashboard(docRadios, resumo) {
 }
 
 function renderizarOperacaoDashboard(resumo) {
-  const campos = ["solicitacoes", "ocorrencias", "streaming", "comercial", "emails", "streams"];
+  const campos = ["solicitacoes", "ocorrencias", "streaming", "emails", "streams"];
   if (!resumo) {
     texto("dashboard-alert-total", "—");
     campos.forEach((campo) => texto(`dashboard-alert-${campo}`, "—"));
@@ -209,10 +209,11 @@ function renderizarOperacaoDashboard(resumo) {
   }
 
   const alertas = resumo.alertas || {};
-  texto("dashboard-alert-total", Number(alertas.total || 0));
+  const totalVisivel = campos.reduce((total, campo) => total + Number(alertas[campo] || 0), 0);
+  texto("dashboard-alert-total", totalVisivel);
   campos.forEach((campo) => texto(`dashboard-alert-${campo}`, Number(alertas[campo] || 0)));
-  texto("dashboard-operational-status", Number(alertas.total || 0)
-    ? `${alertas.total} item${alertas.total === 1 ? "" : "s"} aguardando atenção.`
+  texto("dashboard-operational-status", totalVisivel
+    ? `${totalVisivel} item${totalVisivel === 1 ? "" : "s"} aguardando atenção.`
     : "Nenhum alerta operacional pendente.");
   texto("dashboard-activity-updated", `Atualizado ${formatarDataHoraDashboard(resumo.geradoEm)}`);
   renderizarAtividadesDashboard(resumo.atividades || []);
@@ -227,8 +228,13 @@ function renderizarAtividadesDashboard(atividades) {
     alvo.innerHTML = '<p class="dashboard-empty">Nenhuma atividade registrada ainda.</p>';
     return;
   }
-  const icones = { solicitacao: "📥", alteracao: "📝", streaming: "🚀", comercial: "💼", ocorrencia: "⚠️", email: "✉️", stream: "📡" };
-  alvo.innerHTML = atividades.map((item) => `
+  const icones = { solicitacao: "📥", alteracao: "📝", streaming: "🚀", ocorrencia: "⚠️", email: "✉️", stream: "📡" };
+  const atividadesVisiveis = atividades.filter((item) => item?.tipo !== "comercial" && item?.rota !== "comercial");
+  if (!atividadesVisiveis.length) {
+    alvo.innerHTML = '<p class="dashboard-empty">Nenhuma atividade operacional registrada ainda.</p>';
+    return;
+  }
+  alvo.innerHTML = atividadesVisiveis.map((item) => `
     <button type="button" class="activity-item" data-dashboard-route="${escaparHtml(item.rota || "dashboard")}">
       <span class="activity-icon">${icones[item.tipo] || "•"}</span>
       <span class="activity-content"><strong>${escaparHtml(item.titulo || "Atividade")}</strong><small>${escaparHtml(item.detalhe || "")}</small></span>
@@ -244,8 +250,6 @@ function renderizarResumoFilasDashboard(resumo) {
     ["Solicitações pendentes", Number(resumo.solicitacoes?.pendentes || 0) + Number(resumo.alteracoes?.pendentes || 0), "solicitacoes"],
     ["Ocorrências em análise", Number(resumo.ocorrencias?.emAnalise || 0), "ocorrencias"],
     ["Leads qualificados", Number(resumo.streaming?.qualificados || 0), "streaming-interesses"],
-    ["Faturas vencidas", Number(resumo.comercial?.faturasVencidas || 0), "comercial"],
-    ["Sites em implantação", Number(resumo.comercial?.sitesImplantacao || 0), "comercial"],
     ["E-mails na entrada", Number(resumo.emails?.entrada || 0), "emails"],
     ["Streams online", Number(resumo.streams?.online || 0), "streams"]
   ];
@@ -268,7 +272,6 @@ function atualizarBadgesNavegacao(alertas) {
     "solicitacoes-nav-count": alertas.solicitacoes,
     "ocorrencias-nav-count": alertas.ocorrencias,
     "streaming-nav-count": alertas.streaming,
-    "comercial-nav-count": alertas.comercial,
     "emails-nav-count": alertas.emails,
     "streams-nav-count": alertas.streams
   };

@@ -1,8 +1,8 @@
 {
   "app": "Central Rádios Brasil — Painel Administrativo",
-  "version": "3.11.0",
-  "release": "Usuários reais e permissões no servidor",
-  "build": "2026-08-04",
+  "version": "3.11.1",
+  "release": "Dashboard reorganizado e Gestão Comercial removida do Admin",
+  "build": "2026-08-05",
   "modules": {
     "dashboard_operacional": true,
     "dashboard": true,
@@ -18,23 +18,11 @@
     "emails": true,
     "streaming_interesses": true,
     "ocorrencias": true,
-    "gestao_comercial": true,
-    "sites_clientes": true,
     "portal_cliente": true
   },
   "features": [
-    "commercial-client-management",
-    "commercial-plans",
-    "contracts-and-services",
     "manual-invoicing",
-    "manual-payment-settlement",
-    "payment-refunds",
-    "reseller-capacity",
-    "site-template-catalog",
-    "client-site-instances",
-    "editable-field-permissions",
     "streaming-lead-conversion",
-    "commercial-dashboard-alerts",
     "operational-dashboard",
     "consolidated-admin-summary",
     "navigation-alert-badges",
@@ -48,21 +36,15 @@
     "streaming-leads",
     "email-inbox",
     "stream-monitoring",
-    "invoice-charge-types",
-    "invoice-service-aware-duplicate-control",
-    "clear-duplicate-invoice-errors",
     "client-portal-access",
-    "radio-essencial-template",
     "site-drafts",
     "site-version-history",
     "publication-request",
     "admin-site-publication",
-    "client-multi-user-access",
-    "server-side-role-permissions",
-    "client-user-password-reset"
+    "server-side-role-permissions"
   ],
-  "name": "v3.0.0 — Pacote 4",
-  "updatedAt": "2026-08-04T18:30:00Z",
-  "descricao": "Adiciona gestão administrativa de usuários individuais do Portal do Cliente, mantendo o acesso principal e todas as integrações anteriores.",
-  "pacote": "v3.0.0-pacote-4"
+  "name": "Admin v3.11.1 — Dashboard e limpeza operacional",
+  "updatedAt": "2026-08-05T12:30:00-03:00",
+  "descricao": "Reorganiza os cards do Dashboard e remove integralmente o módulo Gestão Comercial da interface administrativa, sem alterar o Worker ou outros repositórios.",
+  "pacote": "admin-v3.11.1-dashboard-sem-comercial"
 }
