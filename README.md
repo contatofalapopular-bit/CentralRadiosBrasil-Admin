@@ -1,6 +1,11 @@
-# Central Rádios Brasil — Painel Administrativo v3.14.0
+# Central Rádios Brasil — Painel Administrativo v3.15.0
 
 Esta versão reorganiza o Dashboard operacional e remove da interface o módulo **Gestão Comercial**, que não será mais utilizado neste Painel Administrativo.
+
+
+## v3.15.0 — Navegação Inteligente das Listagens
+
+Esta versão prepara as tabelas administrativas para grandes bases, mantendo identificação e ações visíveis, adicionando rolagem superior sincronizada, modo compacto, controle de colunas e paginação automática. Consulte `GUIA-NAVEGACAO-INTELIGENTE-3.15.0.md`.
 
 
 ## v3.14.0 — Central de Alertas e Pendências

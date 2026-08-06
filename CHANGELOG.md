@@ -1,3 +1,12 @@
+## 3.15.0 — Navegação Inteligente das Listagens (2026-08-06)
+
+- Rolagem horizontal superior sincronizada em tabelas largas.
+- Coluna principal fixa à esquerda e coluna Ações fixa à direita.
+- Botões de navegação lateral, modo compacto e seleção de colunas.
+- Paginação automática para grandes quantidades de registros.
+- Reorganização compacta dos comandos e tratamento de textos longos.
+- Worker/API, D1 e Site/PWA preservados.
+
 ## 3.14.0 — Central de Alertas e Pendências (2026-08-06)
 
 - Adiciona a nova rota **🧭 Central** logo após o Dashboard.

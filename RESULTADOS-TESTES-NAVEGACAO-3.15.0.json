@@ -1,0 +1,64 @@
+{
+  "versao": "3.15.0",
+  "data": "2026-08-06",
+  "resultado_geral": "aprovado",
+  "escopo": "Navegação Inteligente das Listagens do Painel Administrativo",
+  "testes": [
+    {
+      "nome": "Sintaxe JavaScript do módulo",
+      "resultado": "aprovado",
+      "detalhe": "node --check executado sem erros em js/smart-tables.js"
+    },
+    {
+      "nome": "Integração no HTML",
+      "resultado": "aprovado",
+      "detalhe": "CSS e JavaScript 3.15.0 carregados; data-app-version e cache bust atualizados"
+    },
+    {
+      "nome": "Estrutura CSS",
+      "resultado": "aprovado",
+      "detalhe": "Chaves CSS balanceadas e regras responsivas validadas"
+    },
+    {
+      "nome": "Descoberta das tabelas reais do Admin 3.14.0",
+      "resultado": "aprovado",
+      "detalhe": "11 listagens largas reconhecidas automaticamente"
+    },
+    {
+      "nome": "Colunas fixas por contexto",
+      "resultado": "aprovado",
+      "detalhe": "Central: Emissora índice 3/Ações 7; Ocorrências: Emissora 2/Ações 7; Streaming: Interessado 1/Ações 7; demais módulos mapeados corretamente"
+    },
+    {
+      "nome": "Rolagem superior sincronizada",
+      "resultado": "aprovado",
+      "detalhe": "Posição de teste 200px reproduzida simultaneamente na barra superior e na área da tabela"
+    },
+    {
+      "nome": "Reorganização das ações",
+      "resultado": "aprovado",
+      "detalhe": "60 linhas de teste receberam grade compacta; evento original do botão Editar permaneceu funcional"
+    },
+    {
+      "nome": "Modo compacto",
+      "resultado": "aprovado",
+      "detalhe": "Classe smart-table-compact aplicada e removida pelo controle"
+    },
+    {
+      "nome": "Paginação de grandes listas",
+      "resultado": "aprovado",
+      "detalhe": "60 registros: 50 visíveis na página 1 e 10 na página 2; primeira linha da página 2 correspondeu ao registro 51"
+    },
+    {
+      "nome": "Seletor de colunas",
+      "resultado": "aprovado por inspeção e teste funcional do código",
+      "detalhe": "Colunas secundárias podem ser ocultadas; identificação e ações permanecem obrigatórias; preferência usa localStorage no domínio do painel"
+    },
+    {
+      "nome": "Preservação de integrações",
+      "resultado": "aprovado",
+      "detalhe": "Nenhuma rota, API, dado, botão, Worker ou schema D1 foi alterado"
+    }
+  ],
+  "observacao": "A validação visual final no domínio GitHub Pages deve ser feita após a publicação, especialmente nos módulos Central, Emissoras, Streams, Qualidade e Ocorrências."
+}

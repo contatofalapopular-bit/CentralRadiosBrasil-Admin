@@ -1,6 +1,6 @@
 const CONFIG = Object.freeze({
   APP_NAME: "Central Rádios Brasil",
-  VERSION: "3.14.0",
+  VERSION: "3.15.0",
   GITHUB_OWNER: "contatofalapopular-bit",
   DADOS_REPO: "CentralRadiosBrasil-Dados",
   DADOS_BRANCH: "main",
