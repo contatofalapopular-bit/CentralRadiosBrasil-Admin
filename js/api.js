@@ -334,6 +334,23 @@ const API = {
     });
   },
 
+  listarAuditoriaAudiencia({ periodo = "24h" } = {}) {
+    const parametros = new URLSearchParams({ periodo });
+    return this.worker(`/api/admin/audiencia/radios?${parametros.toString()}`);
+  },
+
+  detalharAuditoriaAudiencia(radioId, { periodo = "24h" } = {}) {
+    const parametros = new URLSearchParams({ periodo });
+    return this.worker(
+      `/api/admin/audiencia/radios/${encodeURIComponent(radioId)}?${parametros.toString()}`
+    );
+  },
+
+  resumoAuditoriaAudiencia({ periodo = "24h" } = {}) {
+    const parametros = new URLSearchParams({ periodo });
+    return this.worker(`/api/admin/audiencia/resumo?${parametros.toString()}`);
+  },
+
   listarMonitoramentoStreams() {
     return this.worker(
       "/api/admin/streams/status"

@@ -1,7 +1,7 @@
 {
   "app": "Central Rádios Brasil — Painel Administrativo",
-  "version": "3.11.1",
-  "release": "Dashboard reorganizado e Gestão Comercial removida do Admin",
+  "version": "3.12.0",
+  "release": "Auditoria de Audiência operacional",
   "build": "2026-08-05",
   "modules": {
     "dashboard_operacional": true,
@@ -18,7 +18,8 @@
     "emails": true,
     "streaming_interesses": true,
     "ocorrencias": true,
-    "portal_cliente": true
+    "portal_cliente": true,
+    "auditoria_audiencia": true
   },
   "features": [
     "manual-invoicing",
@@ -41,10 +42,14 @@
     "site-version-history",
     "publication-request",
     "admin-site-publication",
-    "server-side-role-permissions"
+    "server-side-role-permissions",
+    "audience-audit",
+    "network-duplicate-analysis",
+    "audience-anomaly-alerts",
+    "audience-csv-export"
   ],
-  "name": "Admin v3.11.1 — Dashboard e limpeza operacional",
-  "updatedAt": "2026-08-05T12:30:00-03:00",
-  "descricao": "Reorganiza os cards do Dashboard e remove integralmente o módulo Gestão Comercial da interface administrativa, sem alterar o Worker ou outros repositórios.",
-  "pacote": "admin-v3.11.1-dashboard-sem-comercial"
+  "name": "Admin v3.12.0 — Auditoria de Audiência",
+  "updatedAt": "2026-08-05T23:27:00-03:00",
+  "descricao": "Adiciona auditoria protegida de audiência com reproduções válidas, redes únicas, duplicidades bloqueadas, crescimento, picos, alertas e detalhes por rádio.",
+  "pacote": "admin-v3.12.0-auditoria-audiencia"
 }

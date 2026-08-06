@@ -9,6 +9,7 @@ let solicitacoesInicializadas = false;
 let emailsInicializados = false;
 let streamingInteressesInicializados = false;
 let ocorrenciasInicializadas = false;
+let audienciaInicializada = false;
 
 document.addEventListener("DOMContentLoaded", () => {
   texto("app-version", `v${CONFIG.VERSION}`);
@@ -22,6 +23,8 @@ document.addEventListener("DOMContentLoaded", () => {
     .addEventListener("click", () => {
       if (rotaAtual() === "dashboard") {
         carregarDashboard(true);
+      } else if (rotaAtual() === "audiencia") {
+        AudienciaAdmin.carregar(true);
       } else if (rotaAtual() === "solicitacoes") {
         SolicitacoesAdmin.carregar();
       } else if (rotaAtual() === "emails") {
@@ -100,6 +103,7 @@ async function renderizarRota() {
 
   const paginas = {
     dashboard: document.getElementById("dashboard-page"),
+    audiencia: document.getElementById("audiencia-page"),
     solicitacoes:
       document.getElementById("solicitacoes-page"),
     ocorrencias: document.getElementById("ocorrencias-page"),
@@ -143,7 +147,16 @@ async function renderizarRota() {
       );
     });
 
-  if (rotaFinal === "ocorrencias") {
+  if (rotaFinal === "audiencia") {
+    texto("page-title", "Auditoria de Audiência");
+    texto("page-subtitle", "Reproduções válidas, redes, duplicidades e sinais de anomalia");
+    if (!audienciaInicializada) {
+      audienciaInicializada = true;
+      await AudienciaAdmin.iniciar();
+    } else {
+      await AudienciaAdmin.carregar();
+    }
+  } else if (rotaFinal === "ocorrencias") {
     texto("page-title", "Ocorrências");
     texto("page-subtitle", "Relatos públicos, suporte e confiabilidade do catálogo");
     if (!ocorrenciasInicializadas) {

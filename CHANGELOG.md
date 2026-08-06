@@ -137,3 +137,10 @@
 - Instâncias de site por cliente, domínio e campos editáveis permitidos.
 - Conversão de interessados do Streaming CRB em clientes.
 - Alertas comerciais integrados ao Dashboard Operacional.
+
+
+## 3.12.0 — Auditoria de Audiência
+- Novo módulo protegido de auditoria.
+- KPIs, filtros, detalhes por rádio, picos e exportação CSV.
+- Alertas integrados ao Dashboard.
+- Nenhum IP ou hash técnico é exposto na interface.

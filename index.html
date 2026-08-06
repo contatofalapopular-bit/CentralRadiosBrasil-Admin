@@ -9,19 +9,20 @@
 <meta content="no-cache, no-store, must-revalidate" http-equiv="Cache-Control"/>
 <meta content="no-cache" http-equiv="Pragma"/>
 <meta content="0" http-equiv="Expires"/>
-<title>Central Rádios Brasil — Painel Administrativo v3.11.1</title>
-<link href="style.css?v=3.11.1" rel="stylesheet"/>
-<link href="css/dashboard.css?v=3.11.1" rel="stylesheet"/>
-<link href="css/radios.css?v=3.11.1" rel="stylesheet"/>
-<link href="css/streams.css?v=3.11.1" rel="stylesheet"/>
-<link href="css/emissoras.css?v=3.11.1" rel="stylesheet"/>
-<link href="css/solicitacoes.css?v=3.11.1" rel="stylesheet"/>
-<link href="css/emails.css?v=3.11.1" rel="stylesheet"/>
-<link href="css/streaming-interesses.css?v=3.11.1" rel="stylesheet"/>
-<link href="css/ocorrencias.css?v=3.11.1" rel="stylesheet"/>
+<title>Central Rádios Brasil — Painel Administrativo v3.12.0</title>
+<link href="style.css?v=3.12.0" rel="stylesheet"/>
+<link href="css/dashboard.css?v=3.12.0" rel="stylesheet"/>
+<link href="css/audiencia.css?v=3.12.0" rel="stylesheet"/>
+<link href="css/radios.css?v=3.12.0" rel="stylesheet"/>
+<link href="css/streams.css?v=3.12.0" rel="stylesheet"/>
+<link href="css/emissoras.css?v=3.12.0" rel="stylesheet"/>
+<link href="css/solicitacoes.css?v=3.12.0" rel="stylesheet"/>
+<link href="css/emails.css?v=3.12.0" rel="stylesheet"/>
+<link href="css/streaming-interesses.css?v=3.12.0" rel="stylesheet"/>
+<link href="css/ocorrencias.css?v=3.12.0" rel="stylesheet"/>
 
 </head>
-<body data-app-version="3.11.1" data-build="dashboard-reorganizado-sem-gestao-comercial">
+<body data-app-version="3.12.0" data-build="auditoria-audiencia-operacional">
 <div class="app-shell">
 <aside class="sidebar">
 <div class="brand">
@@ -33,6 +34,7 @@
 </div>
 <nav class="main-nav">
 <a class="nav-link active" data-route="dashboard" href="#/dashboard">🏠 Dashboard</a>
+<a class="nav-link" data-route="audiencia" href="#/audiencia">📊 Audiência <span class="nav-alert-count hidden" id="audiencia-nav-count"></span></a>
 <a class="nav-link" data-route="solicitacoes" href="#/solicitacoes">📥 Solicitações <span class="nav-alert-count hidden" id="solicitacoes-nav-count"></span></a>
 <a class="nav-link" data-route="ocorrencias" href="#/ocorrencias">⚠️ Ocorrências <span class="nav-alert-count hidden" id="ocorrencias-nav-count"></span></a>
 <a class="nav-link" data-route="streaming-interesses" href="#/streaming-interesses">🚀 Streaming CRB <span class="nav-alert-count hidden" id="streaming-nav-count"></span></a>
@@ -111,6 +113,10 @@
 <button class="operation-card" data-dashboard-route="emails" type="button">
 <span class="operation-icon">✉️</span><small>E-mails</small>
 <strong id="dashboard-alert-emails">—</strong><em>Mensagens não lidas</em>
+</button>
+<button class="operation-card" data-dashboard-route="audiencia" type="button">
+<span class="operation-icon">📊</span><small>Audiência</small>
+<strong id="dashboard-alert-audiencia">—</strong><em>Rádios para revisão</em>
 </button>
 <button class="operation-card" data-dashboard-route="streams" type="button">
 <span class="operation-icon">📡</span><small>Streams</small>
@@ -1083,6 +1089,44 @@
 </article>
 </section>
 </section>
+<section class="audiencia-page hidden" id="audiencia-page">
+<section class="audiencia-hero">
+  <div>
+    <span class="status-badge loading" id="audiencia-status-badge">Aguardando auditoria</span>
+    <h2>Auditoria de audiência</h2>
+    <p>Analise reproduções válidas, redes únicas, duplicidades bloqueadas, picos e crescimento por rádio. Os indicadores servem para revisão humana e não representam prova automática de fraude.</p>
+  </div>
+  <div class="audiencia-hero-meta"><strong>Proteção ativa: rede + rádio / 6 horas</strong><small id="audiencia-atualizado-em">Ainda não atualizado</small></div>
+</section>
+<section class="audiencia-login-panel" id="audiencia-login-panel">
+  <div><h3>Sessão administrativa necessária</h3><p>Entre com a chave administrativa para consultar os dados protegidos de audiência.</p></div>
+  <button class="primary-button" id="audiencia-login" type="button">🔐 Entrar e carregar</button>
+</section>
+<div class="hidden" id="audiencia-conteudo">
+<section class="audiencia-toolbar">
+  <label>Período<select id="audiencia-periodo"><option value="24h">Últimas 24 horas</option><option value="7d">Últimos 7 dias</option><option value="30d">Últimos 30 dias</option></select></label>
+  <label>Nível<select id="audiencia-nivel"><option value="todos">Todos</option><option value="revisar">Revisar</option><option value="observar">Observar</option><option value="normal">Normal</option></select></label>
+  <label class="audiencia-search">Buscar rádio<input id="audiencia-busca" placeholder="Nome, cidade, UF ou ID" type="search"/></label>
+  <button class="secondary-button" id="audiencia-atualizar" type="button">↻ Atualizar</button>
+  <button class="secondary-button" id="audiencia-exportar" type="button">⬇ Exportar CSV</button>
+  <span class="audiencia-results-count" id="audiencia-resultados">0 rádios</span>
+</section>
+<section class="audiencia-kpis">
+  <article class="audiencia-kpi"><span>Reproduções válidas</span><strong id="audiencia-kpi-validas">0</strong><small>Após 5 minutos</small></article>
+  <article class="audiencia-kpi"><span>Redes únicas</span><strong id="audiencia-kpi-redes">0</strong><small>Sem expor endereços</small></article>
+  <article class="audiencia-kpi"><span>Duplicidades bloqueadas</span><strong id="audiencia-kpi-duplicadas">0</strong><small id="audiencia-kpi-taxa">0%</small></article>
+  <article class="audiencia-kpi"><span>Alertas</span><strong id="audiencia-kpi-alertas">0</strong><small>Observar ou revisar</small></article>
+  <article class="audiencia-kpi"><span>Sessões pendentes</span><strong id="audiencia-kpi-pendentes">0</strong><small>Aguardando 5 minutos</small></article>
+  <article class="audiencia-kpi"><span>Regra atual</span><strong>6 h</strong><small>Uma por rede e rádio</small></article>
+</section>
+<section class="audiencia-summary-alert is-success" id="audiencia-resumo-alerta"><strong>Aguardando dados</strong><span>Carregue a auditoria para verificar os indicadores.</span></section>
+<section class="audiencia-table-card"><div class="table-scroll"><table class="audiencia-table"><thead><tr><th>Rádio</th><th>Válidas</th><th>Redes</th><th>Duplicadas</th><th>Pico/10 min</th><th>Crescimento</th><th>Inícios</th><th>Pendentes</th><th>Nível</th><th>Ação</th></tr></thead><tbody id="audiencia-table-body"><tr><td class="empty-state" colspan="10">Carregando dados de audiência.</td></tr></tbody></table></div></section>
+<section class="audiencia-detail hidden" id="audiencia-detalhe">
+  <header class="audiencia-detail-header"><div><h2 id="audiencia-detalhe-titulo">Detalhes da rádio</h2><p id="audiencia-detalhe-subtitulo">—</p></div><button class="secondary-button" id="audiencia-detalhe-fechar" type="button">Fechar</button></header>
+  <div id="audiencia-detalhe-conteudo"></div>
+</section>
+</div>
+</section>
 <section class="hidden" id="configuracoes-page">
 <div class="radios-toolbar">
 <div>
@@ -1898,22 +1942,23 @@
 </div>
 </section>
 </div>
-<script src="config.js?v=3.11.1"></script>
-<script src="js/utils.js?v=3.11.1"></script>
-<script src="js/api.js?v=3.11.1"></script>
-<script src="js/dashboard.js?v=3.11.1"></script>
-<script src="js/radios.js?v=3.11.1"></script>
-<script src="js/estados.js?v=3.11.1"></script>
-<script src="js/categorias.js?v=3.11.1"></script>
-<script src="js/cidades.js?v=3.11.1"></script>
-<script src="js/streams.js?v=3.11.1"></script>
-<script src="js/emissoras.js?v=3.11.1"></script>
-<script src="js/publicacao.js?v=3.11.1"></script>
-<script src="js/solicitacoes.js?v=3.11.1"></script>
-<script src="js/emails.js?v=3.11.1"></script>
-<script src="js/streaming-interesses.js?v=3.11.1"></script>
-<script src="js/ocorrencias.js?v=3.11.1"></script>
+<script src="config.js?v=3.12.0"></script>
+<script src="js/utils.js?v=3.12.0"></script>
+<script src="js/api.js?v=3.12.0"></script>
+<script src="js/dashboard.js?v=3.12.0"></script>
+<script src="js/radios.js?v=3.12.0"></script>
+<script src="js/estados.js?v=3.12.0"></script>
+<script src="js/categorias.js?v=3.12.0"></script>
+<script src="js/cidades.js?v=3.12.0"></script>
+<script src="js/streams.js?v=3.12.0"></script>
+<script src="js/emissoras.js?v=3.12.0"></script>
+<script src="js/publicacao.js?v=3.12.0"></script>
+<script src="js/solicitacoes.js?v=3.12.0"></script>
+<script src="js/emails.js?v=3.12.0"></script>
+<script src="js/streaming-interesses.js?v=3.12.0"></script>
+<script src="js/ocorrencias.js?v=3.12.0"></script>
+<script src="js/audiencia.js?v=3.12.0"></script>
 
-<script src="app.js?v=3.11.1"></script>
+<script src="app.js?v=3.12.0"></script>
 </body>
 </html>

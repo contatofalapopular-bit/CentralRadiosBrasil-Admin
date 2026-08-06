@@ -194,7 +194,7 @@ function renderizarCatalogoDashboard(docRadios, resumo) {
 }
 
 function renderizarOperacaoDashboard(resumo) {
-  const campos = ["solicitacoes", "ocorrencias", "streaming", "emails", "streams"];
+  const campos = ["solicitacoes", "ocorrencias", "streaming", "emails", "audiencia", "streams"];
   if (!resumo) {
     texto("dashboard-alert-total", "—");
     campos.forEach((campo) => texto(`dashboard-alert-${campo}`, "—"));
@@ -251,6 +251,7 @@ function renderizarResumoFilasDashboard(resumo) {
     ["Ocorrências em análise", Number(resumo.ocorrencias?.emAnalise || 0), "ocorrencias"],
     ["Leads qualificados", Number(resumo.streaming?.qualificados || 0), "streaming-interesses"],
     ["E-mails na entrada", Number(resumo.emails?.entrada || 0), "emails"],
+    ["Rádios para revisar", Number(resumo.audiencia?.revisar || 0), "audiencia"],
     ["Streams online", Number(resumo.streams?.online || 0), "streams"]
   ];
   alvo.innerHTML = itens.map(([rotulo, valor, rota]) => `
@@ -273,6 +274,7 @@ function atualizarBadgesNavegacao(alertas) {
     "ocorrencias-nav-count": alertas.ocorrencias,
     "streaming-nav-count": alertas.streaming,
     "emails-nav-count": alertas.emails,
+    "audiencia-nav-count": alertas.audiencia,
     "streams-nav-count": alertas.streams
   };
   Object.entries(mapa).forEach(([id, valor]) => {
