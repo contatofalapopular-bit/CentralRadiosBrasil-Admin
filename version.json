@@ -1,6 +1,6 @@
 {
   "app": "Central Rádios Brasil — Painel Administrativo",
-  "version": "3.13.0",
+  "version": "3.13.1",
   "release": "Gestão de Emissoras e Qualidade",
   "build": "2026-08-06",
   "modules": {
@@ -54,8 +54,16 @@
     "station-quality-csv-export",
     "safe-suspension-preparation"
   ],
-  "name": "Admin v3.13.0 — Gestão de Emissoras e Qualidade",
+  "name": "Admin v3.13.1 — Layout Amplo Global",
   "updatedAt": "2026-08-06T07:42:00-03:00",
   "descricao": "Adiciona visão consolidada de saúde técnica, completude cadastral, identidade, localização, publicação, selo e pendências por emissora.",
-  "pacote": "admin-v3.13.0-gestao-emissoras-qualidade"
+  "pacote": "admin-v3.13.1-layout-amplo-global",
+  "date": "2026-08-06",
+  "changes": [
+    "Área útil global ampliada em todos os módulos",
+    "Menu lateral reduzido de 280 px para 224 px no desktop",
+    "Margens e espaçamentos internos compactados sem remover conteúdo",
+    "Tabelas de Qualidade e Audiência ajustadas para exigir menos rolagem horizontal",
+    "Responsividade móvel preservada"
+  ]
 }

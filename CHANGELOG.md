@@ -1,3 +1,12 @@
+## 3.13.1 — Layout Amplo Global (2026-08-06)
+
+- Menu lateral reduzido para aumentar a área de trabalho.
+- Conteúdo principal passa a utilizar toda a largura disponível.
+- Margens do cabeçalho e dos módulos compactadas.
+- Tabelas de Qualidade e Audiência otimizadas para telas de notebook e desktop.
+- Menor necessidade de rolagem horizontal, preservando a barra inferior como fallback.
+- Nenhuma alteração no Worker, D1, regras de audiência ou Portal Público.
+
 # Changelog
 
 ## 3.11.1 — Dashboard reorganizado e Gestão Comercial removida

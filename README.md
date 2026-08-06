@@ -23,6 +23,15 @@ Esta versão reorganiza o Dashboard operacional e remove da interface o módulo 
 A alteração é exclusiva do repositório do Admin. Worker, D1, Portal Público/PWA, Portal do Cliente e firmware não foram modificados. As rotas comerciais do Worker permanecem intactas para compatibilidade e eventual uso futuro por outros sistemas.
 
 
+
+## v3.13.1 — Layout Amplo Global
+
+- Reduz a largura do menu lateral no computador.
+- Remove o limite central de 1600 px e aproxima o conteúdo da lateral.
+- Reduz margens internas em todos os módulos.
+- Ajusta as tabelas de Qualidade e Audiência para exibir mais colunas sem rolagem.
+- Mantém integralmente as funções da v3.13.0.
+
 ## v3.13.0 — Gestão de Emissoras e Qualidade
 
 Novo módulo **🛡️ Qualidade** com score de 0 a 100, completude dos campos essenciais, saúde técnica dos streams, filtros, revisão por grupos, exportação CSV e atalhos seguros para edição e preparação de suspensão. A disponibilidade real de sites externos não é testada; apenas presença e formato das URLs. O monitoramento de stream continua vindo do Worker/API 1.19.1.

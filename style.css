@@ -11,18 +11,18 @@ body.dark-theme{
 body{margin:0;font-family:Arial,sans-serif;background:var(--bg);color:var(--text)}
 button,input,select{font:inherit}
 button{cursor:pointer}
-.app-shell{min-height:100vh;display:grid;grid-template-columns:280px 1fr}
-.sidebar{background:var(--sidebar);color:#fff;padding:24px 18px;display:flex;flex-direction:column;min-height:100vh;position:sticky;top:0}
-.brand{display:flex;gap:12px;align-items:center;padding-bottom:24px;border-bottom:1px solid #ffffff22}
+.app-shell{min-height:100vh;display:grid;grid-template-columns:224px minmax(0,1fr)}
+.sidebar{background:var(--sidebar);color:#fff;padding:20px 12px;display:flex;flex-direction:column;min-height:100vh;position:sticky;top:0}
+.brand{display:flex;gap:10px;align-items:center;padding:0 4px 20px;border-bottom:1px solid #ffffff22}
 .brand-mark{width:48px;height:48px;border-radius:50%;display:grid;place-items:center;background:var(--primary);font-weight:800}
 .brand strong,.brand span{display:block}.brand span{font-size:.82rem;color:#ffffffaa}
-.main-nav{display:grid;gap:8px;margin-top:26px}
-.nav-link{border:0;border-radius:10px;background:transparent;color:#ffffffd0;display:flex;gap:10px;padding:13px 14px;text-decoration:none}
+.main-nav{display:grid;gap:6px;margin-top:20px}
+.nav-link{border:0;border-radius:10px;background:transparent;color:#ffffffd0;display:flex;align-items:center;gap:9px;padding:11px 10px;text-decoration:none}
 .nav-link.active,.nav-link:hover{background:var(--primary);color:#fff}
 .nav-link small{margin-left:auto}.nav-link.disabled{opacity:.45}
 .sidebar-footer{margin-top:auto;color:#ffffff88}
-.content-area{min-width:0}
-.topbar{display:flex;align-items:center;gap:12px;padding:18px 30px;background:var(--surface);border-bottom:1px solid var(--border)}
+.content-area{min-width:0;width:100%;overflow:hidden}
+.topbar{display:flex;align-items:center;gap:12px;padding:14px 18px;background:var(--surface);border-bottom:1px solid var(--border)}
 .topbar h1,.topbar p{margin:0}.topbar p{color:var(--muted)}
 .secondary-button{margin-left:auto}
 .secondary-button,.theme-button,.primary-button,#retry-button{
@@ -31,7 +31,7 @@ button{cursor:pointer}
 }
 .primary-button{background:var(--primary);color:#fff;border-color:var(--primary);font-weight:700}
 .primary-button:hover{background:var(--primary-dark)}
-.main-content{padding:30px;max-width:1600px;width:100%;margin:0 auto}
+.main-content{padding:18px 16px 28px;max-width:none;width:100%;margin:0}
 .hidden{display:none!important}
 .status-badge{display:inline-block;padding:6px 10px;border-radius:999px;font-size:.78rem;font-weight:700}
 .status-badge.loading{background:#f2c230;color:#111}
@@ -82,7 +82,7 @@ button{cursor:pointer}
 }
 @media(max-width:800px){
   .app-shell{grid-template-columns:1fr}.sidebar{position:static;min-height:auto}
-  .topbar{flex-wrap:wrap;padding:16px}.secondary-button{margin-left:0}.main-content{padding:18px}
+  .topbar{flex-wrap:wrap;padding:14px}.secondary-button{margin-left:0}.main-content{padding:14px}
 }
 
 
@@ -161,3 +161,21 @@ body.dark-theme{
 .publication-summary--success{border-left-color:#079ee8}.publication-summary--success>div:first-child>span{background:#d9f5ff;color:#056b9e}
 
 @media(max-width:520px){.brand-mark{width:46px;height:46px;flex-basis:46px;font-size:.92rem}.brand{gap:10px}.brand strong{font-size:.92rem}.brand span{font-size:.75rem}}
+
+
+/* v3.13.1 — Layout amplo global */
+.app-shell,.content-area,.main-content,.main-content>section{min-width:0}
+.main-content>section{width:100%;max-width:none}
+.table-card,.table-scroll,.qualidade-table-card,.audiencia-table-card{max-width:100%}
+.table-scroll{overflow-x:auto;overflow-y:visible;scrollbar-gutter:stable}
+.sidebar-footer{padding:0 6px}
+@media (min-width:801px) and (max-width:1180px){
+  .app-shell{grid-template-columns:208px minmax(0,1fr)}
+  .sidebar{padding-left:9px;padding-right:9px}
+  .nav-link{padding-left:8px;padding-right:8px;font-size:.92rem}
+  .main-content{padding-left:12px;padding-right:12px}
+}
+@media (min-width:1500px){
+  .app-shell{grid-template-columns:232px minmax(0,1fr)}
+  .main-content{padding-left:20px;padding-right:20px}
+}
