@@ -10,6 +10,7 @@ let emailsInicializados = false;
 let streamingInteressesInicializados = false;
 let ocorrenciasInicializadas = false;
 let audienciaInicializada = false;
+let qualidadeInicializada = false;
 
 document.addEventListener("DOMContentLoaded", () => {
   texto("app-version", `v${CONFIG.VERSION}`);
@@ -25,6 +26,8 @@ document.addEventListener("DOMContentLoaded", () => {
         carregarDashboard(true);
       } else if (rotaAtual() === "audiencia") {
         AudienciaAdmin.carregar(true);
+      } else if (rotaAtual() === "qualidade") {
+        QualidadeAdmin.carregar(true);
       } else if (rotaAtual() === "solicitacoes") {
         SolicitacoesAdmin.carregar();
       } else if (rotaAtual() === "emails") {
@@ -104,6 +107,7 @@ async function renderizarRota() {
   const paginas = {
     dashboard: document.getElementById("dashboard-page"),
     audiencia: document.getElementById("audiencia-page"),
+    qualidade: document.getElementById("qualidade-page"),
     solicitacoes:
       document.getElementById("solicitacoes-page"),
     ocorrencias: document.getElementById("ocorrencias-page"),
@@ -147,7 +151,16 @@ async function renderizarRota() {
       );
     });
 
-  if (rotaFinal === "audiencia") {
+  if (rotaFinal === "qualidade") {
+    texto("page-title", "Gestão de Emissoras e Qualidade");
+    texto("page-subtitle", "Saúde técnica, completude cadastral e prontidão do catálogo");
+    if (!qualidadeInicializada) {
+      qualidadeInicializada = true;
+      await QualidadeAdmin.iniciar();
+    } else {
+      await QualidadeAdmin.carregar();
+    }
+  } else if (rotaFinal === "audiencia") {
     texto("page-title", "Auditoria de Audiência");
     texto("page-subtitle", "Reproduções válidas, redes, duplicidades e sinais de anomalia");
     if (!audienciaInicializada) {
@@ -247,6 +260,7 @@ async function renderizarRota() {
     } else {
       EmissorasAdmin.renderizar();
     }
+    QualidadeAdmin.aplicarAcaoPendenteEmissoras();
   } else if (rotaFinal === "streams") {
     texto("page-title", "Streams");
 

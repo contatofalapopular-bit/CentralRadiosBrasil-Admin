@@ -144,3 +144,16 @@
 - KPIs, filtros, detalhes por rádio, picos e exportação CSV.
 - Alertas integrados ao Dashboard.
 - Nenhum IP ou hash técnico é exposto na interface.
+
+
+## 3.13.0 — Gestão de Emissoras e Qualidade (2026-08-06)
+
+- Nova rota e menu `#/qualidade`.
+- Score de qualidade e completude por emissora.
+- Consolidação do monitoramento protegido de streams.
+- Filtros por risco, UF, categoria, stream e Selo Oficial.
+- Detalhes por identidade, localização, conteúdo, contato, links, stream, publicação e confiança.
+- Exportação CSV das pendências.
+- Atalhos para editar e preparar suspensão sem salvar automaticamente.
+- Card e badge de qualidade no Dashboard.
+- Site/PWA 22.18.0 e Worker/API 1.19.1 permanecem inalterados.

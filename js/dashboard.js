@@ -37,6 +37,18 @@ async function carregarDashboard(semCache = false) {
       }
     }
 
+    let resumoQualidade = null;
+    if (resumoOperacional && typeof QualidadeAdmin !== "undefined") {
+      try {
+        resumoQualidade = await QualidadeAdmin.resumoRapido(radios);
+        resumoOperacional.alertas = resumoOperacional.alertas || {};
+        resumoOperacional.alertas.qualidade = Number(resumoQualidade?.atencaoTotal || 0);
+        resumoOperacional.qualidade = resumoQualidade;
+      } catch (erro) {
+        console.warn("Resumo de qualidade indisponível no Dashboard:", erro);
+      }
+    }
+
     dashboardOperacional = resumoOperacional;
     renderizarCatalogoDashboard(docRadios, resumoCatalogo);
     renderizarOperacaoDashboard(resumoOperacional);
@@ -194,7 +206,7 @@ function renderizarCatalogoDashboard(docRadios, resumo) {
 }
 
 function renderizarOperacaoDashboard(resumo) {
-  const campos = ["solicitacoes", "ocorrencias", "streaming", "emails", "audiencia", "streams"];
+  const campos = ["solicitacoes", "ocorrencias", "streaming", "emails", "audiencia", "qualidade", "streams"];
   if (!resumo) {
     texto("dashboard-alert-total", "—");
     campos.forEach((campo) => texto(`dashboard-alert-${campo}`, "—"));
@@ -252,6 +264,7 @@ function renderizarResumoFilasDashboard(resumo) {
     ["Leads qualificados", Number(resumo.streaming?.qualificados || 0), "streaming-interesses"],
     ["E-mails na entrada", Number(resumo.emails?.entrada || 0), "emails"],
     ["Rádios para revisar", Number(resumo.audiencia?.revisar || 0), "audiencia"],
+    ["Qualidade do catálogo", Number(resumo.qualidade?.atencaoTotal || 0), "qualidade"],
     ["Streams online", Number(resumo.streams?.online || 0), "streams"]
   ];
   alvo.innerHTML = itens.map(([rotulo, valor, rota]) => `
@@ -275,6 +288,7 @@ function atualizarBadgesNavegacao(alertas) {
     "streaming-nav-count": alertas.streaming,
     "emails-nav-count": alertas.emails,
     "audiencia-nav-count": alertas.audiencia,
+    "qualidade-nav-count": alertas.qualidade,
     "streams-nav-count": alertas.streams
   };
   Object.entries(mapa).forEach(([id, valor]) => {

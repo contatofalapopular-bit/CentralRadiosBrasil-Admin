@@ -1,8 +1,8 @@
 {
   "app": "Central Rádios Brasil — Painel Administrativo",
-  "version": "3.12.0",
-  "release": "Auditoria de Audiência operacional",
-  "build": "2026-08-05",
+  "version": "3.13.0",
+  "release": "Gestão de Emissoras e Qualidade",
+  "build": "2026-08-06",
   "modules": {
     "dashboard_operacional": true,
     "dashboard": true,
@@ -19,7 +19,8 @@
     "streaming_interesses": true,
     "ocorrencias": true,
     "portal_cliente": true,
-    "auditoria_audiencia": true
+    "auditoria_audiencia": true,
+    "gestao_emissoras_qualidade": true
   },
   "features": [
     "manual-invoicing",
@@ -46,10 +47,15 @@
     "audience-audit",
     "network-duplicate-analysis",
     "audience-anomaly-alerts",
-    "audience-csv-export"
+    "audience-csv-export",
+    "station-quality-score",
+    "catalog-completeness-audit",
+    "stream-health-consolidation",
+    "station-quality-csv-export",
+    "safe-suspension-preparation"
   ],
-  "name": "Admin v3.12.0 — Auditoria de Audiência",
-  "updatedAt": "2026-08-05T23:27:00-03:00",
-  "descricao": "Adiciona auditoria protegida de audiência com reproduções válidas, redes únicas, duplicidades bloqueadas, crescimento, picos, alertas e detalhes por rádio.",
-  "pacote": "admin-v3.12.0-auditoria-audiencia"
+  "name": "Admin v3.13.0 — Gestão de Emissoras e Qualidade",
+  "updatedAt": "2026-08-06T07:42:00-03:00",
+  "descricao": "Adiciona visão consolidada de saúde técnica, completude cadastral, identidade, localização, publicação, selo e pendências por emissora.",
+  "pacote": "admin-v3.13.0-gestao-emissoras-qualidade"
 }

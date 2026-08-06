@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-<!DOCTYPE html>
 
 <html lang="pt-BR">
 <head>
@@ -9,20 +8,21 @@
 <meta content="no-cache, no-store, must-revalidate" http-equiv="Cache-Control"/>
 <meta content="no-cache" http-equiv="Pragma"/>
 <meta content="0" http-equiv="Expires"/>
-<title>Central Rádios Brasil — Painel Administrativo v3.12.0</title>
-<link href="style.css?v=3.12.0" rel="stylesheet"/>
-<link href="css/dashboard.css?v=3.12.0" rel="stylesheet"/>
-<link href="css/audiencia.css?v=3.12.0" rel="stylesheet"/>
-<link href="css/radios.css?v=3.12.0" rel="stylesheet"/>
-<link href="css/streams.css?v=3.12.0" rel="stylesheet"/>
-<link href="css/emissoras.css?v=3.12.0" rel="stylesheet"/>
-<link href="css/solicitacoes.css?v=3.12.0" rel="stylesheet"/>
-<link href="css/emails.css?v=3.12.0" rel="stylesheet"/>
-<link href="css/streaming-interesses.css?v=3.12.0" rel="stylesheet"/>
-<link href="css/ocorrencias.css?v=3.12.0" rel="stylesheet"/>
+<title>Central Rádios Brasil — Painel Administrativo v3.13.0</title>
+<link href="style.css?v=3.13.0" rel="stylesheet"/>
+<link href="css/dashboard.css?v=3.13.0" rel="stylesheet"/>
+<link href="css/audiencia.css?v=3.13.0" rel="stylesheet"/>
+<link href="css/qualidade.css?v=3.13.0" rel="stylesheet"/>
+<link href="css/radios.css?v=3.13.0" rel="stylesheet"/>
+<link href="css/streams.css?v=3.13.0" rel="stylesheet"/>
+<link href="css/emissoras.css?v=3.13.0" rel="stylesheet"/>
+<link href="css/solicitacoes.css?v=3.13.0" rel="stylesheet"/>
+<link href="css/emails.css?v=3.13.0" rel="stylesheet"/>
+<link href="css/streaming-interesses.css?v=3.13.0" rel="stylesheet"/>
+<link href="css/ocorrencias.css?v=3.13.0" rel="stylesheet"/>
 
 </head>
-<body data-app-version="3.12.0" data-build="auditoria-audiencia-operacional">
+<body data-app-version="3.13.0" data-build="gestao-emissoras-qualidade">
 <div class="app-shell">
 <aside class="sidebar">
 <div class="brand">
@@ -41,6 +41,7 @@
 
 <a class="nav-link" data-route="emails" href="#/emails">✉️ E-mails <span class="emails-nav-count nav-alert-count hidden" id="emails-nav-count"></span></a>
 <a class="nav-link" data-route="emissoras" href="#/emissoras">🏢 Emissoras</a>
+<a class="nav-link" data-route="qualidade" href="#/qualidade">🛡️ Qualidade <span class="nav-alert-count hidden" id="qualidade-nav-count"></span></a>
 <a class="nav-link" data-route="publicacao" href="#/publicacao">📤 Publicação</a>
 <a class="nav-link" data-route="radios" href="#/radios">📻 Rádios</a>
 <a class="nav-link" data-route="estados" href="#/estados">🗺️ Estados</a>
@@ -117,6 +118,10 @@
 <button class="operation-card" data-dashboard-route="audiencia" type="button">
 <span class="operation-icon">📊</span><small>Audiência</small>
 <strong id="dashboard-alert-audiencia">—</strong><em>Rádios para revisão</em>
+</button>
+<button class="operation-card" data-dashboard-route="qualidade" type="button">
+<span class="operation-icon">🛡️</span><small>Qualidade</small>
+<strong id="dashboard-alert-qualidade">—</strong><em>Emissoras com pendências</em>
 </button>
 <button class="operation-card" data-dashboard-route="streams" type="button">
 <span class="operation-icon">📡</span><small>Streams</small>
@@ -1127,6 +1132,48 @@
 </section>
 </div>
 </section>
+<section class="qualidade-page hidden" id="qualidade-page">
+<section class="qualidade-hero">
+  <div>
+    <span class="status-badge loading" id="qualidade-status-badge">Aguardando análise</span>
+    <h2>Gestão de Emissoras e Qualidade</h2>
+    <p>Consolide saúde técnica, completude cadastral, identidade, localização, publicação e Selo Oficial. A análise orienta a revisão administrativa sem alterar automaticamente o banco oficial.</p>
+    <span class="qualidade-session-note" id="qualidade-session-note">Análise cadastral pública ativa; entre para incluir o monitoramento técnico protegido.</span>
+  </div>
+  <div class="qualidade-hero-meta"><span>Score médio do catálogo</span><strong id="qualidade-score-medio">—</strong><small id="qualidade-atualizado-em">Ainda não atualizado</small></div>
+</section>
+<section class="qualidade-login-panel" id="qualidade-login-panel">
+  <div><h3>Inclua a saúde técnica dos streams</h3><p>Entre com a chave administrativa para carregar falhas, retiradas do portal, suspensões e última verificação.</p></div>
+  <button class="primary-button" id="qualidade-login" type="button">🔐 Entrar e incluir monitoramento</button>
+</section>
+<section class="qualidade-toolbar">
+  <label class="qualidade-search">Buscar emissora<input id="qualidade-busca" placeholder="Nome, cidade, UF, categoria ou ID" type="search"/></label>
+  <label>Nível<select id="qualidade-nivel"><option value="">Todos</option><option value="critica">Crítica</option><option value="atencao">Atenção</option><option value="saudavel">Saudável</option></select></label>
+  <label>Estado<select id="qualidade-uf"><option value="">Todos os estados</option></select></label>
+  <label>Categoria<select id="qualidade-categoria"><option value="">Todas as categorias</option></select></label>
+  <label>Stream<select id="qualidade-stream"><option value="">Todos</option><option value="online">Online</option><option value="atencao">Em atenção</option><option value="nao_testado">Não testado</option><option value="sem_https">Sem HTTPS</option></select></label>
+  <label>Selo<select id="qualidade-selo"><option value="">Todos</option><option value="verificado">Verificado</option><option value="pendente">Pendente</option></select></label>
+  <label>Ordenar<select id="qualidade-ordenacao"><option value="risco">Maior risco</option><option value="score">Maior score</option><option value="nome">Nome</option><option value="atualizacao">Atualização recente</option></select></label>
+  <button class="secondary-button" id="qualidade-atualizar" type="button">↻ Atualizar</button>
+  <button class="secondary-button" id="qualidade-monitorar" type="button">📡 Verificar streams</button>
+  <button class="secondary-button" id="qualidade-exportar" type="button">⬇ Exportar CSV</button>
+  <span class="qualidade-results-count" id="qualidade-resultados">0 emissoras</span>
+</section>
+<section class="qualidade-kpis">
+  <article class="qualidade-kpi"><span>Total analisado</span><strong id="qualidade-kpi-total">0</strong><small>Banco oficial</small></article>
+  <article class="qualidade-kpi is-success"><span>Saudáveis</span><strong id="qualidade-kpi-saudaveis">0</strong><small>Sem pendência relevante</small></article>
+  <article class="qualidade-kpi is-warning"><span>Atenção</span><strong id="qualidade-kpi-atencao">0</strong><small>Revisão recomendada</small></article>
+  <article class="qualidade-kpi is-danger"><span>Críticas</span><strong id="qualidade-kpi-criticas">0</strong><small>Prioridade operacional</small></article>
+  <article class="qualidade-kpi"><span>Streams em alerta</span><strong id="qualidade-kpi-streams">0</strong><small>Instável, fora ou suspenso</small></article>
+  <article class="qualidade-kpi"><span>Cadastros incompletos</span><strong id="qualidade-kpi-incompletas">0</strong><small>Campos essenciais</small></article>
+</section>
+<section class="qualidade-summary-alert is-success" id="qualidade-resumo-alerta"><strong>Aguardando catálogo</strong><span>Carregue os dados para iniciar a análise.</span></section>
+<section class="qualidade-table-card"><div class="table-scroll"><table class="qualidade-table"><thead><tr><th>Emissora</th><th>Score</th><th>Completude</th><th>Stream</th><th>Cadastro</th><th>Selo</th><th>Pendências</th><th>Atualização</th><th>Ações</th></tr></thead><tbody id="qualidade-table-body"><tr><td class="empty-state" colspan="9">Analisando o catálogo oficial.</td></tr></tbody></table></div></section>
+<section class="qualidade-detail hidden" id="qualidade-detalhe">
+  <header class="qualidade-detail-header"><div><h2 id="qualidade-detalhe-titulo">Detalhes da emissora</h2><p id="qualidade-detalhe-subtitulo">—</p></div><button class="secondary-button" id="qualidade-detalhe-fechar" type="button">Fechar</button></header>
+  <div id="qualidade-detalhe-conteudo"></div>
+</section>
+</section>
 <section class="hidden" id="configuracoes-page">
 <div class="radios-toolbar">
 <div>
@@ -1942,23 +1989,24 @@
 </div>
 </section>
 </div>
-<script src="config.js?v=3.12.0"></script>
-<script src="js/utils.js?v=3.12.0"></script>
-<script src="js/api.js?v=3.12.0"></script>
-<script src="js/dashboard.js?v=3.12.0"></script>
-<script src="js/radios.js?v=3.12.0"></script>
-<script src="js/estados.js?v=3.12.0"></script>
-<script src="js/categorias.js?v=3.12.0"></script>
-<script src="js/cidades.js?v=3.12.0"></script>
-<script src="js/streams.js?v=3.12.0"></script>
-<script src="js/emissoras.js?v=3.12.0"></script>
-<script src="js/publicacao.js?v=3.12.0"></script>
-<script src="js/solicitacoes.js?v=3.12.0"></script>
-<script src="js/emails.js?v=3.12.0"></script>
-<script src="js/streaming-interesses.js?v=3.12.0"></script>
-<script src="js/ocorrencias.js?v=3.12.0"></script>
-<script src="js/audiencia.js?v=3.12.0"></script>
+<script src="config.js?v=3.13.0"></script>
+<script src="js/utils.js?v=3.13.0"></script>
+<script src="js/api.js?v=3.13.0"></script>
+<script src="js/qualidade.js?v=3.13.0"></script>
+<script src="js/dashboard.js?v=3.13.0"></script>
+<script src="js/radios.js?v=3.13.0"></script>
+<script src="js/estados.js?v=3.13.0"></script>
+<script src="js/categorias.js?v=3.13.0"></script>
+<script src="js/cidades.js?v=3.13.0"></script>
+<script src="js/streams.js?v=3.13.0"></script>
+<script src="js/emissoras.js?v=3.13.0"></script>
+<script src="js/publicacao.js?v=3.13.0"></script>
+<script src="js/solicitacoes.js?v=3.13.0"></script>
+<script src="js/emails.js?v=3.13.0"></script>
+<script src="js/streaming-interesses.js?v=3.13.0"></script>
+<script src="js/ocorrencias.js?v=3.13.0"></script>
+<script src="js/audiencia.js?v=3.13.0"></script>
 
-<script src="app.js?v=3.12.0"></script>
+<script src="app.js?v=3.13.0"></script>
 </body>
 </html>

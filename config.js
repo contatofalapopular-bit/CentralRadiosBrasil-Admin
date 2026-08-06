@@ -1,6 +1,6 @@
 const CONFIG = Object.freeze({
   APP_NAME: "Central Rádios Brasil",
-  VERSION: "3.12.0",
+  VERSION: "3.13.0",
   GITHUB_OWNER: "contatofalapopular-bit",
   DADOS_REPO: "CentralRadiosBrasil-Dados",
   DADOS_BRANCH: "main",
@@ -12,6 +12,8 @@ const CONFIG = Object.freeze({
     "https://cliente.centralradiosbrasil.com.br",
   ADMIN_KEY_SESSION_STORAGE:
     "crb-admin-token-sessao-v2",
+  QUALIDADE_ACTION_SESSION_STORAGE:
+    "crb-admin-qualidade-acao-v1",
   REQUEST_TIMEOUT_MS: 15000,
   LOCAL_STORAGE_KEY: "crb-admin-radios-rascunho-v1",
   ESTADOS_STORAGE_KEY: "crb-admin-estados-rascunho-v1",
