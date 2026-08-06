@@ -1,3 +1,15 @@
+## 3.14.0 — Central de Alertas e Pendências (2026-08-06)
+
+- Adiciona a nova rota **🧭 Central** logo após o Dashboard.
+- Consolida solicitações, alterações, ocorrências, leads do Streaming CRB, e-mails não lidos, audiência, qualidade e streams.
+- Classifica a fila em prioridade Baixa, Média, Alta e Urgente.
+- Adiciona estados Pendente, Em análise, Monitorando, Resolvida e Ignorada.
+- Persiste observações administrativas, prioridade manual e histórico no D1.
+- Resolve automaticamente a pendência quando ela desaparece da origem e reabre quando volta a ocorrer.
+- Inclui pesquisa, filtros, paginação, exportação CSV e atalhos para o módulo responsável.
+- Integra card e contador da Central ao Dashboard e ao menu lateral.
+- Não suspende, publica, exclui ou altera emissoras automaticamente.
+
 ## 3.13.1 — Layout Amplo Global (2026-08-06)
 
 - Menu lateral reduzido para aumentar a área de trabalho.

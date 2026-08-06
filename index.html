@@ -8,21 +8,22 @@
 <meta content="no-cache, no-store, must-revalidate" http-equiv="Cache-Control"/>
 <meta content="no-cache" http-equiv="Pragma"/>
 <meta content="0" http-equiv="Expires"/>
-<title>Central Rádios Brasil — Painel Administrativo v3.13.1</title>
-<link href="style.css?v=3.13.1" rel="stylesheet"/>
-<link href="css/dashboard.css?v=3.13.1" rel="stylesheet"/>
-<link href="css/audiencia.css?v=3.13.1" rel="stylesheet"/>
-<link href="css/qualidade.css?v=3.13.1" rel="stylesheet"/>
-<link href="css/radios.css?v=3.13.1" rel="stylesheet"/>
-<link href="css/streams.css?v=3.13.1" rel="stylesheet"/>
-<link href="css/emissoras.css?v=3.13.1" rel="stylesheet"/>
-<link href="css/solicitacoes.css?v=3.13.1" rel="stylesheet"/>
-<link href="css/emails.css?v=3.13.1" rel="stylesheet"/>
-<link href="css/streaming-interesses.css?v=3.13.1" rel="stylesheet"/>
-<link href="css/ocorrencias.css?v=3.13.1" rel="stylesheet"/>
+<title>Central Rádios Brasil — Painel Administrativo v3.14.0</title>
+<link href="style.css?v=3.14.0" rel="stylesheet"/>
+<link href="css/dashboard.css?v=3.14.0" rel="stylesheet"/>
+<link href="css/audiencia.css?v=3.14.0" rel="stylesheet"/>
+<link href="css/qualidade.css?v=3.14.0" rel="stylesheet"/>
+<link href="css/central-pendencias.css?v=3.14.0" rel="stylesheet"/>
+<link href="css/radios.css?v=3.14.0" rel="stylesheet"/>
+<link href="css/streams.css?v=3.14.0" rel="stylesheet"/>
+<link href="css/emissoras.css?v=3.14.0" rel="stylesheet"/>
+<link href="css/solicitacoes.css?v=3.14.0" rel="stylesheet"/>
+<link href="css/emails.css?v=3.14.0" rel="stylesheet"/>
+<link href="css/streaming-interesses.css?v=3.14.0" rel="stylesheet"/>
+<link href="css/ocorrencias.css?v=3.14.0" rel="stylesheet"/>
 
 </head>
-<body data-app-version="3.13.1" data-build="layout-amplo-global">
+<body data-app-version="3.14.0" data-build="central-alertas-pendencias">
 <div class="app-shell">
 <aside class="sidebar">
 <div class="brand">
@@ -34,6 +35,7 @@
 </div>
 <nav class="main-nav">
 <a class="nav-link active" data-route="dashboard" href="#/dashboard">🏠 Dashboard</a>
+<a class="nav-link" data-route="central" href="#/central">🧭 Central <span class="nav-alert-count hidden" id="central-nav-count"></span></a>
 <a class="nav-link" data-route="audiencia" href="#/audiencia">📊 Audiência <span class="nav-alert-count hidden" id="audiencia-nav-count"></span></a>
 <a class="nav-link" data-route="solicitacoes" href="#/solicitacoes">📥 Solicitações <span class="nav-alert-count hidden" id="solicitacoes-nav-count"></span></a>
 <a class="nav-link" data-route="ocorrencias" href="#/ocorrencias">⚠️ Ocorrências <span class="nav-alert-count hidden" id="ocorrencias-nav-count"></span></a>
@@ -98,6 +100,10 @@
 <strong class="operations-total" id="dashboard-alert-total">—</strong>
 </section>
 <section aria-label="Alertas operacionais" class="operations-kpis">
+<button class="operation-card operation-card-central" data-dashboard-route="central" type="button">
+<span class="operation-icon">🧭</span><small>Central</small>
+<strong id="dashboard-alert-central">—</strong><em>Fila consolidada</em>
+</button>
 <button class="operation-card" data-dashboard-route="solicitacoes" type="button">
 <span class="operation-icon">📥</span><small>Solicitações</small>
 <strong id="dashboard-alert-solicitacoes">—</strong><em>Pendentes e em análise</em>
@@ -1094,6 +1100,55 @@
 </article>
 </section>
 </section>
+<section class="central-page hidden" id="central-page">
+<section class="central-hero">
+  <div>
+    <span class="status-badge loading" id="central-status-badge">Aguardando sincronização</span>
+    <h2>Central de Alertas e Pendências</h2>
+    <p>Reúna em uma única fila o que exige atenção em solicitações, alterações, ocorrências, e-mails, streaming, audiência, qualidade e streams. A Central organiza o trabalho, registra decisões e leva diretamente ao módulo responsável.</p>
+  </div>
+  <div class="central-hero-meta"><strong>Operação sem ações automáticas destrutivas</strong><small id="central-atualizado-em">Ainda não sincronizado</small></div>
+</section>
+<section class="central-login-panel" id="central-login-panel">
+  <div><h3>Sessão administrativa necessária</h3><p>Entre para sincronizar os módulos e registrar decisões no D1.</p></div>
+  <button class="primary-button" id="central-login" type="button">🔐 Entrar e carregar</button>
+</section>
+<div class="hidden" id="central-conteudo">
+<span class="central-source-note is-success" id="central-fontes-nota">Clique em sincronizar para consolidar os módulos.</span>
+<section class="central-toolbar">
+  <label class="central-search">Buscar<input id="central-busca" placeholder="Emissora, protocolo, título ou referência" type="search"/></label>
+  <label>Status<select id="central-status"><option value="abertas">Abertas</option><option value="pendente">Pendentes</option><option value="em_analise">Em análise</option><option value="monitorando">Monitorando</option><option value="encerradas">Encerradas</option><option value="resolvida">Resolvidas</option><option value="ignorada">Ignoradas</option><option value="">Todos</option></select></label>
+  <label>Prioridade<select id="central-prioridade"><option value="">Todas</option><option value="urgente">Urgente</option><option value="alta">Alta</option><option value="media">Média</option><option value="baixa">Baixa</option></select></label>
+  <label>Origem<select id="central-origem"><option value="">Todas</option><option value="solicitacoes">Solicitações</option><option value="alteracoes">Alterações</option><option value="ocorrencias">Ocorrências</option><option value="streaming">Streaming CRB</option><option value="emails">E-mails</option><option value="audiencia">Audiência</option><option value="qualidade">Qualidade</option><option value="streams">Streams</option></select></label>
+  <label>Fonte<select id="central-ativas"><option value="1">Ativa</option><option value="0">Encerrada</option><option value="todas">Todas</option></select></label>
+  <label>Por página<select id="central-limite"><option value="25">25</option><option value="50" selected>50</option><option value="100">100</option><option value="200">200</option></select></label>
+  <button class="secondary-button" id="central-filtrar" type="button">Aplicar</button>
+  <button class="secondary-button" id="central-limpar" type="button">Limpar</button>
+  <button class="primary-button" id="central-atualizar" type="button">↻ Sincronizar tudo</button>
+  <button class="secondary-button" id="central-exportar" type="button">⬇ CSV</button>
+  <span class="central-results-count" id="central-resultados">0 resultados</span>
+</section>
+<section class="central-kpis">
+  <article class="central-kpi"><span>Abertas</span><strong id="central-kpi-abertas">0</strong><small>Fila ativa</small></article>
+  <article class="central-kpi is-danger"><span>Urgentes</span><strong id="central-kpi-urgentes">0</strong><small>Prioridade máxima</small></article>
+  <article class="central-kpi"><span>Pendentes</span><strong id="central-kpi-pendentes">0</strong><small>Aguardando início</small></article>
+  <article class="central-kpi is-warning"><span>Em análise</span><strong id="central-kpi-analise">0</strong><small>Em tratamento</small></article>
+  <article class="central-kpi"><span>Monitorando</span><strong id="central-kpi-monitorando">0</strong><small>Acompanhamento ativo</small></article>
+  <article class="central-kpi"><span>Resolvidas</span><strong id="central-kpi-resolvidas">0</strong><small>Histórico preservado</small></article>
+</section>
+<section class="central-table-card"><div class="table-scroll"><table class="central-table"><thead><tr><th>Prioridade</th><th>Origem</th><th>Pendência</th><th>Emissora</th><th>Em aberto</th><th>Status</th><th>Atualização</th><th>Ações</th></tr></thead><tbody id="central-table-body"><tr><td class="empty-state" colspan="8">Sincronize os módulos para montar a fila.</td></tr></tbody></table></div><div class="central-pagination"><button class="secondary-button" id="central-anterior" type="button">← Anterior</button><span id="central-pagina">Página 1 de 1</span><button class="secondary-button" id="central-proxima" type="button">Próxima →</button></div></section>
+<section class="central-detail hidden" id="central-detalhe">
+  <header class="central-detail-header"><div><h2 id="central-detalhe-titulo">Detalhes da pendência</h2><p id="central-detalhe-subtitulo">—</p></div><div class="central-toolbar-actions"><button class="secondary-button" id="central-detalhe-abrir-origem" type="button">Abrir módulo responsável</button><button class="secondary-button" id="central-detalhe-fechar" type="button">Fechar</button></div></header>
+  <form class="central-detail-form" id="central-detalhe-form">
+    <label>Status<select id="central-detalhe-status"><option value="pendente">Pendente</option><option value="em_analise">Em análise</option><option value="monitorando">Monitorando</option><option value="resolvida">Resolvida</option><option value="ignorada">Ignorada</option></select></label>
+    <label>Prioridade<select id="central-detalhe-prioridade"><option value="">Automática (sugerida)</option><option value="baixa">Baixa</option><option value="media">Média</option><option value="alta">Alta</option><option value="urgente">Urgente</option></select></label>
+    <label>Observação administrativa<textarea id="central-detalhe-observacao" maxlength="2400" placeholder="Registre o que foi verificado, a decisão e o próximo acompanhamento."></textarea></label>
+    <button class="primary-button" id="central-detalhe-salvar" type="submit">Salvar decisão</button>
+  </form>
+  <div id="central-detalhe-conteudo"></div>
+</section>
+</div>
+</section>
 <section class="audiencia-page hidden" id="audiencia-page">
 <section class="audiencia-hero">
   <div>
@@ -1989,24 +2044,25 @@
 </div>
 </section>
 </div>
-<script src="config.js?v=3.13.1"></script>
-<script src="js/utils.js?v=3.13.1"></script>
-<script src="js/api.js?v=3.13.1"></script>
-<script src="js/qualidade.js?v=3.13.1"></script>
-<script src="js/dashboard.js?v=3.13.1"></script>
-<script src="js/radios.js?v=3.13.1"></script>
-<script src="js/estados.js?v=3.13.1"></script>
-<script src="js/categorias.js?v=3.13.1"></script>
-<script src="js/cidades.js?v=3.13.1"></script>
-<script src="js/streams.js?v=3.13.1"></script>
-<script src="js/emissoras.js?v=3.13.1"></script>
-<script src="js/publicacao.js?v=3.13.1"></script>
-<script src="js/solicitacoes.js?v=3.13.1"></script>
-<script src="js/emails.js?v=3.13.1"></script>
-<script src="js/streaming-interesses.js?v=3.13.1"></script>
-<script src="js/ocorrencias.js?v=3.13.1"></script>
-<script src="js/audiencia.js?v=3.13.1"></script>
+<script src="config.js?v=3.14.0"></script>
+<script src="js/utils.js?v=3.14.0"></script>
+<script src="js/api.js?v=3.14.0"></script>
+<script src="js/qualidade.js?v=3.14.0"></script>
+<script src="js/central-pendencias.js?v=3.14.0"></script>
+<script src="js/dashboard.js?v=3.14.0"></script>
+<script src="js/radios.js?v=3.14.0"></script>
+<script src="js/estados.js?v=3.14.0"></script>
+<script src="js/categorias.js?v=3.14.0"></script>
+<script src="js/cidades.js?v=3.14.0"></script>
+<script src="js/streams.js?v=3.14.0"></script>
+<script src="js/emissoras.js?v=3.14.0"></script>
+<script src="js/publicacao.js?v=3.14.0"></script>
+<script src="js/solicitacoes.js?v=3.14.0"></script>
+<script src="js/emails.js?v=3.14.0"></script>
+<script src="js/streaming-interesses.js?v=3.14.0"></script>
+<script src="js/ocorrencias.js?v=3.14.0"></script>
+<script src="js/audiencia.js?v=3.14.0"></script>
 
-<script src="app.js?v=3.13.1"></script>
+<script src="app.js?v=3.14.0"></script>
 </body>
 </html>

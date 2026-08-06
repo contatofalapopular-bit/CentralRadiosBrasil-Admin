@@ -1,10 +1,20 @@
-# Central Rádios Brasil — Painel Administrativo v3.11.1
+# Central Rádios Brasil — Painel Administrativo v3.14.0
 
 Esta versão reorganiza o Dashboard operacional e remove da interface o módulo **Gestão Comercial**, que não será mais utilizado neste Painel Administrativo.
+
+
+## v3.14.0 — Central de Alertas e Pendências
+
+A nova opção **🧭 Central** reúne em uma única fila as tarefas que exigem atenção administrativa. Ela sincroniza os módulos existentes, preserva as decisões no D1 e oferece prioridade, status, observações, histórico, filtros, paginação, CSV e atalho para o módulo responsável.
+
+A Central não executa ações destrutivas. Resolver uma pendência na fila não suspende rádio, não altera cadastro e não remove audiência; a ação operacional continua sendo feita no módulo de origem.
 
 ## Módulos ativos
 
 - Dashboard
+- Central de Alertas e Pendências
+- Auditoria de Audiência
+- Gestão de Emissoras e Qualidade
 - Solicitações
 - Ocorrências
 - Streaming CRB
@@ -20,7 +30,7 @@ Esta versão reorganiza o Dashboard operacional e remove da interface o módulo 
 
 ## Isolamento
 
-A alteração é exclusiva do repositório do Admin. Worker, D1, Portal Público/PWA, Portal do Cliente e firmware não foram modificados. As rotas comerciais do Worker permanecem intactas para compatibilidade e eventual uso futuro por outros sistemas.
+Esta versão utiliza o **Worker/API 1.20.0** para persistir a fila e o histórico no D1. As tabelas são criadas automaticamente, sem SQL manual. O Site/PWA 22.18.0, o banco público de rádios e o firmware não são alterados. As rotas anteriores permanecem compatíveis.
 
 
 

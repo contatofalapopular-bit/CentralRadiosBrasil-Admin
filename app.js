@@ -11,6 +11,7 @@ let streamingInteressesInicializados = false;
 let ocorrenciasInicializadas = false;
 let audienciaInicializada = false;
 let qualidadeInicializada = false;
+let centralInicializada = false;
 
 document.addEventListener("DOMContentLoaded", () => {
   texto("app-version", `v${CONFIG.VERSION}`);
@@ -24,6 +25,8 @@ document.addEventListener("DOMContentLoaded", () => {
     .addEventListener("click", () => {
       if (rotaAtual() === "dashboard") {
         carregarDashboard(true);
+      } else if (rotaAtual() === "central") {
+        CentralPendenciasAdmin.carregar(true);
       } else if (rotaAtual() === "audiencia") {
         AudienciaAdmin.carregar(true);
       } else if (rotaAtual() === "qualidade") {
@@ -106,6 +109,7 @@ async function renderizarRota() {
 
   const paginas = {
     dashboard: document.getElementById("dashboard-page"),
+    central: document.getElementById("central-page"),
     audiencia: document.getElementById("audiencia-page"),
     qualidade: document.getElementById("qualidade-page"),
     solicitacoes:
@@ -151,7 +155,16 @@ async function renderizarRota() {
       );
     });
 
-  if (rotaFinal === "qualidade") {
+  if (rotaFinal === "central") {
+    texto("page-title", "Central de Alertas e Pendências");
+    texto("page-subtitle", "Fila consolidada, prioridades, decisões e atalhos operacionais");
+    if (!centralInicializada) {
+      centralInicializada = true;
+      await CentralPendenciasAdmin.iniciar();
+    } else {
+      await CentralPendenciasAdmin.carregar(false);
+    }
+  } else if (rotaFinal === "qualidade") {
     texto("page-title", "Gestão de Emissoras e Qualidade");
     texto("page-subtitle", "Saúde técnica, completude cadastral e prontidão do catálogo");
     if (!qualidadeInicializada) {

@@ -1,8 +1,8 @@
 {
   "app": "Central Rádios Brasil — Painel Administrativo",
-  "version": "3.13.1",
-  "release": "Gestão de Emissoras e Qualidade",
-  "build": "2026-08-06",
+  "version": "3.14.0",
+  "release": "Central de Alertas e Pendências",
+  "build": "central-alertas-pendencias",
   "modules": {
     "dashboard_operacional": true,
     "dashboard": true,
@@ -18,9 +18,10 @@
     "emails": true,
     "streaming_interesses": true,
     "ocorrencias": true,
-    "portal_cliente": true,
+    "portal_cliente": false,
     "auditoria_audiencia": true,
-    "gestao_emissoras_qualidade": true
+    "gestao_emissoras_qualidade": true,
+    "central_alertas_pendencias": true
   },
   "features": [
     "manual-invoicing",
@@ -38,12 +39,6 @@
     "streaming-leads",
     "email-inbox",
     "stream-monitoring",
-    "client-portal-access",
-    "site-drafts",
-    "site-version-history",
-    "publication-request",
-    "admin-site-publication",
-    "server-side-role-permissions",
     "audience-audit",
     "network-duplicate-analysis",
     "audience-anomaly-alerts",
@@ -52,18 +47,26 @@
     "catalog-completeness-audit",
     "stream-health-consolidation",
     "station-quality-csv-export",
-    "safe-suspension-preparation"
+    "safe-suspension-preparation",
+    "central-operational-queue",
+    "persistent-admin-workflow",
+    "pending-item-history",
+    "cross-module-shortcuts",
+    "central-csv-export"
   ],
-  "name": "Admin v3.13.1 — Layout Amplo Global",
-  "updatedAt": "2026-08-06T07:42:00-03:00",
-  "descricao": "Adiciona visão consolidada de saúde técnica, completude cadastral, identidade, localização, publicação, selo e pendências por emissora.",
-  "pacote": "admin-v3.13.1-layout-amplo-global",
+  "name": "Admin v3.14.0 — Central de Alertas e Pendências",
+  "updatedAt": "2026-08-06T09:34:00-03:00",
+  "descricao": "Consolida alertas operacionais em uma fila única com prioridades, status, observações, histórico, filtros, paginação, CSV e atalhos para os módulos responsáveis.",
+  "pacote": "admin-v3.14.0-central-alertas-pendencias",
   "date": "2026-08-06",
   "changes": [
-    "Área útil global ampliada em todos os módulos",
-    "Menu lateral reduzido de 280 px para 224 px no desktop",
-    "Margens e espaçamentos internos compactados sem remover conteúdo",
-    "Tabelas de Qualidade e Audiência ajustadas para exigir menos rolagem horizontal",
-    "Responsividade móvel preservada"
-  ]
+    "Nova tela Central de Alertas e Pendências",
+    "Sincronização de Solicitações, Alterações, Ocorrências, Streaming CRB, E-mails, Audiência, Qualidade e Streams",
+    "Prioridades Baixa, Média, Alta e Urgente",
+    "Estados Pendente, Em análise, Monitorando, Resolvida e Ignorada",
+    "Observações administrativas e histórico persistidos no D1",
+    "Paginação, filtros, pesquisa, exportação CSV e atalhos para o módulo responsável",
+    "Card e badge integrados ao Dashboard e ao menu lateral"
+  ],
+  "versao": "3.14.0"
 }

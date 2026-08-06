@@ -351,6 +351,44 @@ const API = {
     return this.worker(`/api/admin/audiencia/resumo?${parametros.toString()}`);
   },
 
+  sincronizarPendencias(dados) {
+    return this.worker(
+      "/api/admin/pendencias/sincronizar",
+      {
+        method: "POST",
+        body: JSON.stringify(dados || {})
+      }
+    );
+  },
+
+  listarPendencias({ status = "abertas", prioridade = "", origem = "", busca = "", ativas = "1", page = 1, limit = 50 } = {}) {
+    const parametros = new URLSearchParams({
+      status,
+      ativas,
+      page: String(page),
+      limit: String(limit)
+    });
+    if (prioridade) parametros.set("prioridade", prioridade);
+    if (origem) parametros.set("origem", origem);
+    if (busca) parametros.set("busca", busca);
+    return this.worker(`/api/admin/pendencias?${parametros.toString()}`);
+  },
+
+  resumoPendencias() {
+    return this.worker("/api/admin/pendencias/resumo");
+  },
+
+  detalharPendencia(id) {
+    return this.worker(`/api/admin/pendencias/${encodeURIComponent(id)}`);
+  },
+
+  atualizarPendencia(id, dados) {
+    return this.worker(`/api/admin/pendencias/${encodeURIComponent(id)}`, {
+      method: "PATCH",
+      body: JSON.stringify(dados || {})
+    });
+  },
+
   listarMonitoramentoStreams() {
     return this.worker(
       "/api/admin/streams/status"

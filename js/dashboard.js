@@ -206,7 +206,7 @@ function renderizarCatalogoDashboard(docRadios, resumo) {
 }
 
 function renderizarOperacaoDashboard(resumo) {
-  const campos = ["solicitacoes", "ocorrencias", "streaming", "emails", "audiencia", "qualidade", "streams"];
+  const campos = ["central", "solicitacoes", "ocorrencias", "streaming", "emails", "audiencia", "qualidade", "streams"];
   if (!resumo) {
     texto("dashboard-alert-total", "—");
     campos.forEach((campo) => texto(`dashboard-alert-${campo}`, "—"));
@@ -221,7 +221,7 @@ function renderizarOperacaoDashboard(resumo) {
   }
 
   const alertas = resumo.alertas || {};
-  const totalVisivel = campos.reduce((total, campo) => total + Number(alertas[campo] || 0), 0);
+  const totalVisivel = Number(alertas.total || campos.filter((campo) => campo !== "central").reduce((total, campo) => total + Number(alertas[campo] || 0), 0));
   texto("dashboard-alert-total", totalVisivel);
   campos.forEach((campo) => texto(`dashboard-alert-${campo}`, Number(alertas[campo] || 0)));
   texto("dashboard-operational-status", totalVisivel
@@ -259,6 +259,7 @@ function renderizarResumoFilasDashboard(resumo) {
   const alvo = document.getElementById("dashboard-queue-summary");
   if (!alvo) return;
   const itens = [
+    ["Central de pendências", Number(resumo.pendencias?.abertas || 0), "central"],
     ["Solicitações pendentes", Number(resumo.solicitacoes?.pendentes || 0) + Number(resumo.alteracoes?.pendentes || 0), "solicitacoes"],
     ["Ocorrências em análise", Number(resumo.ocorrencias?.emAnalise || 0), "ocorrencias"],
     ["Leads qualificados", Number(resumo.streaming?.qualificados || 0), "streaming-interesses"],
@@ -283,6 +284,7 @@ function atualizarSessaoDashboard(autenticado) {
 
 function atualizarBadgesNavegacao(alertas) {
   const mapa = {
+    "central-nav-count": alertas.central,
     "solicitacoes-nav-count": alertas.solicitacoes,
     "ocorrencias-nav-count": alertas.ocorrencias,
     "streaming-nav-count": alertas.streaming,

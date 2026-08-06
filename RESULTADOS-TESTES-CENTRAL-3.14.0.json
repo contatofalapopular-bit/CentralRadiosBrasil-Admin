@@ -1,0 +1,32 @@
+{
+  "admin_version": "3.14.0",
+  "baseline_admin": "3.13.1",
+  "worker_required": "1.20.0",
+  "javascript_syntax_all_files": "passed",
+  "html_required_ids": "passed",
+  "html_duplicate_ids": "none",
+  "version_json": "valid",
+  "central_source_mapping_samples": {
+    "status": "passed",
+    "sources": 8
+  },
+  "sources": [
+    "solicitacoes",
+    "alteracoes",
+    "ocorrencias",
+    "streaming",
+    "emails",
+    "audiencia",
+    "qualidade",
+    "streams"
+  ],
+  "visual_browser_test": "not_run_in_container_environment",
+  "manual_validation_after_publish": [
+    "abrir Central e sincronizar",
+    "alterar status e observacao",
+    "testar atalho para origem",
+    "exportar CSV",
+    "confirmar badge e card no Dashboard"
+  ],
+  "validated_at": "2026-08-06T09:34:00-03:00"
+}
